@@ -12,6 +12,7 @@ import {
   startOfWeek,
   subDays,
 } from "date-fns";
+import TaskComponent from "./TaskComponent";
 
 const CalendarPage = () => {
   // const month = ["January","February","March","April","May","June","July","August","September","October","November","December"];
@@ -75,19 +76,6 @@ const CalendarPage = () => {
   const [currentWeek, setCurrentWeek] = useState(getWeekDays(new Date()));
   const [activeDay, setActiveDay] = useState(null);
   const [events, setEvents] = useState(loadData(currentWeek));
-
-  const renderItem = (item, key) => (
-    <View className="rounded-lg mb-2 p-2 bg-gray-300" key={key}>
-      <TouchableOpacity className=" flex-1">
-        <View className="self-start">
-          <Text className="font-bold">{item.name}: </Text>
-          <Text>{item.description}</Text>
-          <Text>{item.date}</Text>
-          <Text>{item.course}</Text>
-        </View>
-      </TouchableOpacity>
-    </View>
-  );
 
   return (
     <SafeAreaView className="flex-1 p-2">
@@ -165,7 +153,7 @@ const CalendarPage = () => {
                   <View className="flex-1">
                     {a &&
                       a.map((item, key) => {
-                        return renderItem(item, key);
+                        return <TaskComponent item={item} key={key} />;
                       })}
                   </View>
                 </View>

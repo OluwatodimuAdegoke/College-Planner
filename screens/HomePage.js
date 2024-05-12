@@ -1,7 +1,7 @@
 import { View, Text, TouchableOpacity, Image } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { ScrollView } from "react-native-gesture-handler";
+import { FlatList, ScrollView } from "react-native-gesture-handler";
 import database from "../tempDatabase";
 import Icon from "react-native-vector-icons/MaterialIcons";
 
@@ -15,8 +15,25 @@ const HomePage = () => {
     }
     return false;
   };
+
+  const changeFormat = (da) => {
+    return (
+      da.getFullYear() +
+      "-" +
+      ("0" + (da.getMonth() + 1)).slice(-2) +
+      "-" +
+      ("0" + da.getDate()).slice(-2)
+    );
+  };
+
   // const tasks = database.users[0].tasks;
   const incomplete_tasks = database.users[0].tasks.filter(checkStatus);
+  // Only shows the tasks that are due today
+  const today_tasks = incomplete_tasks.filter(
+    (e, index) =>
+      new Date(e.dueDate).toDateString() === new Date().toDateString()
+  );
+
   const study_sessions = database.users[0].studySessions;
   const assignments = database.users[0].assignments[0];
   const schedules = database.users[0].schedules;
@@ -24,36 +41,47 @@ const HomePage = () => {
 
   if (courses !== null) {
     schedule = (
-      <View className="flex-row justify-evenly flex-1">
-        {courses.slice(0, 2).map((item) => {
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={{
+          gap: 10,
+        }}
+      >
+        {courses.slice(0, 3).map((item) => {
           return (
             <TouchableOpacity
               key={item.id}
-              className="p-2 rounded-md bg-gray-400  w-40"
+              className="p-2 rounded-md bg-gray-400  w-36 justify-around items-start"
             >
               <Text className="font-bold text-lg text-center" numberOfLines={1}>
                 {item.code}
                 <Text className="font-normal">: {item.name}</Text>
               </Text>
-              <View className="flex-row items-center space-x-2">
-                <Icon name="pin-drop" size={30} />
-                <Text className="text-base" numberOfLines={1}>
-                  {item.location}
-                </Text>
-              </View>
-              <Text className="text-xl">{item.startTime}</Text>
-              <Text className="text-xl">{item.endTime}</Text>
+
+              <Text className="font-bold text-base text-center">
+                Location:
+                <Text className="font-normal">: {item.location}</Text>
+              </Text>
+              <Text className="font-bold text-base text-center">
+                Start Time:
+                <Text className="font-normal">: {item.startTime}</Text>
+              </Text>
+              <Text className="font-bold text-base text-center">
+                End Time:
+                <Text className="font-normal">: {item.endTime}</Text>
+              </Text>
             </TouchableOpacity>
           );
         })}
-      </View>
+      </ScrollView>
     );
   } else {
     schedule = <Text>No Upcoming Schedule...</Text>;
   }
 
-  if (incomplete_tasks !== null) {
-    tasks = incomplete_tasks.map((item) => {
+  if (today_tasks.length > 0) {
+    tasks = today_tasks.map((item) => {
       return (
         <TouchableOpacity
           key={item.id}
@@ -154,7 +182,7 @@ const HomePage = () => {
       </View>
 
       {/* TODO: Schedule Tab*/}
-      <View className=" rounded-md h-56">
+      <View className=" rounded-md h-40">
         <Text className="font-bold text-xl mb-2">Schedule</Text>
         {schedule}
       </View>

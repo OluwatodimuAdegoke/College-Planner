@@ -13,11 +13,14 @@ import {
   subDays,
 } from "date-fns";
 import TaskComponent from "./TaskComponent";
+import Icon from "react-native-vector-icons/MaterialIcons";
+import { useIsFocused } from "@react-navigation/native";
 
-const CalendarPage = () => {
+const CalendarPage = ({ navigation }) => {
   // const month = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+
   const tasks = database.users[0].tasks;
-  const d = new Date();
+  const assignments = database.users[0].assignments;
 
   const changeFormat = (da) => {
     return (
@@ -57,13 +60,18 @@ const CalendarPage = () => {
   const loadData = (week) => {
     let items = {};
     const week_dates = week.map((e) => changeFormat(new Date(e)));
-    const other = tasks.filter((task) => week_dates.includes(task.dueDate));
+    const other1 = assignments.filter((task) =>
+      week_dates.includes(task.dueDate)
+    );
+    const other2 = tasks.filter((task) => week_dates.includes(task.dueDate));
+    const other = other1.concat(other2);
     for (let i = 0; i < other.length; i++) {
       let eventDetails = {
         date: other[i].dueDate,
         name: other[i].name,
         description: other[i].description,
         course: other[i].course,
+        type: other[i].id,
       };
       if (!items[eventDetails.date]) {
         items[eventDetails.date] = [];
@@ -76,39 +84,26 @@ const CalendarPage = () => {
   const [currentWeek, setCurrentWeek] = useState(getWeekDays(new Date()));
   const [activeDay, setActiveDay] = useState(null);
   const [events, setEvents] = useState(loadData(currentWeek));
-
+  //TODO: Work on making the calendar go back to its current week after changing the navigation
   return (
     <SafeAreaView className="flex-1 p-2">
-      <Text className="text-center text-3xl font-bold mb-1">Calendar</Text>
-      <View className="flex-row justify-between mb-2">
+      <View className="flex-row items-start justify-center mb-2">
+        <Text className="text-4xl font-bold ">Calendar, </Text>
+        <Text className="text-base font-bold">
+          {format(currentWeek[0], "MMM, yyyy")}
+        </Text>
+      </View>
+
+      <View className=" justify-between flex-row items-center">
         <TouchableOpacity
           onPress={() => {
             const temp = getPrevWeek(currentWeek);
             setCurrentWeek(temp);
             setEvents(loadData(temp));
           }}
-          className=" py-2 px-4 bg-gray-200 rounded-e-md"
         >
-          <Text className="text-lg font-bold">Prev</Text>
+          <Icon name="chevron-left" size={30} />
         </TouchableOpacity>
-
-        <Text className="text-center text-xl font-bold">
-          {format(currentWeek[0], "MMM")}
-        </Text>
-
-        <TouchableOpacity
-          onPress={() => {
-            const temp = getNextWeek(currentWeek);
-            setCurrentWeek(temp);
-            setEvents(loadData(temp));
-          }}
-          className=" py-2 px-4 bg-gray-200 rounded-e-md"
-        >
-          <Text className="text-lg font-bold">Next</Text>
-        </TouchableOpacity>
-      </View>
-
-      <View className=" justify-between px-1 flex-row">
         {currentWeek.map((date, key) => {
           const t = new Date(date);
           return (
@@ -118,7 +113,7 @@ const CalendarPage = () => {
                 setEvents(loadData([t]));
               }}
               key={key}
-              className={`w-10 py-1 rounded-lg ${
+              className={`w-9 py-1 rounded-lg ${
                 activeDay && activeDay.toISOString() === t.toISOString()
                   ? "bg-gray-400"
                   : "bg-gray-200"
@@ -133,6 +128,15 @@ const CalendarPage = () => {
             </TouchableOpacity>
           );
         })}
+        <TouchableOpacity
+          onPress={() => {
+            const temp = getNextWeek(currentWeek);
+            setCurrentWeek(temp);
+            setEvents(loadData(temp));
+          }}
+        >
+          <Icon name="chevron-right" size={30} />
+        </TouchableOpacity>
       </View>
 
       <View className="flex-1 mt-2 rounded-lg">
@@ -152,8 +156,8 @@ const CalendarPage = () => {
                   </View>
                   <View className="flex-1">
                     {a &&
-                      a.map((item, key) => {
-                        return <TaskComponent item={item} key={key} />;
+                      a.map((item, i) => {
+                        return <TaskComponent item={item} key={i} />;
                       })}
                   </View>
                 </View>

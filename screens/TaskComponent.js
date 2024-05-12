@@ -3,16 +3,22 @@ import React from "react";
 import { Swipeable } from "react-native-gesture-handler";
 import Icon from "react-native-vector-icons/MaterialIcons";
 
-const TaskComponent = ({ item, key }) => {
+const TaskComponent = ({ item, deleteComponent, isCompleted }) => {
   let swipeableRef;
+  deleteComponent = false;
+  //TODO: Delete the component
   const renderLeftActions = (progress, dragX) => {
+    deleteComponent = true;
     return (
       <TouchableOpacity className=" justify-center pr-2">
         <Icon name="delete" size={25} style={{ color: "red" }} />
       </TouchableOpacity>
     );
   };
+
+  //TODO: Change completed property to completed
   const renderRightActions = (progress, dragX) => {
+    isCompleted = !isCompleted;
     return (
       <TouchableOpacity className="justify-center px-2">
         <Icon name="check-circle" size={25} style={{ color: "green" }} />
@@ -27,7 +33,7 @@ const TaskComponent = ({ item, key }) => {
     }, 10);
   };
   return (
-    <View key={key}>
+    <View>
       <Swipeable
         renderLeftActions={renderLeftActions}
         renderRightActions={renderRightActions}

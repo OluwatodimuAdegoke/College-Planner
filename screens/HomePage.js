@@ -52,7 +52,7 @@ const HomePage = () => {
           return (
             <TouchableOpacity
               key={item.id}
-              className="p-2 rounded-md bg-gray-400  w-36 justify-around items-start"
+              className="p-2 rounded-md bg-gray-400  justify-around items-start"
             >
               <Text className="font-bold text-lg text-center" numberOfLines={1}>
                 {item.code}
@@ -143,16 +143,19 @@ const HomePage = () => {
               key={item.id}
               className="flex p-2 rounded-md bg-gray-400"
             >
-              <Text className="font-bold text-xl text-center">
+              <Text className="font-bold text-lg text-center">
                 {item.course.toUpperCase()}
               </Text>
-              <View className="flex-row items-center justify-between">
-                <Icon name="schedule" size={20} />
+              <View className="flex-row items-center">
+                <Text className="font-semibold text-base">Time: </Text>
                 <Text className="text-base">{item.duration} minutes</Text>
               </View>
-              <Text numberOfLines={3} className="w-24">
-                {item.notes}
-              </Text>
+              <View className="flex-row items-start">
+                <Text className="font-semibold text-base">Notes: </Text>
+                <Text className="text-base w-36" numberOfLines={3}>
+                  {item.notes}
+                </Text>
+              </View>
             </TouchableOpacity>
           );
         })}

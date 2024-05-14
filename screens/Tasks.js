@@ -27,27 +27,29 @@ const Tasks = ({ navigation }) => {
     setOngoing(b);
     setCompleted(a);
   };
+
   useEffect(() => {
     loadData();
   }, []);
 
   return (
     <SafeAreaView className="flex-1 p-2">
-      <View className="flex-row mb-2 ">
+      <View className="flex-row mb-2 items-center">
         <Icon
           name="chevron-left"
           size={30}
           onPress={() => navigation.goBack()}
         />
-        <Text className="text-4xl font-bold flex-auto justify-center text-center pr-7">
+        <Text className="text-3xl font-bold flex-auto justify-center text-center pr-7">
           Tasks
         </Text>
       </View>
-      <View className="flex-row bg-gray-300 justify-evenly h-12 items-center px-10 rounded-lg">
+
+      <View className="flex-row justify-evenly h-12 items-center px-10 rounded-lg">
         <TouchableOpacity
           className={`${
             active === "Ongoing" ? "bg-gray-200 border border-gray-100" : ""
-          } py-2.5 px-10 rounded-xl`}
+          } py-2 px-10 rounded-xl`}
           onPress={() => setActive("Ongoing")}
         >
           <Text className="font-semibold text-base">Ongoing</Text>
@@ -55,12 +57,13 @@ const Tasks = ({ navigation }) => {
         <TouchableOpacity
           className={`${
             active === "Completed" ? "bg-gray-200 border border-gray-100" : ""
-          } py-2.5 px-10 rounded-xl`}
+          } py-2 px-10 rounded-xl`}
           onPress={() => setActive("Completed")}
         >
           <Text className="font-semibold text-base">Completed</Text>
         </TouchableOpacity>
       </View>
+
       <View className="flex-1 mt-2">
         <FlatList
           data={active === "Ongoing" ? ongoing : completed}
@@ -71,9 +74,11 @@ const Tasks = ({ navigation }) => {
           )}
         />
       </View>
-      <View className="justify-center items-center">
-        <Icon name="add-box" size={50} style={{ color: "gray" }} />
-      </View>
+      {active === "Ongoing" && (
+        <TouchableOpacity className="justify-center items-center">
+          <Icon name="add-box" size={50} style={{ color: "#6b7280" }} />
+        </TouchableOpacity>
+      )}
     </SafeAreaView>
   );
 };

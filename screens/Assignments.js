@@ -21,17 +21,16 @@ const Assignments = ({ navigation }) => {
 
   return (
     <SafeAreaView className="flex-1 p-2">
-      <View className="flex-row mb-2 ">
+      <View className="flex-row mb-2 items-center">
         <Icon
           name="chevron-left"
           size={30}
           onPress={() => navigation.goBack()}
         />
-        <Text className="text-4xl font-bold flex-auto justify-center text-center pr-6">
+        <Text className="text-3xl font-bold flex-auto justify-center text-center pr-6">
           Assignments
         </Text>
       </View>
-
       <View className="flex-1 mt-2">
         <FlatList
           data={assignment}
@@ -42,9 +41,9 @@ const Assignments = ({ navigation }) => {
           )}
         />
       </View>
-      <View className="justify-center items-center">
-        <Icon name="add-box" size={50} style={{ color: "gray" }} />
-      </View>
+      <TouchableOpacity className="justify-center items-center">
+        <Icon name="add-box" size={50} style={{ color: "#6b7280" }} />
+      </TouchableOpacity>
     </SafeAreaView>
   );
 };

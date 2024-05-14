@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity, Image } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { FlatList, ScrollView } from "react-native-gesture-handler";
 import database from "../tempDatabase";
@@ -7,7 +7,6 @@ import Icon from "react-native-vector-icons/MaterialIcons";
 
 const HomePage = () => {
   const userName = database.users[0].name;
-  const profilePicture = database.users[0].profilePicture;
 
   const checkStatus = (status) => {
     if (status["completed"] == false) {
@@ -34,10 +33,21 @@ const HomePage = () => {
       new Date(e.dueDate).toDateString() === new Date().toDateString()
   );
 
-  const study_sessions = database.users[0].studySessions;
-  const assignments = database.users[0].assignments[0];
-  const schedules = database.users[0].schedules;
-  const courses = schedules[0].courses;
+  const loadData = () => {
+    // LoadData: Here
+  };
+
+  const [profilePicture, setProfilePicture] = useState(
+    database.users[0].profilePicture
+  );
+  const [study_sessions, setStudySessions] = useState(
+    database.users[0].studySessions
+  );
+  const [assignments, setAssignments] = useState(database.users[0].assignments);
+  const [schedules, setSchedules] = useState(database.users[0].schedules);
+  const [courses, setCourses] = useState(schedules[0].courses);
+  const [exams, setExams] = useState(database.users[0].exams);
+  const [activeUpcoming, setActiveUpcoming] = useState("assignments");
 
   if (courses !== null) {
     schedule = (
@@ -107,25 +117,87 @@ const HomePage = () => {
 
   if (assignments !== null) {
     ass = (
-      <TouchableOpacity className=" p-2 rounded-md bg-gray-400">
-        <View className="flex-row items-center justify-between">
-          <View>
-            <Text className="font-bold text-base">
-              {assignments.name} : {assignments.course}
-            </Text>
-            <Text className="text-base w-11/12" numberOfLines={1}>
-              {assignments.description}
-            </Text>
-          </View>
-          <View className="">
-            <Text>Due Date: </Text>
-            <Text>{assignments.dueDate}</Text>
-          </View>
-        </View>
-      </TouchableOpacity>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ gap: 10 }}
+      >
+        {assignments.map((item) => {
+          return (
+            <TouchableOpacity
+              className=" p-2 rounded-md bg-gray-400"
+              key={item.id}
+            >
+              <View className="flex-row items-center justify-between">
+                <View>
+                  <Text className="font-bold text-base">
+                    {item.name} : {item.course}
+                  </Text>
+                  <Text className="text-base w-11/12" numberOfLines={1}>
+                    {item.description}
+                  </Text>
+                </View>
+                <View className="">
+                  <Text>Due Date: </Text>
+                  <Text>{item.dueDate}</Text>
+                </View>
+              </View>
+            </TouchableOpacity>
+          );
+        })}
+      </ScrollView>
     );
   } else {
     ass = <Text>No Upcoming Assignments...</Text>;
+  }
+
+  if (exams !== null) {
+    exam = (
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ gap: 10 }}
+      >
+        {exams.map((item) => {
+          return (
+            <TouchableOpacity
+              className=" p-2 rounded-md bg-gray-400"
+              key={item.id}
+            >
+              <View className="justify-between">
+                <View>
+                  <Text className="font-semibold text-base">
+                    {item.course.toUpperCase()} : {item.name}
+                  </Text>
+                  <Text
+                    className="text-bold font-semibold w-11/12"
+                    numberOfLines={1}
+                  >
+                    Location:{" "}
+                    <Text className="font-normal">{item.location}</Text>
+                  </Text>
+                  <Text
+                    className="text-bold font-semibold w-11/12"
+                    numberOfLines={1}
+                  >
+                    Date: <Text className="font-normal">{item.date}</Text>
+                  </Text>
+                  <Text
+                    className="text-bold font-semibold w-11/12"
+                    numberOfLines={1}
+                  >
+                    Time:{" "}
+                    <Text className="font-normal">
+                      {item.startTime} - {item.endTime}
+                    </Text>
+                  </Text>
+                </View>
+              </View>
+            </TouchableOpacity>
+          );
+        })}
+      </ScrollView>
+    );
+  } else {
+    exam = <Text>No Upcoming Assignments...</Text>;
   }
 
   if (study_sessions !== null) {
@@ -184,30 +256,52 @@ const HomePage = () => {
         </View>
       </View>
 
-      {/* TODO: Schedule Tab*/}
-      <View className=" rounded-md h-40">
-        <Text className="font-bold text-xl mb-2">Schedule</Text>
-        {schedule}
-      </View>
+      {/* Body */}
+      <View className="flex-1 justify-between rounded-lg">
+        {/* TODO: Schedule Tab*/}
+        <View className=" rounded-md h-40">
+          <Text className="font-bold text-xl mb-2">Schedule</Text>
+          {schedule}
+        </View>
 
-      {/* TODO: My Tasks*/}
-      <View className=" rounded-md max-h-50">
-        <Text className="font-bold text-xl mb-2">To do Today</Text>
-        {/* <View> */}
-        {tasks}
-        {/* </View> */}
-      </View>
+        {/* TODO: My Tasks*/}
+        <View className=" rounded-md max-h-50">
+          <Text className="font-bold text-xl mb-2">To do Today</Text>
+          {/* <View> */}
+          {tasks}
+          {/* </View> */}
+        </View>
 
-      {/* TODO: Study Sessions*/}
-      <View className=" rounded-md h-36 mb-2">
-        <Text className="font-bold text-xl mb-2">Study Sessions</Text>
-        {study}
-      </View>
+        {/* TODO: Study Sessions*/}
+        <View className=" rounded-md h-36 mb-2">
+          <Text className="font-bold text-xl mb-2">Study Sessions</Text>
+          {study}
+        </View>
 
-      {/* TODO: Assignments*/}
-      <View className=" rounded-md mb-2">
-        <Text className="font-bold text-xl mb-2">Assignment</Text>
-        {ass}
+        {/* TODO: Upcoming Assignments/ Exams*/}
+        <View className=" rounded-md max-h-48">
+          <Text className="font-bold text-xl mb-2">Upcoming</Text>
+          <View className="flex-row justify-evenly mb-2">
+            <TouchableOpacity
+              className={`${
+                activeUpcoming == "assignments" ? "bg-gray-400" : "bg-gray-200"
+              } p-1 rounded-md px-2`}
+              onPress={() => setActiveUpcoming("assignments")}
+            >
+              <Text className="font-semibold text-base">Assignments</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              className={`${
+                activeUpcoming == "exams" ? "bg-gray-400" : "bg-gray-200"
+              } p-1 rounded-md px-2`}
+              onPress={() => setActiveUpcoming("exams")}
+            >
+              <Text className="font-semibold text-base">Exams</Text>
+            </TouchableOpacity>
+          </View>
+          {activeUpcoming == "assignments" && ass}
+          {activeUpcoming == "exams" && exam}
+        </View>
       </View>
     </View>
   );

@@ -19,16 +19,6 @@ const database = {
               startTime: "10:00 AM",
               endTime: "11:30 AM",
               days: ["Monday", "Wednesday", "Friday"],
-              exams: [
-                {
-                  id: "exam1",
-                  name: "Midterm Exam",
-                  date: "2023-10-20",
-                  startTime: "9:00 AM",
-                  endTime: "11:00 AM",
-                  location: "Building B, Room 203",
-                },
-              ],
             },
             {
               id: "course2",
@@ -39,16 +29,6 @@ const database = {
               startTime: "2:00 PM",
               endTime: "3:30 PM",
               days: ["Tuesday", "Thursday"],
-              exams: [
-                {
-                  id: "exam2",
-                  name: "Final Exam",
-                  date: "2023-12-18",
-                  startTime: "1:00 PM",
-                  endTime: "4:00 PM",
-                  location: "Building A, Room 105",
-                },
-              ],
             },
             {
               id: "course3",
@@ -59,7 +39,6 @@ const database = {
               startTime: "11:00 AM",
               endTime: "12:30 PM",
               days: ["Monday", "Wednesday"],
-              exams: [],
             },
           ],
         },

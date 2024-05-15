@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, FlatList } from 'react-native';
+import React, { useState } from "react";
+import { View, Text, TouchableOpacity, FlatList } from "react-native";
 import {
   startOfWeek,
   endOfWeek,
@@ -7,7 +7,7 @@ import {
   subDays,
   format,
   isToday,
-} from 'date-fns';
+} from "date-fns";
 
 const WeekSlider = () => {
   const [currentWeek, setCurrentWeek] = useState(getWeekDays(new Date()));
@@ -24,12 +24,14 @@ const WeekSlider = () => {
     <View className="px-2">
       <Text
         className={`text-center text-lg font-bold ${
-          isToday(item.date) ? 'text-blue-500' : 'text-gray-800'
+          isToday(item.date) ? "text-blue-500" : "text-gray-800"
         }`}
       >
         {item.date.getDate()}
       </Text>
-      <Text className="text-center text-gray-500">{format(item.date, 'EEE')}</Text>
+      <Text className="text-center text-gray-500">
+        {format(item.date, "EEE")}
+      </Text>
     </View>
   );
 

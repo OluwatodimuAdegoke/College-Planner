@@ -5,6 +5,7 @@ import React from "react";
 import WeekSlider from "./Test";
 
 const Settings = ({ navigation }) => {
+  //TODO: Add a feature to change the current term and also create new ones for the schedule and courses
   return (
     <View className="flex-1">
       <View className="flex-row space-x-3">

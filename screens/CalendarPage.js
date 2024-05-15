@@ -59,15 +59,17 @@ const CalendarPage = ({ navigation }) => {
 
   const loadData = (week) => {
     let items = {};
-    const week_dates = week.map((e) => changeFormat(new Date(e)));
-    const other1 = assignments.filter((task) =>
-      week_dates.includes(task.dueDate)
-    );
-    const other2 = tasks.filter((task) => week_dates.includes(task.dueDate));
+    const week_dates = week.map((e) => new Date(e).toDateString());
+    //Assignment
+    const other1 = assignments.filter((task) => week_dates.includes(task.date));
+
+    //Tasks
+    const other2 = tasks.filter((task) => week_dates.includes(task.date));
+    //Concatenating the two for assignments and tasks
     const other = other1.concat(other2);
     for (let i = 0; i < other.length; i++) {
       let eventDetails = {
-        date: other[i].dueDate,
+        date: other[i].date,
         name: other[i].name,
         description: other[i].description,
         course: other[i].course,
@@ -143,7 +145,7 @@ const CalendarPage = ({ navigation }) => {
         <View className="flex-1 p-2">
           <ScrollView showsVerticalScrollIndicator={false}>
             {currentWeek.map((e, i) => {
-              const a = events[changeFormat(e)];
+              const a = events[e.toDateString()];
               return (
                 <View key={i} className="flex-row flex-1">
                   {/* TODO: Work on Dates */}

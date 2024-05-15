@@ -50,7 +50,10 @@ const TaskComponent = ({ item, deleteComponent, isCompleted }) => {
                 <Text className="font-normal">{item.description}</Text>
               </Text>
               <Text className="font-semibold">
-                Due Date: <Text className="font-normal">{item.date}</Text>
+                Due Date:{" "}
+                <Text className="font-normal">
+                  {new Date(item.date).toDateString()}
+                </Text>
               </Text>
             </View>
           </TouchableOpacity>

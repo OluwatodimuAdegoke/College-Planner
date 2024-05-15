@@ -15,22 +15,21 @@ const HomePage = () => {
     return false;
   };
 
-  const changeFormat = (da) => {
-    return (
-      da.getFullYear() +
-      "-" +
-      ("0" + (da.getMonth() + 1)).slice(-2) +
-      "-" +
-      ("0" + da.getDate()).slice(-2)
-    );
-  };
+  // const changeFormat = (da) => {
+  //   return (
+  //     da.getFullYear() +
+  //     "-" +
+  //     ("0" + (da.getMonth() + 1)).slice(-2) +
+  //     "-" +
+  //     ("0" + da.getDate()).slice(-2)
+  //   );
+  // };
 
   // const tasks = database.users[0].tasks;
   const incomplete_tasks = database.users[0].tasks.filter(checkStatus);
   // Only shows the tasks that are due today
   const today_tasks = incomplete_tasks.filter(
-    (e, index) =>
-      new Date(e.dueDate).toDateString() === new Date().toDateString()
+    (e, index) => e.date === new Date().toDateString()
   );
 
   const loadData = () => {
@@ -45,6 +44,7 @@ const HomePage = () => {
   );
   const [assignments, setAssignments] = useState(database.users[0].assignments);
   const [schedules, setSchedules] = useState(database.users[0].schedules);
+  //TODO: Make it so that I can change the current term here
   const [courses, setCourses] = useState(schedules[0].courses);
   const [exams, setExams] = useState(database.users[0].exams);
   const [activeUpcoming, setActiveUpcoming] = useState("assignments");
@@ -91,26 +91,32 @@ const HomePage = () => {
   }
 
   if (today_tasks.length > 0) {
-    tasks = today_tasks.map((item) => {
-      return (
-        <TouchableOpacity
-          key={item.id}
-          className="flex-row mb-2 p-2 rounded-md bg-gray-400 justify-between"
-        >
-          <View className="flex-row items-center">
-            <Icon name="add-task" size={20} />
-            <View className="pl-2">
-              <Text className="font-semibold">{item.name.slice(0, 30)}...</Text>
-              <Text>{item.description.slice(0, 30)}...</Text>
-            </View>
-          </View>
-          <View className="pl-2 ">
-            <Text className="font-semibold">Date: {item.dueDate}</Text>
-            <Text>In Progress</Text>
-          </View>
-        </TouchableOpacity>
-      );
-    });
+    tasks = (
+      <ScrollView>
+        {today_tasks.map((item) => {
+          return (
+            <TouchableOpacity
+              key={item.id}
+              className="flex-row mb-2 p-2 rounded-md bg-gray-400 justify-between"
+            >
+              <View className="flex-row items-center">
+                <Icon name="add-task" size={20} />
+                <View className="pl-2">
+                  <Text className="font-semibold">
+                    {item.name.slice(0, 30)}...
+                  </Text>
+                  <Text>{item.description.slice(0, 30)}...</Text>
+                </View>
+              </View>
+              <View className="pl-2 ">
+                <Text className="font-semibold">Date: {item.date}</Text>
+                <Text>In Progress</Text>
+              </View>
+            </TouchableOpacity>
+          );
+        })}
+      </ScrollView>
+    );
   } else {
     tasks = <Text>No Upcoming Tasks...</Text>;
   }
@@ -138,7 +144,7 @@ const HomePage = () => {
                 </View>
                 <View className="">
                   <Text>Due Date: </Text>
-                  <Text>{item.dueDate}</Text>
+                  <Text>{item.date}</Text>
                 </View>
               </View>
             </TouchableOpacity>
@@ -259,23 +265,17 @@ const HomePage = () => {
       {/* Body */}
       <View className="flex-1 justify-between rounded-lg">
         {/* TODO: Schedule Tab*/}
-        <View className=" rounded-md h-40">
+        <View className=" rounded-md h-36">
           <Text className="font-bold text-xl mb-2">Schedule</Text>
           {schedule}
         </View>
 
         {/* TODO: My Tasks*/}
-        <View className=" rounded-md max-h-50">
+        <View className=" rounded-md max-h-48">
           <Text className="font-bold text-xl mb-2">To do Today</Text>
           {/* <View> */}
           {tasks}
           {/* </View> */}
-        </View>
-
-        {/* TODO: Study Sessions*/}
-        <View className=" rounded-md h-36 mb-2">
-          <Text className="font-bold text-xl mb-2">Study Sessions</Text>
-          {study}
         </View>
 
         {/* TODO: Upcoming Assignments/ Exams*/}
@@ -301,6 +301,12 @@ const HomePage = () => {
           </View>
           {activeUpcoming == "assignments" && ass}
           {activeUpcoming == "exams" && exam}
+        </View>
+
+        {/* TODO: Study Sessions*/}
+        <View className=" rounded-md h-32 mb-2">
+          <Text className="font-bold text-xl mb-2">Study Sessions</Text>
+          {study}
         </View>
       </View>
     </View>

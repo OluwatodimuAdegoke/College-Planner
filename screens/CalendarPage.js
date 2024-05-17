@@ -22,15 +22,15 @@ const CalendarPage = ({ navigation }) => {
   const tasks = database.users[0].tasks;
   const assignments = database.users[0].assignments;
 
-  const changeFormat = (da) => {
-    return (
-      da.getFullYear() +
-      "-" +
-      ("0" + (da.getMonth() + 1)).slice(-2) +
-      "-" +
-      ("0" + da.getDate()).slice(-2)
-    );
-  };
+  // const changeFormat = (da) => {
+  //   return (
+  //     da.getFullYear() +
+  //     "-" +
+  //     ("0" + (da.getMonth() + 1)).slice(-2) +
+  //     "-" +
+  //     ("0" + da.getDate()).slice(-2)
+  //   );
+  // };
 
   const getWeekDays = (date) => {
     const dates = eachDayOfInterval(
@@ -74,6 +74,7 @@ const CalendarPage = ({ navigation }) => {
         description: other[i].description,
         course: other[i].course,
         type: other[i].id,
+        completed: other[i].completed,
       };
       if (!items[eventDetails.date]) {
         items[eventDetails.date] = [];
@@ -87,6 +88,14 @@ const CalendarPage = ({ navigation }) => {
   const [activeDay, setActiveDay] = useState(null);
   const [events, setEvents] = useState(loadData(currentWeek));
   //TODO: Work on making the calendar go back to its current week after changing the navigation
+
+  //TODO: Not working
+  const [complete, setComplete] = useState(false);
+  const onCompleted = (childData) => {
+    console.log(childData);
+    console.log("Here");
+  };
+
   return (
     <SafeAreaView className="flex-1 p-2">
       <View className="flex-row items-start justify-center mb-2">
@@ -141,15 +150,17 @@ const CalendarPage = ({ navigation }) => {
         </TouchableOpacity>
       </View>
 
-      <View className="flex-1 mt-2 rounded-lg">
+      <View className="flex-1 rounded-lg">
         <View className="flex-1 p-2">
-          <ScrollView showsVerticalScrollIndicator={false}>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{ gap: 5 }}
+          >
             {currentWeek.map((e, i) => {
               const a = events[e.toDateString()];
               return (
                 <View key={i} className="flex-row flex-1">
-                  {/* TODO: Work on Dates */}
-                  <View className="pr-4">
+                  <View className="pr-2">
                     {a && (
                       <Text className="text-xl font-bold">
                         {format(new Date(a[0].date), "dd")}
@@ -159,8 +170,15 @@ const CalendarPage = ({ navigation }) => {
                   <View className="flex-1">
                     {a &&
                       a.map((item, i) => {
-                        return <TaskComponent item={item} key={i} />;
+                        return (
+                          <TaskComponent
+                            item={item}
+                            key={i}
+                            isCompleted={onCompleted}
+                          />
+                        );
                       })}
+                    {console.log(complete)}
                   </View>
                 </View>
               );

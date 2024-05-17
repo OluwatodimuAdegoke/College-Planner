@@ -28,9 +28,9 @@ const HomePage = () => {
   // const tasks = database.users[0].tasks;
   const incomplete_tasks = database.users[0].tasks.filter(checkStatus);
   // Only shows the tasks that are due today
-  const today_tasks = incomplete_tasks.filter(
-    (e, index) => e.date === new Date().toDateString()
-  );
+  const today_tasks = incomplete_tasks.filter((e, index) => {
+    return e.date == new Date().toDateString();
+  });
 
   const loadData = () => {
     // LoadData: Here

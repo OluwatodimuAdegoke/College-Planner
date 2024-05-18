@@ -11,19 +11,11 @@ import Icon from "react-native-vector-icons/MaterialIcons";
 import { Picker } from "@react-native-picker/picker";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import database from "../tempDatabase";
-import { addData, loadData } from "../firebaseConfig";
+import { addData, loadData, updateData } from "../firebaseConfig";
+import { el } from "date-fns/locale";
 
 const AddTask = ({ setActiveModal, type, item }) => {
   // const [activeModal, setActiveModal] = useState(false);
-  if (item === null) {
-    item = {
-      name: "Task Name",
-      description: "Task Description",
-      date: new Date(),
-      course: "None",
-      completed: false,
-    };
-  }
 
   const courses = database.users[0].schedules[0].courses;
 
@@ -32,6 +24,33 @@ const AddTask = ({ setActiveModal, type, item }) => {
   const [taskName, setTaskName] = useState("");
   const [taskDescription, setTaskDescription] = useState("");
   const [relatedCourse, setRelatedCourse] = useState("None");
+
+  // const [open, setOpen] = useState(false);
+  // if (item !== null) {
+  //   setTaskName(item.name);
+  //   setTaskDescription(item.description);
+  //   setDueDate(item.date.toDate());
+  //   setRelatedCourse(item.course);
+
+  //   const [open, setOpen] = useState(false);
+  //   const [dueDate, setDueDate] = useState(new Date());
+  //   const [taskName, setTaskName] = useState("");
+  //   const [taskDescription, setTaskDescription] = useState("");
+  //   const [relatedCourse, setRelatedCourse] = useState("None");
+  //   // item = {
+  //   //   name: "Task Name",
+  //   //   description: "Task Description",
+  //   //   date: new Date(),
+  //   //   course: "None",
+  //   //   completed: false,
+  //   // };
+  // }else{
+
+  //   const [dueDate, setDueDate] = useState(new Date());
+  //   const [taskName, setTaskName] = useState("");
+  //   const [taskDescription, setTaskDescription] = useState("");
+  //   const [relatedCourse, setRelatedCourse] = useState("None");
+  // }
 
   const checkField = () => {
     if (taskName === "" || taskDescription === "") {
@@ -46,8 +65,21 @@ const AddTask = ({ setActiveModal, type, item }) => {
       completed: false,
     };
     setActiveModal(false);
-    addData({ value: task, type: "tasks" });
+    if (type === "Edit") {
+      updateData({ id: item.id, type: "tasks", value: task });
+    } else {
+      addData({ value: task, type: "tasks" });
+    }
   };
+
+  useEffect(() => {
+    if (item) {
+      setTaskName(item.name);
+      setTaskDescription(item.description);
+      setDueDate(item.date.toDate());
+      setRelatedCourse(item.course);
+    }
+  }, [item]);
 
   return (
     <Modal
@@ -69,7 +101,7 @@ const AddTask = ({ setActiveModal, type, item }) => {
               <TextInput
                 className="bg-gray-100 flex-1 rounded-lg px-2 pr-2"
                 maxLength={30}
-                placeholder={item.name}
+                placeholder="Task Name"
                 value={taskName}
                 onChangeText={(value) => setTaskName(value)}
               />
@@ -79,7 +111,7 @@ const AddTask = ({ setActiveModal, type, item }) => {
               <TextInput
                 className="bg-gray-100 flex-1 rounded-lg px-2 pr-2"
                 maxLength={30}
-                placeholder={item.description}
+                placeholder="Task Description"
                 value={taskDescription}
                 onChangeText={(value) => setTaskDescription(value)}
               />

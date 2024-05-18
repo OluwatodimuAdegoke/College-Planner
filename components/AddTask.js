@@ -13,8 +13,18 @@ import RNDateTimePicker from "@react-native-community/datetimepicker";
 import database from "../tempDatabase";
 import { addData, loadData } from "../firebaseConfig";
 
-const AddTask = ({ activeModal, setActiveModal }) => {
+const AddTask = ({ setActiveModal, type, item }) => {
   // const [activeModal, setActiveModal] = useState(false);
+  if (item === null) {
+    item = {
+      name: "Task Name",
+      description: "Task Description",
+      date: new Date(),
+      course: "None",
+      completed: false,
+    };
+  }
+
   const courses = database.users[0].schedules[0].courses;
 
   const [open, setOpen] = useState(false);
@@ -42,7 +52,7 @@ const AddTask = ({ activeModal, setActiveModal }) => {
   return (
     <Modal
       animationType="fade"
-      visible={activeModal}
+      visible={true}
       transparent={true}
       onRequestClose={() => setActiveModal(false)}
     >
@@ -59,7 +69,7 @@ const AddTask = ({ activeModal, setActiveModal }) => {
               <TextInput
                 className="bg-gray-100 flex-1 rounded-lg px-2 pr-2"
                 maxLength={30}
-                placeholder="Task Name"
+                placeholder={item.name}
                 value={taskName}
                 onChangeText={(value) => setTaskName(value)}
               />
@@ -69,7 +79,7 @@ const AddTask = ({ activeModal, setActiveModal }) => {
               <TextInput
                 className="bg-gray-100 flex-1 rounded-lg px-2 pr-2"
                 maxLength={30}
-                placeholder="Task Description"
+                placeholder={item.description}
                 value={taskDescription}
                 onChangeText={(value) => setTaskDescription(value)}
               />

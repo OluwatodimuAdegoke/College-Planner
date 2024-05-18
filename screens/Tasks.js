@@ -10,11 +10,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import database from "../tempDatabase";
-import TaskComponent from "../components/TaskComponent";
-import RNDateTimePicker from "@react-native-community/datetimepicker";
-import { Picker } from "@react-native-picker/picker";
-import { addData, loadData } from "../firebaseConfig";
+import { addData, deleteData, loadData, updateData } from "../firebaseConfig";
 import AddTask from "../components/AddTask";
 
 const Tasks = ({ navigation }) => {
@@ -23,12 +19,15 @@ const Tasks = ({ navigation }) => {
   const [completed, setCompleted] = useState([]);
 
   const [activeModal, setActiveModal] = useState(false);
+  const [modalType, setModalType] = useState("Add");
+  const [currentItem, setCurrentItem] = useState(null);
 
   const [tasks, setTasks] = useState([]);
 
   const separateData = () => {
     let a = [];
     let b = [];
+
     tasks.map((e, i) => {
       if (e.completed) {
         a.push(e);
@@ -36,13 +35,33 @@ const Tasks = ({ navigation }) => {
         b.push(e);
       }
     });
-
     setOngoing(b);
     setCompleted(a);
   };
 
-  const isCompleted = (data) => {
-    console.log(data);
+  const completeTask = (item) => {
+    updateData({
+      id: item.id,
+      type: "tasks",
+      value: { completed: !item.completed },
+    });
+    // console.log(item);
+  };
+
+  const deleteComponent = (id) => {
+    deleteData({ id: id, type: "tasks" });
+    // loadData({ setData: setTasks, type: "tasks" });
+  };
+  const editComponent = (item) => {
+    setModalType("Edit");
+    setCurrentItem(item);
+    setActiveModal(true);
+  };
+
+  const addComponent = () => {
+    setModalType("Add");
+    setCurrentItem(null);
+    setActiveModal(true);
   };
 
   useEffect(() => {
@@ -56,7 +75,16 @@ const Tasks = ({ navigation }) => {
   return (
     <SafeAreaView className="flex-1 p-2">
       {/* {modal} */}
-      <AddTask activeModal={activeModal} setActiveModal={setActiveModal} />
+      {activeModal && (
+        <AddTask
+          setActiveModal={setActiveModal}
+          type={modalType}
+          item={currentItem}
+        />
+      )}
+      {/* {activeModalE && (
+        <EditTask setActiveModal={setActiveModalE} item={currentItem} />
+      )} */}
       <View className="flex-row mb-2 items-center">
         <Icon
           name="chevron-left"
@@ -93,8 +121,54 @@ const Tasks = ({ navigation }) => {
           keyExtractor={(item, index) => index.toString()}
           showsVerticalScrollIndicator={false}
           renderItem={({ item }) => (
-            <View>
-              <TaskComponent item={item} isCompleted={isCompleted} />
+            <View className="rounded-lg mb-2 p-2 bg-gray-300 ">
+              {/* TouchableOpacity Here */}
+              <View className=" flex-1">
+                <View className="flex-row">
+                  <Text className="text-center font-bold text-sm flex-auto">
+                    {item.name}
+                  </Text>
+
+                  {item.completed === true ? (
+                    <Icon
+                      name="check-box"
+                      size={20}
+                      onPress={() => completeTask(item)}
+                    />
+                  ) : (
+                    <Icon
+                      name="check-box-outline-blank"
+                      size={20}
+                      onPress={() => completeTask(item)}
+                    />
+                  )}
+                </View>
+
+                <View className="self-start">
+                  <Text className="font-semibold">
+                    Description:{" "}
+                    <Text className="font-normal">{item.description}</Text>
+                  </Text>
+                  <Text className="font-semibold">
+                    Due Date:{" "}
+                    <Text className="font-normal">
+                      {item.date.toDate().toDateString()}
+                    </Text>
+                  </Text>
+                </View>
+                <View className="flex-row justify-end space-x-4">
+                  <Icon
+                    name="edit-note"
+                    size={25}
+                    onPress={() => editComponent(item)}
+                  />
+                  <Icon
+                    name="delete"
+                    size={25}
+                    onPress={() => deleteComponent(item.id)}
+                  />
+                </View>
+              </View>
             </View>
           )}
         />
@@ -102,7 +176,7 @@ const Tasks = ({ navigation }) => {
       {active === "Ongoing" && (
         <TouchableOpacity
           className="justify-center items-center"
-          onPress={() => setActiveModal(true)}
+          onPress={() => addComponent()}
         >
           <Icon name="add-box" size={50} style={{ color: "#6b7280" }} />
         </TouchableOpacity>

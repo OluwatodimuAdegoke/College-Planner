@@ -6,7 +6,6 @@ import { set } from "date-fns";
 
 const TaskComponent = ({ item, deleteComponent, isCompleted }) => {
   let swipeableRef;
-  deleteComponent = false;
   const [data, setData] = useState(item);
 
   const upddateData = () => {
@@ -32,6 +31,8 @@ const TaskComponent = ({ item, deleteComponent, isCompleted }) => {
   const onSwipeableOpen = (direction) => {
     if (direction == "right") {
       isCompleted("HHererer");
+    } else if (direction == "left") {
+      deleteComponent(data.id);
     }
     setTimeout(() => {
       if (swipeableRef) {
@@ -41,38 +42,31 @@ const TaskComponent = ({ item, deleteComponent, isCompleted }) => {
   };
   return (
     <View>
-      <Swipeable
-        renderLeftActions={renderLeftActions}
-        renderRightActions={renderRightActions}
-        ref={(ref) => (swipeableRef = ref)}
-        onSwipeableOpen={(direction) => onSwipeableOpen(direction)}
-      >
-        <View className="rounded-lg mb-2 p-2 bg-gray-300 h-16">
-          <TouchableOpacity className=" flex-1">
-            <View className="flex-row">
-              <Text className="text-center font-bold text-sm flex-auto">
-                {data.name}
-              </Text>
-              {data.completed && (
-                <Icon name="check-circle" size={15} color={"green"} />
-              )}
-            </View>
+      <View className="rounded-lg mb-2 p-2 bg-gray-300 h-16">
+        <TouchableOpacity className=" flex-1">
+          <View className="flex-row">
+            <Text className="text-center font-bold text-sm flex-auto">
+              {data.name}
+            </Text>
+            {data.completed && (
+              <Icon name="check-circle" size={15} color={"green"} />
+            )}
+          </View>
 
-            <View className="self-start">
-              <Text className="font-semibold">
-                Description:{" "}
-                <Text className="font-normal">{data.description}</Text>
+          <View className="self-start">
+            <Text className="font-semibold">
+              Description:{" "}
+              <Text className="font-normal">{data.description}</Text>
+            </Text>
+            <Text className="font-semibold">
+              Due Date:{" "}
+              <Text className="font-normal">
+                {new Date(data.date).toDateString()}
               </Text>
-              <Text className="font-semibold">
-                Due Date:{" "}
-                <Text className="font-normal">
-                  {new Date(data.date).toDateString()}
-                </Text>
-              </Text>
-            </View>
-          </TouchableOpacity>
-        </View>
-      </Swipeable>
+            </Text>
+          </View>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };

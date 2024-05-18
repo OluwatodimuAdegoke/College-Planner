@@ -12,7 +12,7 @@ import {
   startOfWeek,
   subDays,
 } from "date-fns";
-import TaskComponent from "./TaskComponent";
+import TaskComponent from "../components/TaskComponent";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { useIsFocused } from "@react-navigation/native";
 
@@ -21,16 +21,6 @@ const CalendarPage = ({ navigation }) => {
 
   const tasks = database.users[0].tasks;
   const assignments = database.users[0].assignments;
-
-  // const changeFormat = (da) => {
-  //   return (
-  //     da.getFullYear() +
-  //     "-" +
-  //     ("0" + (da.getMonth() + 1)).slice(-2) +
-  //     "-" +
-  //     ("0" + da.getDate()).slice(-2)
-  //   );
-  // };
 
   const getWeekDays = (date) => {
     const dates = eachDayOfInterval(
@@ -93,7 +83,6 @@ const CalendarPage = ({ navigation }) => {
   const [complete, setComplete] = useState(false);
   const onCompleted = (childData) => {
     console.log(childData);
-    console.log("Here");
   };
 
   return (
@@ -178,7 +167,6 @@ const CalendarPage = ({ navigation }) => {
                           />
                         );
                       })}
-                    {console.log(complete)}
                   </View>
                 </View>
               );

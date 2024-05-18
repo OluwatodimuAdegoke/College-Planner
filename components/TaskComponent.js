@@ -47,7 +47,7 @@ const TaskComponent = ({ item, deleteComponent, isCompleted }) => {
         ref={(ref) => (swipeableRef = ref)}
         onSwipeableOpen={(direction) => onSwipeableOpen(direction)}
       >
-        <View className="rounded-lg mb-2 p-2 bg-gray-300">
+        <View className="rounded-lg mb-2 p-2 bg-gray-300 h-16">
           <TouchableOpacity className=" flex-1">
             <View className="flex-row">
               <Text className="text-center font-bold text-sm flex-auto">

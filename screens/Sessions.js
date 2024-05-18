@@ -1,16 +1,24 @@
 import { View, Text, TouchableOpacity } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import database from "../tempDatabase";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { ScrollView } from "react-native-gesture-handler";
+import { loadData } from "../firebaseConfig";
+import AddSessions from "../components/AddSessions";
 
 const Sessions = ({ navigation }) => {
-  const sessions = database.users[0].studySessions;
-  const loadData = () => {};
+  // const sessions = database.users[0].studySessions;
+  const [sessions, setSessions] = useState([]);
+  const [activeModal, setActiveModal] = useState(false);
+
+  useEffect(() => {
+    loadData({ setData: setSessions, type: "studySessions" });
+  }, []);
 
   return (
     <SafeAreaView className="flex-1 p-2">
+      <AddSessions activeModal={activeModal} setActiveModal={setActiveModal} />
       <View className="flex-row mb-2 items-center">
         <Icon
           name="chevron-left"
@@ -48,7 +56,10 @@ const Sessions = ({ navigation }) => {
           );
         })}
       </ScrollView>
-      <TouchableOpacity className="justify-center items-center">
+      <TouchableOpacity
+        className="justify-center items-center"
+        onPress={() => setActiveModal(true)}
+      >
         <Icon name="add-box" size={50} style={{ color: "#6b7280" }} />
       </TouchableOpacity>
     </SafeAreaView>

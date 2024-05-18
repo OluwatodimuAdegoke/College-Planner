@@ -1,18 +1,27 @@
 import { View, Text, TouchableOpacity } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import database from "../tempDatabase";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { ScrollView } from "react-native-gesture-handler";
+import { loadCourses } from "../firebaseConfig";
+import AddCourses from "../components/AddCourses";
 
 const Schedules = ({ navigation }) => {
-  const schedules = database.users[0].schedules;
-  const courses = schedules[0].courses;
+  // const schedules = database.users[0].schedules;
+  // const courses = schedules[0].courses;
 
-  const loadData = () => {};
+  const [activeModal, setActiveModal] = useState(false);
+
+  const [courses, setCourses] = useState([]);
+  const [term, setTerm] = useState("");
+
+  useEffect(() => {
+    loadCourses({ setCourse: setCourses, setTerm: setTerm });
+  }, []);
 
   return (
     <SafeAreaView className="flex-1 p-2">
+      <AddCourses activeModal={activeModal} setActiveModal={setActiveModal} />
       <View className="flex-row mb-1 items-center">
         <Icon
           name="chevron-left"
@@ -20,11 +29,15 @@ const Schedules = ({ navigation }) => {
           onPress={() => navigation.goBack()}
         />
         <Text className="text-2xl font-bold flex-auto justify-center text-center pr-6">
-          {schedules[0].name}
+          {term}
         </Text>
       </View>
 
-      <ScrollView className="flex-1" contentContainerStyle={{ gap: 10 }}>
+      <ScrollView
+        className="flex-1"
+        contentContainerStyle={{ gap: 10 }}
+        showsVerticalScrollIndicator={false}
+      >
         {courses.map((course, index) => {
           return (
             <TouchableOpacity
@@ -50,12 +63,14 @@ const Schedules = ({ navigation }) => {
                 <Text className="font-semibold text-xl">
                   StartTime:{" "}
                   <Text className="font-normal text-lg">
-                    {course.startTime}
+                    {course.startTime.toDate().toLocaleTimeString()}
                   </Text>
                 </Text>
                 <Text className="font-semibold text-xl">
                   EndTime:{" "}
-                  <Text className="font-normal text-lg">{course.endTime}</Text>
+                  <Text className="font-normal text-lg">
+                    {course.endTime.toDate().toLocaleTimeString()}
+                  </Text>
                 </Text>
 
                 <View className="flex-row items-center">
@@ -73,7 +88,10 @@ const Schedules = ({ navigation }) => {
           );
         })}
       </ScrollView>
-      <TouchableOpacity className="justify-center items-center">
+      <TouchableOpacity
+        className="justify-center items-center"
+        onPress={() => setActiveModal(true)}
+      >
         <Icon name="add-box" size={50} style={{ color: "#6b7280" }} />
       </TouchableOpacity>
     </SafeAreaView>

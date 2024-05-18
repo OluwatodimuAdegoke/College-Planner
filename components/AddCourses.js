@@ -30,6 +30,7 @@ const AddCourses = ({ activeModal, setActiveModal }) => {
   const [endTime, setEndTime] = useState(new Date());
 
   const checkField = () => {
+    const daysChosen = days.filter((e, i) => daysPressed[i]);
     if (
       name === "" ||
       code === "" ||
@@ -37,6 +38,9 @@ const AddCourses = ({ activeModal, setActiveModal }) => {
       startTime === endTime
     ) {
       Alert.alert("Empty Fields", "Please fill all the fields");
+      return;
+    } else if (daysChosen.length === 0) {
+      Alert.alert("Empty Fields", "Please chose a least a day");
       return;
     }
     const value = {
@@ -46,7 +50,7 @@ const AddCourses = ({ activeModal, setActiveModal }) => {
       location: location,
       startTime: startTime,
       endTime: endTime,
-      days: days.filter((e, i) => daysPressed[i]),
+      days: daysChosen,
     };
 
     setActiveModal(false);

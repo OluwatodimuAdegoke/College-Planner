@@ -11,9 +11,9 @@ import Icon from "react-native-vector-icons/MaterialIcons";
 import { Picker } from "@react-native-picker/picker";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import database from "../tempDatabase";
-import { addData } from "../firebaseConfig";
+import { addData, updateData } from "../firebaseConfig";
 
-const AddAssignments = ({ activeModal, setActiveModal }) => {
+const AddAssignments = ({ setActiveModal, type, item }) => {
   const courses = database.users[0].schedules[0].courses;
 
   const [open, setOpen] = useState(false);
@@ -35,13 +35,27 @@ const AddAssignments = ({ activeModal, setActiveModal }) => {
       completed: false,
     };
     setActiveModal(false);
-    addData({ value: task, type: "assignments" });
+    if (type === "Edit") {
+      updateData({ id: item.id, value: task, type: "assignments" });
+    } else {
+      addData({ value: task, type: "assignments" });
+    }
   };
+
+  useEffect(() => {
+    if (item) {
+      console.log(item);
+      setName(item.name);
+      setDescription(item.description);
+      setDueDate(item.date.toDate());
+      setRelatedCourse(item.course);
+    }
+  }, [item]);
 
   return (
     <Modal
       animationType="fade"
-      visible={activeModal}
+      visible={true}
       transparent={true}
       onRequestClose={() => setActiveModal(false)}
     >

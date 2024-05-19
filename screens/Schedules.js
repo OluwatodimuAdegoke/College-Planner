@@ -15,13 +15,16 @@ const Schedules = ({ navigation }) => {
   const [courses, setCourses] = useState([]);
   const [term, setTerm] = useState("");
 
+  const [modalType, setModalType] = useState("Add");
+  const [currentItem, setCurrentItem] = useState(null);
+
   useEffect(() => {
     loadCourses({ setCourse: setCourses, setTerm: setTerm });
   }, []);
 
   return (
     <SafeAreaView className="flex-1 p-2">
-      <AddCourses activeModal={activeModal} setActiveModal={setActiveModal} />
+      {activeModal && <AddCourses setActiveModal={setActiveModal} />}
       <View className="flex-row mb-1 items-center">
         <Icon
           name="chevron-left"

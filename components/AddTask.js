@@ -15,8 +15,6 @@ import { addData, loadData, updateData } from "../firebaseConfig";
 import { el } from "date-fns/locale";
 
 const AddTask = ({ setActiveModal, type, item }) => {
-  // const [activeModal, setActiveModal] = useState(false);
-
   const courses = database.users[0].schedules[0].courses;
 
   const [open, setOpen] = useState(false);
@@ -24,33 +22,6 @@ const AddTask = ({ setActiveModal, type, item }) => {
   const [taskName, setTaskName] = useState("");
   const [taskDescription, setTaskDescription] = useState("");
   const [relatedCourse, setRelatedCourse] = useState("None");
-
-  // const [open, setOpen] = useState(false);
-  // if (item !== null) {
-  //   setTaskName(item.name);
-  //   setTaskDescription(item.description);
-  //   setDueDate(item.date.toDate());
-  //   setRelatedCourse(item.course);
-
-  //   const [open, setOpen] = useState(false);
-  //   const [dueDate, setDueDate] = useState(new Date());
-  //   const [taskName, setTaskName] = useState("");
-  //   const [taskDescription, setTaskDescription] = useState("");
-  //   const [relatedCourse, setRelatedCourse] = useState("None");
-  //   // item = {
-  //   //   name: "Task Name",
-  //   //   description: "Task Description",
-  //   //   date: new Date(),
-  //   //   course: "None",
-  //   //   completed: false,
-  //   // };
-  // }else{
-
-  //   const [dueDate, setDueDate] = useState(new Date());
-  //   const [taskName, setTaskName] = useState("");
-  //   const [taskDescription, setTaskDescription] = useState("");
-  //   const [relatedCourse, setRelatedCourse] = useState("None");
-  // }
 
   const checkField = () => {
     if (taskName === "" || taskDescription === "") {

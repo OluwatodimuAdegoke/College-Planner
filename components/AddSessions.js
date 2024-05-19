@@ -6,13 +6,14 @@ import {
   Alert,
   TouchableOpacity,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { Picker } from "@react-native-picker/picker";
 import database from "../tempDatabase";
-import { addData, loadData } from "../firebaseConfig";
+import { addData, loadData, updateData } from "../firebaseConfig";
+import { update } from "firebase/database";
 
-const AddSessions = ({ activeModal, setActiveModal }) => {
+const AddSessions = ({ setActiveModal, type, item }) => {
   const courses = database.users[0].schedules[0].courses;
 
   const [duration, setDuration] = useState(0);
@@ -20,24 +21,42 @@ const AddSessions = ({ activeModal, setActiveModal }) => {
   const [relatedCourse, setRelatedCourse] = useState("None");
 
   const checkField = () => {
-    if (notes === "" || duration === 0) {
+    const durationInt = parseInt(duration);
+    if (
+      notes === "" ||
+      duration === 0 ||
+      duration === NaN ||
+      relatedCourse === "None"
+    ) {
       Alert.alert("Empty Fields", "Please fill all the fields");
       return;
     }
     const task = {
       course: relatedCourse,
-      duration: duration,
+      duration: durationInt,
       notes: notes,
     };
 
     setActiveModal(false);
-    addData({ value: task, type: "studySessions" });
+    if (type === "Edit") {
+      updateData({ id: item.id, value: task, type: "studySessions" });
+    } else {
+      addData({ value: task, type: "studySessions" });
+    }
   };
+
+  useEffect(() => {
+    if (item) {
+      setNotes(item.notes);
+      setDuration(item.duration);
+      setRelatedCourse(item.course);
+    }
+  }, [item]);
 
   return (
     <Modal
       animationType="fade"
-      visible={activeModal}
+      visible={true}
       transparent={true}
       onRequestClose={() => setActiveModal(false)}
     >

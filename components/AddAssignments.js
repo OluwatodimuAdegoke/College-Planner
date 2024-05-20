@@ -44,7 +44,6 @@ const AddAssignments = ({ setActiveModal, type, item }) => {
 
   useEffect(() => {
     if (item) {
-      console.log(item);
       setName(item.name);
       setDescription(item.description);
       setDueDate(item.date.toDate());

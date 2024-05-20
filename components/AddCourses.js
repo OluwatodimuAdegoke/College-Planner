@@ -6,12 +6,12 @@ import {
   Alert,
   TouchableOpacity,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
-import { addCourses } from "../firebaseConfig";
+import { addCourses, updateData } from "../firebaseConfig";
 
-const AddCourses = ({ activeModal, setActiveModal }) => {
+const AddCourses = ({ setActiveModal, type, item }) => {
   const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
   const [daysPressed, setDaysPressed] = useState([
     false,
@@ -31,6 +31,7 @@ const AddCourses = ({ activeModal, setActiveModal }) => {
 
   const checkField = () => {
     const daysChosen = days.filter((e, i) => daysPressed[i]);
+
     if (
       name === "" ||
       code === "" ||
@@ -54,13 +55,33 @@ const AddCourses = ({ activeModal, setActiveModal }) => {
     };
 
     setActiveModal(false);
-    addCourses({ course: value });
+    if (type === "Edit") {
+      updateData({ id: item.id, value: value, type: "courses" });
+    } else {
+      addCourses({ course: value });
+    }
   };
+
+  useEffect(() => {
+    if (item) {
+      setName(item.name);
+      setCode(item.code);
+      setSection(item.section);
+      setLocation(item.location);
+      setStartTime(item.startTime.toDate());
+      setEndTime(item.endTime.toDate());
+      item.days.forEach((e) => {
+        const index = days.indexOf(e);
+        daysPressed[index] = true;
+      });
+      setDaysPressed([...daysPressed]);
+    }
+  }, [item]);
 
   return (
     <Modal
       animationType="fade"
-      visible={activeModal}
+      visible={true}
       transparent={true}
       onRequestClose={() => setActiveModal(false)}
     >

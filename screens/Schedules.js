@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { ScrollView } from "react-native-gesture-handler";
-import { loadCourses } from "../firebaseConfig";
+import { deleteData, loadCourses } from "../firebaseConfig";
 import AddCourses from "../components/AddCourses";
 
 const Schedules = ({ navigation }) => {
@@ -18,13 +18,37 @@ const Schedules = ({ navigation }) => {
   const [modalType, setModalType] = useState("Add");
   const [currentItem, setCurrentItem] = useState(null);
 
+  const deleteComponent = (id) => {
+    // deleteData({ id: id, type: "assignments" });
+    deleteData({ id: id, type: "courses" });
+    console.log("Delete", id);
+  };
+
+  const editComponent = (item) => {
+    setModalType("Edit");
+    setCurrentItem(item);
+    setActiveModal(true);
+  };
+
+  const addComponent = () => {
+    setModalType("Add");
+    setCurrentItem(null);
+    setActiveModal(true);
+  };
+
   useEffect(() => {
     loadCourses({ setCourse: setCourses, setTerm: setTerm });
   }, []);
 
   return (
     <SafeAreaView className="flex-1 p-2">
-      {activeModal && <AddCourses setActiveModal={setActiveModal} />}
+      {activeModal && (
+        <AddCourses
+          setActiveModal={setActiveModal}
+          type={modalType}
+          item={currentItem}
+        />
+      )}
       <View className="flex-row mb-1 items-center">
         <Icon
           name="chevron-left"
@@ -76,14 +100,28 @@ const Schedules = ({ navigation }) => {
                   </Text>
                 </Text>
 
-                <View className="flex-row items-center">
-                  <Text className="font-semibold text-xl">Days: </Text>
-                  <View className="flex-row space-x-2">
-                    {course.days.map((e, i) => (
-                      <Text className="text-lg" key={i}>
-                        {e}
-                      </Text>
-                    ))}
+                <View className="flex-row justify-between">
+                  <View className="flex-row items-center">
+                    <Text className="font-semibold text-xl">Days: </Text>
+                    <View className="flex-row space-x-2">
+                      {course.days.map((e, i) => (
+                        <Text className="text-lg" key={i}>
+                          {e}
+                        </Text>
+                      ))}
+                    </View>
+                  </View>
+                  <View className="flex-row items-center">
+                    <Icon
+                      name="edit-note"
+                      size={25}
+                      onPress={() => editComponent(course)}
+                    />
+                    <Icon
+                      name="delete"
+                      size={25}
+                      onPress={() => deleteComponent(course.id)}
+                    />
                   </View>
                 </View>
               </View>
@@ -93,7 +131,7 @@ const Schedules = ({ navigation }) => {
       </ScrollView>
       <TouchableOpacity
         className="justify-center items-center"
-        onPress={() => setActiveModal(true)}
+        onPress={() => addComponent()}
       >
         <Icon name="add-box" size={50} style={{ color: "#6b7280" }} />
       </TouchableOpacity>

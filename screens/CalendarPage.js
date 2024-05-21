@@ -1,8 +1,6 @@
 import { View, Text, Button, Dimensions, StyleSheet } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-
-import database from "../tempDatabase";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import {
   addDays,
@@ -12,15 +10,18 @@ import {
   startOfWeek,
   subDays,
 } from "date-fns";
-import TaskComponent from "../components/TaskComponent";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import { useIsFocused } from "@react-navigation/native";
+import { loadData } from "../firebaseConfig";
 
 const CalendarPage = ({ navigation }) => {
   // const month = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 
-  const tasks = database.users[0].tasks;
-  const assignments = database.users[0].assignments;
+  // const tasks = database.users[0].tasks;
+  // const assignments = database.users[0].assignments;
+
+  const [assignments, setAssignments] = useState([]);
+  const [tasks, setTasks] = useState([]);
+  const [exams, setExams] = useState([]);
 
   const getWeekDays = (date) => {
     const dates = eachDayOfInterval(
@@ -47,43 +48,90 @@ const CalendarPage = ({ navigation }) => {
     return getWeekDays(prevWeekEnd);
   };
 
-  const loadData = (week) => {
-    let items = {};
-    const week_dates = week.map((e) => new Date(e).toDateString());
-    //Assignment
-    const other1 = assignments.filter((task) => week_dates.includes(task.date));
+  const [currentWeek, setCurrentWeek] = useState(getWeekDays(new Date()));
+  const [activeDay, setActiveDay] = useState(null);
+  const [events, setEvents] = useState({});
 
+  const loadLocalData = (week) => {
+    let items = {};
+
+    const week_dates = week.map((e) => new Date(e).toDateString());
     //Tasks
-    const other2 = tasks.filter((task) => week_dates.includes(task.date));
-    //Concatenating the two for assignments and tasks
-    const other = other1.concat(other2);
+    console.log("week_dates", week_dates);
+    const other = tasks.filter((task) =>
+      week_dates.includes(task.date.toDate().toDateString())
+    );
+
     for (let i = 0; i < other.length; i++) {
       let eventDetails = {
-        date: other[i].date,
+        date: other[i].date.toDate().toDateString(),
         name: other[i].name,
         description: other[i].description,
-        course: other[i].course,
-        type: other[i].id,
         completed: other[i].completed,
+        type: "task",
       };
       if (!items[eventDetails.date]) {
         items[eventDetails.date] = [];
       }
       items[eventDetails.date].push(eventDetails);
     }
-    return items;
+
+    //Assignments
+    const other1 = assignments.filter((assignment) =>
+      week_dates.includes(assignment.date.toDate().toDateString())
+    );
+
+    for (let i = 0; i < other1.length; i++) {
+      let eventDetails = {
+        date: other1[i].date.toDate().toDateString(),
+        name: other1[i].name,
+        description: other1[i].description,
+        completed: other1[i].completed,
+        course: other1[i].course,
+        type: "assignment",
+      };
+      if (!items[eventDetails.date]) {
+        items[eventDetails.date] = [];
+      }
+      items[eventDetails.date].push(eventDetails);
+    }
+
+    //Exams
+    const other2 = exams.filter((exam) =>
+      week_dates.includes(exam.date.toDate().toDateString())
+    );
+
+    for (let i = 0; i < other2.length; i++) {
+      let eventDetails = {
+        date: other2[i].date.toDate().toDateString(),
+        name: other2[i].name,
+        location: other2[i].location,
+        startTime: other2[i].startTime.toDate(),
+        endTime: other2[i].endTime.toDate(),
+        course: other2[i].course,
+        type: "exam",
+      };
+      if (!items[eventDetails.date]) {
+        items[eventDetails.date] = [];
+      }
+      items[eventDetails.date].push(eventDetails);
+    }
+
+    setEvents(items);
+    // return items;
   };
 
-  const [currentWeek, setCurrentWeek] = useState(getWeekDays(new Date()));
-  const [activeDay, setActiveDay] = useState(null);
-  const [events, setEvents] = useState(loadData(currentWeek));
   //TODO: Work on making the calendar go back to its current week after changing the navigation
 
-  //TODO: Not working
-  const [complete, setComplete] = useState(false);
-  const onCompleted = (childData) => {
-    console.log(childData);
-  };
+  useEffect(() => {
+    loadLocalData(currentWeek);
+  }, [assignments, exams, tasks]);
+
+  useEffect(() => {
+    loadData({ setData: setAssignments, type: "assignments" });
+    loadData({ setData: setExams, type: "exams" });
+    loadData({ setData: setTasks, type: "tasks" });
+  }, []);
 
   return (
     <SafeAreaView className="flex-1 p-2">
@@ -99,7 +147,8 @@ const CalendarPage = ({ navigation }) => {
           onPress={() => {
             const temp = getPrevWeek(currentWeek);
             setCurrentWeek(temp);
-            setEvents(loadData(temp));
+            loadLocalData(temp);
+            // setEvents(loadLocalData(temp));
           }}
         >
           <Icon name="chevron-left" size={30} />
@@ -110,7 +159,8 @@ const CalendarPage = ({ navigation }) => {
             <TouchableOpacity
               onPress={() => {
                 setActiveDay(t);
-                setEvents(loadData([t]));
+                loadLocalData([t]);
+                // setEvents(loadLocalData([t]));
               }}
               key={key}
               className={`w-9 py-1 rounded-lg ${
@@ -132,7 +182,8 @@ const CalendarPage = ({ navigation }) => {
           onPress={() => {
             const temp = getNextWeek(currentWeek);
             setCurrentWeek(temp);
-            setEvents(loadData(temp));
+            loadLocalData(temp);
+            // setEvents(loadLocalData(temp));
           }}
         >
           <Icon name="chevron-right" size={30} />
@@ -160,11 +211,46 @@ const CalendarPage = ({ navigation }) => {
                     {a &&
                       a.map((item, i) => {
                         return (
-                          <TaskComponent
-                            item={item}
+                          <View
+                            className="rounded-lg mb-2 p-2 bg-gray-300 h-18"
                             key={i}
-                            isCompleted={onCompleted}
-                          />
+                          >
+                            <TouchableOpacity className=" ">
+                              <View className="flex-row">
+                                <Text className="text-center font-bold text-sm flex-auto">
+                                  {item.name}
+                                </Text>
+                                {item.completed && (
+                                  <Icon
+                                    name="check-circle"
+                                    size={15}
+                                    color={"green"}
+                                  />
+                                )}
+                              </View>
+
+                              <View className="self-start">
+                                <Text className="font-semibold">
+                                  Description:{" "}
+                                  <Text className="font-normal">
+                                    {item.description}
+                                  </Text>
+                                </Text>
+                                <Text className="font-semibold">
+                                  Due Date:{" "}
+                                  <Text className="font-normal">
+                                    {new Date(item.date).toDateString()}
+                                  </Text>
+                                </Text>
+                                <Text className="font-semibold">
+                                  Type:{" "}
+                                  <Text className="font-normal">
+                                    {item.type}
+                                  </Text>
+                                </Text>
+                              </View>
+                            </TouchableOpacity>
+                          </View>
                         );
                       })}
                   </View>

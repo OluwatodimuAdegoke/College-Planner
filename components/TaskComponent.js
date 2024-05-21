@@ -8,38 +8,6 @@ const TaskComponent = ({ item, deleteComponent, isCompleted }) => {
   let swipeableRef;
   const [data, setData] = useState(item);
 
-  const upddateData = () => {
-    item.completed = !item.completed;
-    setData(item);
-  };
-  const renderLeftActions = (progress, dragX) => {
-    return (
-      <TouchableOpacity className=" justify-center pr-2">
-        <Icon name="delete" size={25} style={{ color: "red" }} />
-      </TouchableOpacity>
-    );
-  };
-
-  //TODO: Change completed property to completed
-  const renderRightActions = (progress, dragX) => {
-    return (
-      <TouchableOpacity className="justify-center px-2">
-        <Icon name="check-circle" size={25} style={{ color: "green" }} />
-      </TouchableOpacity>
-    );
-  };
-  const onSwipeableOpen = (direction) => {
-    if (direction == "right") {
-      isCompleted("HHererer");
-    } else if (direction == "left") {
-      deleteComponent(data.id);
-    }
-    setTimeout(() => {
-      if (swipeableRef) {
-        swipeableRef.close();
-      }
-    }, 10);
-  };
   return (
     <View>
       <View className="rounded-lg mb-2 p-2 bg-gray-300 h-16">

@@ -15,16 +15,6 @@ const HomePage = () => {
     return false;
   };
 
-  // const changeFormat = (da) => {
-  //   return (
-  //     da.getFullYear() +
-  //     "-" +
-  //     ("0" + (da.getMonth() + 1)).slice(-2) +
-  //     "-" +
-  //     ("0" + da.getDate()).slice(-2)
-  //   );
-  // };
-
   // const tasks = database.users[0].tasks;
   const incomplete_tasks = database.users[0].tasks.filter(checkStatus);
   // Only shows the tasks that are due today

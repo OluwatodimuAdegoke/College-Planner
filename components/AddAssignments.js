@@ -33,19 +33,21 @@ const AddAssignments = ({ setActiveModal, type, item, course }) => {
       date: dueDate,
       course: course.code,
       completed: false,
+      courseId: course.id,
     };
 
     setActiveModal(false);
     if (type === "Edit") {
-      updateToCourse({
-        value: task,
-        id: item.id,
-        type: "assignments",
-        courseId: course.id,
-      });
-      // updateData({ id: item.id, value: task, type: "assignments" });
+      // updateToCourse({
+      //   value: task,
+      //   id: item.id,
+      //   type: "assignments",
+      //   courseId: course.id,
+      // });
+      updateData({ id: item.id, value: value, type: "assignments" });
     } else {
-      addToCourse({ value: task, type: "assignments", courseId: course.id });
+      addData({ value: task, type: "assignments" });
+      // addToCourse({ value: task, type: "assignments", courseId: course.id });
     }
   };
 

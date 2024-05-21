@@ -3,14 +3,7 @@ import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { ScrollView } from "react-native-gesture-handler";
-import {
-  addToCourse,
-  deleteData,
-  loadCourses,
-  loadToCourse,
-  updateToCourse,
-  deleteFromCourse,
-} from "../firebaseConfig";
+import { deleteData, loadData } from "../firebaseConfig";
 import AddCourses from "../components/AddCourses";
 import AddAssignments from "../components/AddAssignments";
 import AddExams from "../components/AddExams";
@@ -22,6 +15,7 @@ const Schedules = ({ navigation }) => {
   const [activeModal, setActiveModal] = useState(false);
   const [modalType, setModalType] = useState("Add");
   const [currentItem, setCurrentItem] = useState(null);
+  const [currentCourse, setCurrentCourse] = useState(null);
 
   const [courses, setCourses] = useState([]);
   const [term, setTerm] = useState("");
@@ -29,20 +23,15 @@ const Schedules = ({ navigation }) => {
   const [exams, setExams] = useState([]);
 
   const [activeModalE, setActiveModalE] = useState(false);
-  const [currentItemE, setCurrentItemE] = useState(null);
-  const [currentCourseE, setCurrentCourseE] = useState(null);
-
   const [activeModalA, setActiveModalA] = useState(false);
-  const [currentItemA, setCurrentItemA] = useState(null);
-  const [currentCourseA, setCurrentCourseA] = useState(null);
 
   const deleteComponent = ({ id, type, courseId }) => {
     if (type === "courses") {
       deleteData({ id: id, type: "courses" });
     } else if (type === "assignments") {
-      deleteFromCourse({ id: id, type: "assignments", courseId: courseId });
+      // deleteFromCourse({ id: id, type: "assignments", courseId: courseId });
     } else if (type === "exams") {
-      deleteFromCourse({ id: id, type: "exams", courseId: courseId });
+      // deleteFromCourse({ id: id, type: "exams", courseId: courseId });
     }
   };
 
@@ -52,10 +41,10 @@ const Schedules = ({ navigation }) => {
     if (type === "courses") {
       setActiveModal(true);
     } else if (type === "assignments") {
-      setCurrentCourseA(course);
+      setCurrentCourse(course);
       setActiveModalA(true);
     } else if (type === "exams") {
-      setCurrentCourseE(course);
+      setCurrentCourse(course);
       setActiveModalE(true);
     }
   };
@@ -66,15 +55,15 @@ const Schedules = ({ navigation }) => {
     if (type === "courses") {
       setActiveModal(true);
     } else if (type === "assignments") {
-      setCurrentCourseE(course);
+      setCurrentCourse(course);
       setActiveModalE(true);
     } else if (type === "exams") {
-      setCurrentCourseA(course);
+      setCurrentCourse(course);
       setActiveModalA(true);
     }
   };
 
-  const completeA = ({ item, courseId }) => {
+  const completeAssignment = ({ item, courseId }) => {
     updateToCourse({
       value: { completed: !item.completed },
       id: item.id,
@@ -84,9 +73,9 @@ const Schedules = ({ navigation }) => {
   };
 
   useEffect(() => {
-    loadCourses({ setCourse: setCourses, setTerm: setTerm });
-    loadToCourse({ setData: setAssignments, type: "assignments" });
-    loadToCourse({ setData: setExams, type: "exams" });
+    loadData({ setData: setCourses, setTerm: setTerm, type: "courses" });
+    loadData({ setData: setAssignments, type: "assignments" });
+    loadData({ setData: setExams, type: "exams" });
   }, []);
 
   return (
@@ -103,7 +92,7 @@ const Schedules = ({ navigation }) => {
           setActiveModal={setActiveModalA}
           type={modalType}
           item={currentItem}
-          course={currentCourseA}
+          course={currentCourse}
         />
       )}
       {activeModalE && (
@@ -111,7 +100,7 @@ const Schedules = ({ navigation }) => {
           setActiveModal={setActiveModalE}
           type={modalType}
           item={currentItem}
-          course={currentCourseE}
+          course={currentCourse}
         />
       )}
       <View className="flex-row mb-1 items-center">
@@ -187,7 +176,9 @@ const Schedules = ({ navigation }) => {
                       <Icon
                         name="delete"
                         size={25}
-                        onPress={() => deleteComponent(course.id)}
+                        onPress={() =>
+                          deleteComponent({ id: course.id, type: "courses" })
+                        }
                       />
                     </View>
                     <View className="flex-row items-center">
@@ -236,7 +227,7 @@ const Schedules = ({ navigation }) => {
                             name="check-box-outline-blank"
                             size={20}
                             onPress={() =>
-                              completeA({
+                              completeAssignment({
                                 item: item,
                                 courseId: course.id,
                               })

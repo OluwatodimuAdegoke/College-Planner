@@ -15,17 +15,17 @@ import { update } from "firebase/database";
 
 const AddSessions = ({ setActiveModal, type, item }) => {
   const [duration, setDuration] = useState(0);
-  const [notes, setNotes] = useState("");
+  const [name, setName] = useState("");
 
   const checkField = () => {
     const durationInt = parseInt(duration);
-    if (notes === "" || duration === 0 || duration === NaN) {
+    if (name === "" || duration === 0 || duration === NaN) {
       Alert.alert("Empty Fields", "Please fill all the fields");
       return;
     }
     const task = {
       duration: durationInt,
-      notes: notes,
+      name: name,
     };
 
     setActiveModal(false);
@@ -38,7 +38,7 @@ const AddSessions = ({ setActiveModal, type, item }) => {
 
   useEffect(() => {
     if (item) {
-      setNotes(item.notes);
+      setName(item.name);
       setDuration(item.duration);
     }
   }, [item]);
@@ -64,8 +64,8 @@ const AddSessions = ({ setActiveModal, type, item }) => {
                 className="bg-gray-100 flex-1 rounded-lg px-2 pr-2"
                 maxLength={30}
                 placeholder="Notes"
-                value={notes}
-                onChangeText={(value) => setNotes(value)}
+                value={name}
+                onChangeText={(value) => setName(value)}
               />
             </View>
             <View className="h-10">

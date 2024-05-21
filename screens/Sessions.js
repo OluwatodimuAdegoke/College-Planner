@@ -57,7 +57,7 @@ const Sessions = ({ navigation }) => {
           return (
             <TouchableOpacity
               key={index}
-              className="bg-gray-300 rounded-lg p-2 h-52 justify-between"
+              className="bg-gray-300 rounded-lg p-2 h-28 justify-between"
             >
               <View className="flex-row items-center justify-between">
                 <Text className="font-bold text-3xl ">
@@ -70,8 +70,8 @@ const Sessions = ({ navigation }) => {
 
               <View>
                 <Text className="font-semibold text-2xl">
-                  Notes:{" "}
-                  <Text className="font-normal text-xl">{session.notes}</Text>
+                  Name:{" "}
+                  <Text className="font-normal text-xl">{session.name}</Text>
                 </Text>
                 <View className="flex-row justify-between">
                   <View className="flex-row space-x-4 items-center">

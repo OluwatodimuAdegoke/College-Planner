@@ -37,20 +37,22 @@ const AddExams = ({ setActiveModal, type, item, course }) => {
       location: location,
       date: date,
       course: course.code,
+      courseId: course.id,
       startTime: startTime,
       endTime: endTime,
     };
     setActiveModal(false);
     if (type === "Edit") {
-      updateToCourse({
-        value: task,
-        id: item.id,
-        type: "exams",
-        courseId: course.id,
-      });
-      // updateData({ id: item.id, value: task, type: "assignments" });
+      // updateToCourse({
+      //   value: task,
+      //   id: item.id,
+      //   type: "exams",
+      //   courseId: course.id,
+      // });
+      updateData({ id: item.id, value: task, type: "exams" });
     } else {
-      addToCourse({ value: task, type: "exams", courseId: course.id });
+      addData({ value: task, type: "exams" });
+      // addToCourse({ value: task, type: "exams", courseId: course.id });
     }
   };
 

@@ -1,5 +1,11 @@
-Remove course from study session and add Name instead
-Make assignemnts a subcollection of courses to attach it to a course. Delete the extra tab 
-It will serve as a template for the exam too
+
 Continue using the terms collection to keep track of the terms in a person's profile
+
 Future: Delete all courses related to a specific term
+
+
+Work on the HomePage to query the necessary data from firestore
+
+
+
+Add function to delete exmas and assignemnts related to a course

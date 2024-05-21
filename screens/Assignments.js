@@ -3,78 +3,32 @@ import React, { act, useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
-import database from "../tempDatabase";
-import TaskComponent from "../components/TaskComponent";
-import AddAssignments from "../components/AddAssignments";
-import {
-  updateToCourse,
-  deleteData,
-  deleteFromCourse,
-  loadData,
-  loadToCourse,
-  updateData,
-} from "../firebaseConfig";
-import { set } from "date-fns";
+
+import { deleteData, loadData, updateData } from "../firebaseConfig";
 
 const Assignments = ({ navigation }) => {
   const [assignment, setAssignment] = useState([]);
-  const [activeModal, setActiveModal] = useState(false);
+  const [exam, setExam] = useState([]);
 
-  const [modalType, setModalType] = useState("Add");
-  const [currentItem, setCurrentItem] = useState(null);
-
-  const [use, setUse] = useState([]);
-
-  const loadUse = () => {
-    let other = [];
-    for (let a in assignment) {
-      let temp = assignment[a].map((item) => {
-        let temp = item;
-        item.courseId = a;
-        return temp;
-      });
-      temp.courseId = a;
-      other = [...other, ...temp];
-    }
-    setUse(other);
-  };
-
-  const completeTask = ({ item, courseId }) => {
-    updateToCourse({
+  const completeTask = ({ item }) => {
+    updateData({
       value: { completed: !item.completed },
       id: item.id,
       type: "assignments",
-      courseId: item.courseId,
     });
   };
 
-  const deleteComponent = ({ id, courseId }) => {
-    deleteFromCourse({ id: id, type: "assignments", courseId: courseId });
-  };
-
-  const editComponent = (item) => {
-    // setModalType("Edit");
-    // setCurrentItem(item);
-    // setActiveModal(true);
+  const deleteComponent = ({ id, type }) => {
+    deleteData({ id: id, type: type });
   };
 
   useEffect(() => {
-    loadUse();
-  }, [assignment]);
-
-  useEffect(() => {
-    loadToCourse({ setData: setAssignment, type: "assignments" });
+    loadData({ setData: setAssignment, type: "assignments" });
+    loadData({ setData: setExam, type: "exams" });
   }, []);
 
   return (
     <SafeAreaView className="flex-1 p-2">
-      {activeModal && (
-        <AddAssignments
-          setActiveModal={setActiveModal}
-          type={modalType}
-          item={currentItem}
-        />
-      )}
       <View className="flex-row mb-2 items-center">
         <Icon
           name="chevron-left"
@@ -82,12 +36,12 @@ const Assignments = ({ navigation }) => {
           onPress={() => navigation.goBack()}
         />
         <Text className="text-3xl font-bold flex-auto justify-center text-center pr-6">
-          Assignments
+          Assignments / Exams
         </Text>
       </View>
-      <View className="flex-1 mt-2">
+      <View className="flex-1 mt-2 justify-evenly">
         <FlatList
-          data={use}
+          data={assignment}
           renderItem={({ item }) => (
             <View className="rounded-lg mb-2 p-2 bg-gray-300 ">
               {/* TouchableOpacity Here */}
@@ -101,7 +55,7 @@ const Assignments = ({ navigation }) => {
                     <Icon
                       name="check-box"
                       size={20}
-                      onPress={() => completeTask(item)}
+                      onPress={() => completeTask({ item: item })}
                     />
                   ) : (
                     <Icon
@@ -128,16 +82,55 @@ const Assignments = ({ navigation }) => {
                 </View>
                 <View className="flex-row justify-end space-x-4">
                   <Icon
-                    name="edit-note"
+                    name="delete"
                     size={25}
-                    onPress={() => editComponent(item)}
+                    onPress={() =>
+                      deleteComponent({
+                        id: item.id,
+                        courseId: item.courseId,
+                        type: "assignments",
+                      })
+                    }
                   />
-                  {console.log(item)}
+                </View>
+              </View>
+            </View>
+          )}
+        />
+        <FlatList
+          data={exam}
+          renderItem={({ item }) => (
+            <View className="rounded-lg mb-2 p-2 bg-gray-300 ">
+              {/* TouchableOpacity Here */}
+              <View className=" flex-1">
+                <View className="flex-row">
+                  <Text className="text-center font-bold text-sm flex-auto">
+                    {item.name}
+                  </Text>
+                </View>
+
+                <View className="self-start">
+                  <Text className="font-semibold">
+                    Description:{" "}
+                    <Text className="font-normal">{item.location}</Text>
+                  </Text>
+                  <Text className="font-semibold">
+                    Due Date:{" "}
+                    <Text className="font-normal">
+                      {item.date.toDate().toDateString()}
+                    </Text>
+                  </Text>
+                </View>
+                <View className="flex-row justify-end space-x-4">
                   <Icon
                     name="delete"
                     size={25}
                     onPress={() =>
-                      deleteComponent({ id: item.id, courseId: item.courseId })
+                      deleteComponent({
+                        id: item.id,
+                        courseId: item.courseId,
+                        type: "exams",
+                      })
                     }
                   />
                 </View>

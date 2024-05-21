@@ -9,7 +9,7 @@ import {
 import React, { useEffect, useState } from "react";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
-import { addCourses, updateData } from "../firebaseConfig";
+import { addData, updateData } from "../firebaseConfig";
 
 const AddCourses = ({ setActiveModal, type, item }) => {
   const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
@@ -58,7 +58,7 @@ const AddCourses = ({ setActiveModal, type, item }) => {
     if (type === "Edit") {
       updateData({ id: item.id, value: value, type: "courses" });
     } else {
-      addCourses({ course: value });
+      addData({ value: value, type: "courses" });
     }
   };
 

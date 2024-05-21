@@ -16,44 +16,51 @@ import {
   updateToCourse,
 } from "../firebaseConfig";
 
-const AddAssignments = ({ setActiveModal, type, item, course }) => {
+const AddExams = ({ setActiveModal, type, item, course }) => {
   const [open, setOpen] = useState(false);
-  const [dueDate, setDueDate] = useState(new Date());
+  const [date, setDate] = useState(new Date());
   const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
+  const [location, setLocation] = useState("");
+
+  const [openStart, setOpenStart] = useState(false);
+  const [openEnd, setOpenEnd] = useState(false);
+  const [startTime, setStartTime] = useState(new Date());
+  const [endTime, setEndTime] = useState(new Date());
 
   const checkField = () => {
-    if (name === "" || description === "") {
+    if (name === "" || location === "") {
       Alert.alert("Empty Fields", "Please fill all the fields");
       return;
     }
     const task = {
       name: name,
-      description: description,
-      date: dueDate,
+      location: location,
+      date: date,
       course: course.code,
-      completed: false,
+      startTime: startTime,
+      endTime: endTime,
     };
-
     setActiveModal(false);
     if (type === "Edit") {
       updateToCourse({
         value: task,
         id: item.id,
-        type: "assignments",
+        type: "exams",
         courseId: course.id,
       });
       // updateData({ id: item.id, value: task, type: "assignments" });
     } else {
-      addToCourse({ value: task, type: "assignments", courseId: course.id });
+      addToCourse({ value: task, type: "exams", courseId: course.id });
     }
   };
 
   useEffect(() => {
     if (item) {
       setName(item.name);
-      setDescription(item.description);
-      setDueDate(item.date.toDate());
+      setLocation(item.location);
+      setDate(item.date.toDate());
+      setStartTime(item.startTime.toDate());
+      setEndTime(item.endTime.toDate());
     }
   }, [item]);
 
@@ -77,7 +84,7 @@ const AddAssignments = ({ setActiveModal, type, item, course }) => {
               <TextInput
                 className="bg-gray-100 flex-1 rounded-lg px-2 pr-2"
                 maxLength={30}
-                placeholder="Assignment Name"
+                placeholder="Exam Type"
                 value={name}
                 onChangeText={(value) => setName(value)}
               />
@@ -87,9 +94,9 @@ const AddAssignments = ({ setActiveModal, type, item, course }) => {
               <TextInput
                 className="bg-gray-100 flex-1 rounded-lg px-2 pr-2"
                 maxLength={30}
-                placeholder="Assignment Description"
-                value={description}
-                onChangeText={(value) => setDescription(value)}
+                placeholder="Location"
+                value={location}
+                onChangeText={(value) => setLocation(value)}
               />
             </View>
 
@@ -104,22 +111,75 @@ const AddAssignments = ({ setActiveModal, type, item, course }) => {
                 <Text className="text-center">Date</Text>
               </TouchableOpacity>
               <Text className="font-semibold text-base">
-                Due Date: {dueDate.toDateString()}
+                Due Date: {date.toDateString()}
               </Text>
             </View>
+            <View className="h-10 flex-row items-center">
+              <Text>Start Time: </Text>
+              <TextInput
+                className="bg-gray-100 flex-1 rounded-md px-2 pr-2"
+                placeholder={`${startTime.toLocaleTimeString()}`}
+                editable={true}
+                onPress={() => setOpenStart(true)}
+                on
+              />
+            </View>
 
+            {openStart && (
+              <RNDateTimePicker
+                value={startTime}
+                display="spinner"
+                mode="time"
+                onChange={(e, selectedDate) => {
+                  if (e.type === "dismissed") {
+                    setOpenStart(false);
+                  } else if (e.type === "set") {
+                    setOpenStart(false);
+                    setStartTime(selectedDate);
+                  }
+                }}
+              />
+            )}
+
+            <View className="h-10 flex-row items-center">
+              <Text>End Time: </Text>
+              <TextInput
+                className="bg-gray-100 flex-1 rounded-md px-2 pr-2"
+                placeholder={`${endTime.toLocaleTimeString()}`}
+                editable={true}
+                onPress={() => setOpenEnd(true)}
+                on
+              />
+            </View>
+
+            {openEnd && (
+              <RNDateTimePicker
+                value={endTime}
+                display="spinner"
+                mode="time"
+                onChange={(e, selectedDate) => {
+                  if (e.type === "dismissed") {
+                    setOpenEnd(false);
+                  } else if (e.type === "set") {
+                    setOpenEnd(false);
+                    setEndTime(selectedDate);
+                  }
+                }}
+              />
+            )}
             {open && (
               <RNDateTimePicker
-                value={dueDate}
+                value={date}
                 display="spinner"
                 mode="date"
                 minimumDate={new Date()}
                 onChange={(e, selectedDate) => {
+                  s;
                   if (e.type === "dismissed") {
                     setOpen(false);
                   } else if (e.type === "set") {
                     setOpen(false);
-                    setDueDate(selectedDate);
+                    setDate(selectedDate);
                   }
                 }}
               />
@@ -137,4 +197,4 @@ const AddAssignments = ({ setActiveModal, type, item, course }) => {
   );
 };
 
-export default AddAssignments;
+export default AddExams;

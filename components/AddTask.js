@@ -8,20 +8,14 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import { Picker } from "@react-native-picker/picker";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
-import database from "../tempDatabase";
 import { addData, loadData, updateData } from "../firebaseConfig";
-import { el } from "date-fns/locale";
 
 const AddTask = ({ setActiveModal, type, item }) => {
-  const courses = database.users[0].schedules[0].courses;
-
   const [open, setOpen] = useState(false);
   const [dueDate, setDueDate] = useState(new Date());
   const [taskName, setTaskName] = useState("");
   const [taskDescription, setTaskDescription] = useState("");
-  const [relatedCourse, setRelatedCourse] = useState("None");
 
   const checkField = () => {
     if (taskName === "" || taskDescription === "") {
@@ -32,7 +26,6 @@ const AddTask = ({ setActiveModal, type, item }) => {
       name: taskName,
       description: taskDescription,
       date: dueDate,
-      course: relatedCourse,
       completed: false,
     };
     setActiveModal(false);
@@ -48,7 +41,6 @@ const AddTask = ({ setActiveModal, type, item }) => {
       setTaskName(item.name);
       setTaskDescription(item.description);
       setDueDate(item.date.toDate());
-      setRelatedCourse(item.course);
     }
   }, [item]);
 
@@ -86,25 +78,6 @@ const AddTask = ({ setActiveModal, type, item }) => {
                 value={taskDescription}
                 onChangeText={(value) => setTaskDescription(value)}
               />
-            </View>
-
-            <View className="flex-row justify-between items-center">
-              <Text className="font-semibold text-base">Course</Text>
-              <View className="w-2/4">
-                <Picker
-                  selectedValue={relatedCourse}
-                  onValueChange={(itemValue, itemIndex) =>
-                    setRelatedCourse(itemValue)
-                  }
-                  mode="dropdown"
-                >
-                  <Picker.Item label="None" value="None" />
-                  {courses.map((e, i) => {
-                    const val = e.code;
-                    return <Picker.Item label={val} value={val} key={i} />;
-                  })}
-                </Picker>
-              </View>
             </View>
 
             <View className="flex-row items-center justify-around">

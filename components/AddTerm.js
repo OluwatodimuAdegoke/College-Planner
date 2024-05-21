@@ -8,38 +8,32 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import { Picker } from "@react-native-picker/picker";
-import database from "../tempDatabase";
+import RNDateTimePicker from "@react-native-community/datetimepicker";
 import { addData, loadData, updateData } from "../firebaseConfig";
-import { update } from "firebase/database";
 
-const AddSessions = ({ setActiveModal, type, item }) => {
-  const [duration, setDuration] = useState(0);
-  const [notes, setNotes] = useState("");
+const AddTerm = ({ setActiveModal, type, item }) => {
+  const [name, setName] = useState("");
 
   const checkField = () => {
-    const durationInt = parseInt(duration);
-    if (notes === "" || duration === 0 || duration === NaN) {
+    if (name === "") {
       Alert.alert("Empty Fields", "Please fill all the fields");
       return;
     }
     const task = {
-      duration: durationInt,
-      notes: notes,
+      name: name,
     };
 
     setActiveModal(false);
     if (type === "Edit") {
-      updateData({ id: item.id, value: task, type: "studySessions" });
+      updateData({ id: item.id, type: "terms", value: task });
     } else {
-      addData({ value: task, type: "studySessions" });
+      addData({ value: task, type: "terms" });
     }
   };
 
   useEffect(() => {
     if (item) {
-      setNotes(item.notes);
-      setDuration(item.duration);
+      setTaskName(item.name);
     }
   }, [item]);
 
@@ -63,19 +57,9 @@ const AddSessions = ({ setActiveModal, type, item }) => {
               <TextInput
                 className="bg-gray-100 flex-1 rounded-lg px-2 pr-2"
                 maxLength={30}
-                placeholder="Notes"
-                value={notes}
-                onChangeText={(value) => setNotes(value)}
-              />
-            </View>
-            <View className="h-10">
-              <TextInput
-                className="bg-gray-100 flex-1 rounded-lg px-2 pr-2"
-                maxLength={30}
-                keyboardType="number-pad"
-                placeholder="Duration"
-                value={duration}
-                onChangeText={(value) => setDuration(value)}
+                placeholder="Term Name"
+                value={name}
+                onChangeText={(value) => setName(value)}
               />
             </View>
 
@@ -92,4 +76,4 @@ const AddSessions = ({ setActiveModal, type, item }) => {
   );
 };
 
-export default AddSessions;
+export default AddTerm;

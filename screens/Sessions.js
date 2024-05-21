@@ -61,7 +61,7 @@ const Sessions = ({ navigation }) => {
             >
               <View className="flex-row items-center justify-between">
                 <Text className="font-bold text-3xl ">
-                  {session.course.toUpperCase()}
+                  {/* {session.course.toUpperCase()} */}
                 </Text>
                 <TouchableOpacity className="h-10 w-10 bg-gray-500 items-center justify-center rounded-full">
                   <Text>Start</Text>

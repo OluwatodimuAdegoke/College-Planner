@@ -9,7 +9,6 @@ import {
 import React, { useEffect, useState } from "react";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { Picker } from "@react-native-picker/picker";
-import database from "../tempDatabase";
 import { addData, loadData, updateData } from "../firebaseConfig";
 import { update } from "firebase/database";
 

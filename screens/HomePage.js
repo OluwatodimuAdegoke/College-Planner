@@ -2,12 +2,10 @@ import { View, Text, TouchableOpacity, Image } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { FlatList, ScrollView } from "react-native-gesture-handler";
-import database from "../tempDatabase";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { getUserDetail, queryTask } from "../firebaseConfig";
 
 const HomePage = () => {
-  // const userName = database.users[0].name;
   const [userName, setUserName] = useState("");
 
   const [profilePicture, setProfilePicture] = useState("");

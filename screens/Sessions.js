@@ -1,14 +1,13 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import database from "../tempDatabase";
+
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { ScrollView } from "react-native-gesture-handler";
 import { deleteData, loadData } from "../firebaseConfig";
 import AddSessions from "../components/AddSessions";
 
 const Sessions = ({ navigation }) => {
-  // const sessions = database.users[0].studySessions;
   const [sessions, setSessions] = useState([]);
   const [activeModal, setActiveModal] = useState(false);
 

@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import database from "../tempDatabase";
 import { auth } from "../firebaseConfig";
 import { SafeAreaView } from "react-native-safe-area-context";
 import HomePage from "./HomePage";
@@ -13,9 +12,6 @@ import Categories from "./Categories";
 
 const Tab = createBottomTabNavigator();
 const Home = ({ navigation }) => {
-  // const userName = database.users[0].name
-  // const profilePicture = database.users[0].profilePicture
-
   const user = auth.currentUser;
   if (user) {
     return (

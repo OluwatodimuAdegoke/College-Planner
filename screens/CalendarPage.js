@@ -57,7 +57,6 @@ const CalendarPage = ({ navigation }) => {
 
     const week_dates = week.map((e) => new Date(e).toDateString());
     //Tasks
-    console.log("week_dates", week_dates);
     const other = tasks.filter((task) =>
       week_dates.includes(task.date.toDate().toDateString())
     );

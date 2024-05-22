@@ -1,43 +1,34 @@
 import { View, Text, TouchableOpacity, Image } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { FlatList, ScrollView } from "react-native-gesture-handler";
 import database from "../tempDatabase";
 import Icon from "react-native-vector-icons/MaterialIcons";
+import { getUserDetail, queryTask } from "../firebaseConfig";
 
 const HomePage = () => {
-  const userName = database.users[0].name;
+  // const userName = database.users[0].name;
+  const [userName, setUserName] = useState("");
 
-  const checkStatus = (status) => {
-    if (status["completed"] == false) {
-      return true;
-    }
-    return false;
-  };
+  const [profilePicture, setProfilePicture] = useState("");
 
-  // const tasks = database.users[0].tasks;
-  const incomplete_tasks = database.users[0].tasks.filter(checkStatus);
-  // Only shows the tasks that are due today
-  const today_tasks = incomplete_tasks.filter((e, index) => {
-    return e.date == new Date().toDateString();
-  });
-
-  const loadData = () => {
-    // LoadData: Here
-  };
-
-  const [profilePicture, setProfilePicture] = useState(
-    database.users[0].profilePicture
-  );
-  const [study_sessions, setStudySessions] = useState(
-    database.users[0].studySessions
-  );
-  const [assignments, setAssignments] = useState(database.users[0].assignments);
-  const [schedules, setSchedules] = useState(database.users[0].schedules);
-  //TODO: Make it so that I can change the current term here
-  const [courses, setCourses] = useState(schedules[0].courses);
-  const [exams, setExams] = useState(database.users[0].exams);
   const [activeUpcoming, setActiveUpcoming] = useState("assignments");
+
+  const [taskToday, setTaskToday] = useState([]);
+  const [assignments, setAssignments] = useState([]);
+  const [exams, setExams] = useState([]);
+  const [courses, setCourses] = useState([]);
+  const [study_sessions, setStudySessions] = useState([]);
+
+  useEffect(() => {
+    getUserDetail({ setValue: setUserName, type: "username" });
+    getUserDetail({ setValue: setProfilePicture, type: "profile_picture" });
+    queryTask({ setData: setTaskToday, type: "tasks" });
+    queryTask({ setData: setExams, type: "exams" });
+    queryTask({ setData: setAssignments, type: "assignments" });
+    queryTask({ setData: setCourses, type: "courses" });
+    queryTask({ setData: setStudySessions, type: "studySessions" });
+  }, []);
 
   if (courses !== null) {
     schedule = (
@@ -48,7 +39,7 @@ const HomePage = () => {
           gap: 10,
         }}
       >
-        {courses.slice(0, 3).map((item) => {
+        {courses.map((item) => {
           return (
             <TouchableOpacity
               key={item.id}
@@ -65,11 +56,15 @@ const HomePage = () => {
               </Text>
               <Text className="font-bold text-base text-center">
                 Start Time:
-                <Text className="font-normal">: {item.startTime}</Text>
+                <Text className="font-normal">
+                  : {item.startTime.toDate().toTimeString()}
+                </Text>
               </Text>
               <Text className="font-bold text-base text-center">
                 End Time:
-                <Text className="font-normal">: {item.endTime}</Text>
+                <Text className="font-normal">
+                  : {item.endTime.toDate().toTimeString()}
+                </Text>
               </Text>
             </TouchableOpacity>
           );
@@ -80,14 +75,17 @@ const HomePage = () => {
     schedule = <Text>No Upcoming Schedule...</Text>;
   }
 
-  if (today_tasks.length > 0) {
+  if (taskToday.length > 0) {
     tasks = (
-      <ScrollView>
-        {today_tasks.map((item) => {
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ gap: 10 }}
+      >
+        {taskToday.map((item) => {
           return (
             <TouchableOpacity
               key={item.id}
-              className="flex-row mb-2 p-2 rounded-md bg-gray-400 justify-between"
+              className="flex-row p-2 rounded-md bg-gray-400 justify-between"
             >
               <View className="flex-row items-center">
                 <Icon name="add-task" size={20} />
@@ -99,8 +97,10 @@ const HomePage = () => {
                 </View>
               </View>
               <View className="pl-2 ">
-                <Text className="font-semibold">Date: {item.date}</Text>
-                <Text>In Progress</Text>
+                <Text className="font-semibold">
+                  Date: {item.date.toDate().toDateString()}
+                </Text>
+                <Text>Due Today</Text>
               </View>
             </TouchableOpacity>
           );
@@ -134,7 +134,7 @@ const HomePage = () => {
                 </View>
                 <View className="">
                   <Text>Due Date: </Text>
-                  <Text>{item.date}</Text>
+                  <Text>{item.date.toDate().toDateString()}</Text>
                 </View>
               </View>
             </TouchableOpacity>
@@ -174,7 +174,10 @@ const HomePage = () => {
                     className="text-bold font-semibold w-11/12"
                     numberOfLines={1}
                   >
-                    Date: <Text className="font-normal">{item.date}</Text>
+                    Date:{" "}
+                    <Text className="font-normal">
+                      {item.date.toDate().toDateString()}
+                    </Text>
                   </Text>
                   <Text
                     className="text-bold font-semibold w-11/12"
@@ -182,7 +185,8 @@ const HomePage = () => {
                   >
                     Time:{" "}
                     <Text className="font-normal">
-                      {item.startTime} - {item.endTime}
+                      {item.startTime.toDate().toTimeString()} -{" "}
+                      {item.endTime.toDate().toTimeString()}
                     </Text>
                   </Text>
                 </View>
@@ -212,18 +216,18 @@ const HomePage = () => {
               className="flex p-2 rounded-md bg-gray-400"
             >
               <Text className="font-bold text-lg text-center">
-                {item.course.toUpperCase()}
+                {item.name.toUpperCase()}
               </Text>
               <View className="flex-row items-center">
                 <Text className="font-semibold text-base">Time: </Text>
                 <Text className="text-base">{item.duration} minutes</Text>
               </View>
-              <View className="flex-row items-start">
+              {/* <View className="flex-row items-start">
                 <Text className="font-semibold text-base">Notes: </Text>
                 <Text className="text-base w-36" numberOfLines={3}>
                   {item.notes}
                 </Text>
-              </View>
+              </View> */}
             </TouchableOpacity>
           );
         })}
@@ -256,7 +260,7 @@ const HomePage = () => {
       <View className="flex-1 justify-between rounded-lg">
         {/* TODO: Schedule Tab*/}
         <View className=" rounded-md h-36">
-          <Text className="font-bold text-xl mb-2">Schedule</Text>
+          <Text className="font-bold text-xl mb-2">Today's Schedule</Text>
           {schedule}
         </View>
 

@@ -5,10 +5,9 @@ import {
   deleteUserF,
   auth,
   loadData,
-  getCurrentTerm,
+  getUserDetail,
 } from "../firebaseConfig";
 import React, { useEffect, useState } from "react";
-import WeekSlider from "./Test";
 import AddTerm from "../components/AddTerm";
 import { Picker } from "@react-native-picker/picker";
 
@@ -29,7 +28,7 @@ const Settings = ({ navigation }) => {
   };
 
   useEffect(() => {
-    getCurrentTerm({ setCurrentTerm: setCurrentTerm });
+    getUserDetail({ setValue: setCurrentTerm, type: "currentTerm" });
     loadData({ setData: setTerms, type: "terms" });
   }, []);
 

@@ -43,7 +43,7 @@ const Categories = ({ navigation }) => {
         >
           <Text>Study Sessions</Text>
         </TouchableOpacity>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           onPress={() => navigation.navigate("Assignments")}
           className="bg-gray-300 p-4 rounded-br-xl rounded-tr-xl h-36 border "
           style={{
@@ -51,7 +51,7 @@ const Categories = ({ navigation }) => {
           }}
         >
           <Text>Assignments</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
     </View>
   );

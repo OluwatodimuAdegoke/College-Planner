@@ -38,13 +38,7 @@ const AddAssignments = ({ setActiveModal, type, item, course }) => {
 
     setActiveModal(false);
     if (type === "Edit") {
-      // updateToCourse({
-      //   value: task,
-      //   id: item.id,
-      //   type: "assignments",
-      //   courseId: course.id,
-      // });
-      updateData({ id: item.id, value: value, type: "assignments" });
+      updateData({ id: item.id, value: task, type: "assignments" });
     } else {
       addData({ value: task, type: "assignments" });
       // addToCourse({ value: task, type: "assignments", courseId: course.id });

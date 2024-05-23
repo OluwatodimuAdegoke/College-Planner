@@ -3,9 +3,8 @@ Continue using the terms collection to keep track of the terms in a person's pro
 
 Future: Delete all courses related to a specific term
 
-
-Work on the HomePage to query the necessary data from firestore
-
-
-
 Add function to delete exmas and assignemnts related to a course
+
+and then work on the other pop up modal for exam and assignemnts
+
+Work on the completed menu button

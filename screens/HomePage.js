@@ -5,7 +5,7 @@ import { FlatList, ScrollView } from "react-native-gesture-handler";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { getUserDetail, queryTask } from "../firebaseConfig";
 
-const HomePage = () => {
+const HomePage = ({ navigation }) => {
   const [userName, setUserName] = useState("");
 
   const [profilePicture, setProfilePicture] = useState("");
@@ -41,6 +41,9 @@ const HomePage = () => {
           return (
             <TouchableOpacity
               key={item.id}
+              onPress={() =>
+                navigation.navigate("DisplayCourse", { data: item })
+              }
               className="p-2 rounded-md bg-gray-400  justify-around items-start"
             >
               <Text className="font-bold text-lg text-center" numberOfLines={1}>

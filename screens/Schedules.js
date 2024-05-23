@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { ScrollView } from "react-native-gesture-handler";
-import { deleteData, loadData } from "../firebaseConfig";
+import { deleteData, getUserDetail, loadData } from "../firebaseConfig";
 import AddCourses from "../components/AddCourses";
 import AddAssignments from "../components/AddAssignments";
 import AddExams from "../components/AddExams";
@@ -19,8 +19,8 @@ const Schedules = ({ navigation }) => {
 
   const [courses, setCourses] = useState([]);
   const [term, setTerm] = useState("");
-  const [assignments, setAssignments] = useState([]);
-  const [exams, setExams] = useState([]);
+  // const [assignments, setAssignments] = useState([]);
+  // const [exams, setExams] = useState([]);
 
   const [activeModalE, setActiveModalE] = useState(false);
   const [activeModalA, setActiveModalA] = useState(false);
@@ -28,11 +28,12 @@ const Schedules = ({ navigation }) => {
   const deleteComponent = ({ id, type, courseId }) => {
     if (type === "courses") {
       deleteData({ id: id, type: "courses" });
-    } else if (type === "assignments") {
-      // deleteFromCourse({ id: id, type: "assignments", courseId: courseId });
-    } else if (type === "exams") {
-      // deleteFromCourse({ id: id, type: "exams", courseId: courseId });
     }
+    // } else if (type === "assignments") {
+    //   // deleteFromCourse({ id: id, type: "assignments", courseId: courseId });
+    // } else if (type === "exams") {
+    //   // deleteFromCourse({ id: id, type: "exams", courseId: courseId });
+    // }
   };
 
   const editComponent = ({ type, item, course }) => {
@@ -40,13 +41,14 @@ const Schedules = ({ navigation }) => {
     setCurrentItem(item);
     if (type === "courses") {
       setActiveModal(true);
-    } else if (type === "assignments") {
-      setCurrentCourse(course);
-      setActiveModalA(true);
-    } else if (type === "exams") {
-      setCurrentCourse(course);
-      setActiveModalE(true);
     }
+    // } else if (type === "assignments") {
+    //   setCurrentCourse(course);
+    //   setActiveModalA(true);
+    // } else if (type === "exams") {
+    //   setCurrentCourse(course);
+    //   setActiveModalE(true);
+    // }
   };
 
   const addComponent = ({ course, type }) => {
@@ -54,13 +56,14 @@ const Schedules = ({ navigation }) => {
     setModalType("Add");
     if (type === "courses") {
       setActiveModal(true);
-    } else if (type === "assignments") {
-      setCurrentCourse(course);
-      setActiveModalE(true);
-    } else if (type === "exams") {
-      setCurrentCourse(course);
-      setActiveModalA(true);
     }
+    // } else if (type === "assignments") {
+    //   setCurrentCourse(course);
+    //   setActiveModalE(true);
+    // } else if (type === "exams") {
+    //   setCurrentCourse(course);
+    //   setActiveModalA(true);
+    // }
   };
 
   const completeAssignment = ({ item, courseId }) => {
@@ -73,9 +76,10 @@ const Schedules = ({ navigation }) => {
   };
 
   useEffect(() => {
-    loadData({ setData: setCourses, setTerm: setTerm, type: "courses" });
-    loadData({ setData: setAssignments, type: "assignments" });
-    loadData({ setData: setExams, type: "exams" });
+    getUserDetail({ type: "currentTerm", setValue: setTerm });
+    loadData({ setData: setCourses, type: "courses" });
+    // loadData({ setData: setAssignments, type: "assignments" });
+    // loadData({ setData: setExams, type: "exams" });
   }, []);
 
   return (
@@ -122,7 +126,12 @@ const Schedules = ({ navigation }) => {
         {courses.map((course, index) => {
           return (
             <View key={index} className="space-y-1">
-              <TouchableOpacity className="bg-gray-300 rounded-lg p-2  justify-between">
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate("DisplayCourse", { data: course })
+                }
+                className="bg-gray-300 rounded-lg p-2  justify-between"
+              >
                 <View>
                   <View className="flex-row justify-between">
                     <Text className="font-semibold text-2xl">
@@ -198,151 +207,6 @@ const Schedules = ({ navigation }) => {
                   </View>
                 </View>
               </TouchableOpacity>
-              {assignments[course.id] &&
-                assignments[course.id].map((item, i) => (
-                  <View
-                    className="rounded-lg ml-10 p-2 bg-gray-300 h-24"
-                    key={i}
-                  >
-                    {/* TouchableOpacity Here */}
-                    <View className=" flex-1">
-                      <View className="flex-row">
-                        <Text className="text-center font-bold text-sm flex-auto">
-                          Assignment: {item.name}
-                        </Text>
-
-                        {item.completed === true ? (
-                          <Icon
-                            name="check-box"
-                            size={20}
-                            onPress={() =>
-                              completeA({
-                                item: item,
-                                courseId: course.id,
-                              })
-                            }
-                          />
-                        ) : (
-                          <Icon
-                            name="check-box-outline-blank"
-                            size={20}
-                            onPress={() =>
-                              completeAssignment({
-                                item: item,
-                                courseId: course.id,
-                              })
-                            }
-                          />
-                        )}
-                      </View>
-
-                      <View className="self-start">
-                        <Text className="font-semibold">
-                          Description:{" "}
-                          <Text className="font-normal">
-                            {item.description}
-                          </Text>
-                        </Text>
-                        <Text className="font-semibold">
-                          Due Date:{" "}
-                          <Text className="font-normal">
-                            {item.date.toDate().toDateString()}
-                          </Text>
-                        </Text>
-                      </View>
-                      <View className="flex-row justify-end space-x-4">
-                        <Icon
-                          name="edit-note"
-                          size={25}
-                          onPress={() =>
-                            editComponent({
-                              type: "assignments",
-                              item: item,
-                              course: course,
-                            })
-                          }
-                        />
-                        <Icon
-                          name="delete"
-                          size={25}
-                          onPress={() =>
-                            deleteComponent({
-                              id: item.id,
-                              type: "assignments",
-                              courseId: course.id,
-                            })
-                          }
-                        />
-                      </View>
-                    </View>
-                  </View>
-                ))}
-              {exams[course.id] &&
-                exams[course.id].map((item, i) => (
-                  <View
-                    className="rounded-lg ml-10 p-2 bg-gray-300 h-28"
-                    key={i}
-                  >
-                    {/* TouchableOpacity Here */}
-                    <View className=" flex-1">
-                      <View className="flex-row">
-                        <Text className="text-center font-bold text-sm flex-auto">
-                          Exams: {item.name}
-                        </Text>
-                      </View>
-
-                      <View className="self-start">
-                        <Text className="font-semibold">
-                          Location:{" "}
-                          <Text className="font-normal">{item.location}</Text>
-                        </Text>
-                        <Text className="font-semibold">
-                          Exam Date:{" "}
-                          <Text className="font-normal">
-                            {item.date.toDate().toDateString()}
-                          </Text>
-                        </Text>
-                        <Text className="font-semibold">
-                          StartTime:{" "}
-                          <Text className="font-normal ">
-                            {item.startTime.toDate().toLocaleTimeString()}
-                          </Text>
-                        </Text>
-                        <Text className="font-semibold ">
-                          EndTime:{" "}
-                          <Text className="font-normal ">
-                            {item.endTime.toDate().toLocaleTimeString()}
-                          </Text>
-                        </Text>
-                      </View>
-                      <View className="flex-row justify-end space-x-4">
-                        <Icon
-                          name="edit-note"
-                          size={25}
-                          onPress={() =>
-                            editComponent({
-                              type: "exams",
-                              item: item,
-                              course: course,
-                            })
-                          }
-                        />
-                        <Icon
-                          name="delete"
-                          size={25}
-                          onPress={() =>
-                            deleteComponent({
-                              id: item.id,
-                              type: "exams",
-                              courseId: course.id,
-                            })
-                          }
-                        />
-                      </View>
-                    </View>
-                  </View>
-                ))}
-              {/* {exams && console.log(exams)} */}
             </View>
           );
         })}

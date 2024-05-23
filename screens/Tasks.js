@@ -13,6 +13,7 @@ import Icon from "react-native-vector-icons/MaterialIcons";
 import { addData, deleteData, loadData, updateData } from "../firebaseConfig";
 import AddTask from "../components/AddTask";
 import { Button, Menu } from "react-native-paper";
+import ShowTask from "../components/ShowTask";
 
 const Tasks = ({ navigation }) => {
   const [active, setActive] = useState("Ongoing");
@@ -21,7 +22,10 @@ const Tasks = ({ navigation }) => {
 
   const [activeModal, setActiveModal] = useState(false);
   const [modalType, setModalType] = useState("Add");
+  // Using this
   const [currentItem, setCurrentItem] = useState(null);
+
+  const [showModal, setShowModal] = useState(false);
 
   const [tasks, setTasks] = useState([]);
 
@@ -85,9 +89,14 @@ const Tasks = ({ navigation }) => {
           item={currentItem}
         />
       )}
-      {/* {activeModalE && (
-        <EditTask setActiveModal={setActiveModalE} item={currentItem} />
-      )} */}
+      {showModal && (
+        <ShowTask
+          editComponent={editComponent}
+          setShowModal={setShowModal}
+          type={"tasks"}
+          item={currentItem}
+        />
+      )}
       <View className="flex-row mb-2 items-center justify-between">
         <Icon
           name="chevron-left"
@@ -124,52 +133,47 @@ const Tasks = ({ navigation }) => {
           renderItem={({ item }) => (
             <View className="rounded-lg mb-2 p-2 bg-gray-300 ">
               {/* TouchableOpacity Here */}
-              <View className=" flex-1">
-                <View className="flex-row">
-                  <Text className="text-center font-bold text-sm flex-auto">
-                    {item.name}
-                  </Text>
-
-                  {item.completed === true ? (
-                    <Icon
-                      name="check-box"
-                      size={20}
-                      onPress={() => completeTask(item)}
-                    />
-                  ) : (
-                    <Icon
-                      name="check-box-outline-blank"
-                      size={20}
-                      onPress={() => completeTask(item)}
-                    />
-                  )}
-                </View>
-
-                <View className="self-start">
-                  <Text className="font-semibold">
-                    Description:{" "}
-                    <Text className="font-normal">{item.description}</Text>
-                  </Text>
-                  <Text className="font-semibold">
-                    Due Date:{" "}
-                    <Text className="font-normal">
-                      {item.date.toDate().toDateString()}
+              <TouchableOpacity
+                onPress={() => {
+                  setCurrentItem(item);
+                  setShowModal(true);
+                }}
+              >
+                <View className=" flex-1">
+                  <View className="flex-row">
+                    <Text className="text-center font-bold text-sm flex-auto">
+                      {item.name}
                     </Text>
-                  </Text>
+
+                    {item.completed === true ? (
+                      <Icon
+                        name="check-box"
+                        size={20}
+                        onPress={() => completeTask(item)}
+                      />
+                    ) : (
+                      <Icon
+                        name="check-box-outline-blank"
+                        size={20}
+                        onPress={() => completeTask(item)}
+                      />
+                    )}
+                  </View>
+
+                  <View className="self-start">
+                    <Text className="font-semibold">
+                      Description:{" "}
+                      <Text className="font-normal">{item.description}</Text>
+                    </Text>
+                    <Text className="font-semibold">
+                      Due Date:{" "}
+                      <Text className="font-normal">
+                        {item.date.toDate().toDateString()}
+                      </Text>
+                    </Text>
+                  </View>
                 </View>
-                <View className="flex-row justify-end space-x-4">
-                  <Icon
-                    name="edit-note"
-                    size={25}
-                    onPress={() => editComponent(item)}
-                  />
-                  <Icon
-                    name="delete"
-                    size={25}
-                    onPress={() => deleteComponent(item.id)}
-                  />
-                </View>
-              </View>
+              </TouchableOpacity>
             </View>
           )}
         />

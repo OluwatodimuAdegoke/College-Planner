@@ -11,7 +11,7 @@ import Icon from "react-native-vector-icons/MaterialIcons";
 import AddAssignments from "./AddAssignments";
 import AddExams from "./AddExams";
 import { Button, Menu } from "react-native-paper";
-
+import ShowTask from "../components/ShowTask";
 const Display = ({ route, navigation }) => {
   const { data } = route.params;
 
@@ -25,6 +25,8 @@ const Display = ({ route, navigation }) => {
   const [exams, setExams] = useState([]);
 
   const [visible, setVisible] = useState(false);
+
+  const [showModal, setShowModal] = useState(false);
 
   const addComponent = ({ course, type }) => {
     setCurrentItem(null);
@@ -74,6 +76,10 @@ const Display = ({ route, navigation }) => {
             <TouchableOpacity
               className=" p-2 rounded-md bg-gray-400"
               key={item.id}
+              onPress={() => {
+                setCurrentItem(item);
+                setShowModal(true);
+              }}
             >
               <View className="flex-row items-center justify-between">
                 <View>
@@ -103,27 +109,6 @@ const Display = ({ route, navigation }) => {
                     onPress={() => completeTask({ item: item })}
                   />
                 )}
-
-                <Icon
-                  name="delete"
-                  size={18}
-                  onPress={() =>
-                    deleteComponent({
-                      id: item.id,
-                      type: "assignments",
-                    })
-                  }
-                />
-                <Icon
-                  name="edit"
-                  size={18}
-                  onPress={() =>
-                    editComponent({
-                      type: "assignments",
-                      item: item,
-                    })
-                  }
-                />
               </View>
             </TouchableOpacity>
           );
@@ -237,6 +222,14 @@ const Display = ({ route, navigation }) => {
           course={data}
         />
       )}
+      {showModal && (
+        <ShowTask
+          editComponent={editComponent}
+          setShowModal={setShowModal}
+          type={"assignments"}
+          item={currentItem}
+        />
+      )}
       <View className="flex-row justify-between">
         <Text
           className="font-bold text-lg text-center flex-auto"
@@ -273,8 +266,6 @@ const Display = ({ route, navigation }) => {
             : {data.endTime.toDate().toTimeString()}
           </Text>
         </Text>
-        <Icon name="edit-note" />
-        <Icon name="delete" />
       </View>
 
       <View>

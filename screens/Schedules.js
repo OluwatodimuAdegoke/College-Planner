@@ -91,22 +91,7 @@ const Schedules = ({ navigation }) => {
           item={currentItem}
         />
       )}
-      {activeModalA && (
-        <AddAssignments
-          setActiveModal={setActiveModalA}
-          type={modalType}
-          item={currentItem}
-          course={currentCourse}
-        />
-      )}
-      {activeModalE && (
-        <AddExams
-          setActiveModal={setActiveModalE}
-          type={modalType}
-          item={currentItem}
-          course={currentCourse}
-        />
-      )}
+
       <View className="flex-row mb-1 items-center">
         <Icon
           name="chevron-left"
@@ -188,20 +173,6 @@ const Schedules = ({ navigation }) => {
                         onPress={() =>
                           deleteComponent({ id: course.id, type: "courses" })
                         }
-                      />
-                    </View>
-                    <View className="flex-row items-center">
-                      <Icon
-                        name="assignment"
-                        size={25}
-                        onPress={() =>
-                          addComponent({ course, type: "assignments" })
-                        }
-                      />
-                      <Icon
-                        name="book"
-                        size={25}
-                        onPress={() => addComponent({ course, type: "exams" })}
                       />
                     </View>
                   </View>

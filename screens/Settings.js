@@ -28,8 +28,6 @@ const Settings = ({ navigation }) => {
   // Used for the edit term name method
   const [currentItem, setCurrentItem] = useState(null);
 
-  const [value, setValue] = useState(currentTerm);
-
   const addComponent = () => {
     setModalType("Add");
     setCurrentItem(null);
@@ -49,7 +47,6 @@ const Settings = ({ navigation }) => {
   const deleteComponent = ({ item }) => {
     if (item.name === currentTerm) {
       Alert.alert("Current Term", "You cannot delete the current term");
-      console.log("Error");
     } else {
       deleteData({ id: id, type: "terms" });
     }

@@ -32,7 +32,6 @@ const AddTerm = ({ setActiveModal, type, item, editCurrentTerm }) => {
     if (type === "Edit") {
       updateData({ id: item.id, type: "terms", value: task });
       if (editCurrentTerm) {
-        console.log(task.name);
         setUserDetail({
           value: { currentTerm: task.name },
         });

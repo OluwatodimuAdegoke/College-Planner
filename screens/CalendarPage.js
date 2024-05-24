@@ -11,14 +11,9 @@ import {
   subDays,
 } from "date-fns";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import { loadData } from "../firebaseConfig";
+import { getUserDetail, loadData } from "../firebaseConfig";
 
 const CalendarPage = ({ navigation }) => {
-  // const month = ["January","February","March","April","May","June","July","August","September","October","November","December"];
-
-  // const tasks = database.users[0].tasks;
-  // const assignments = database.users[0].assignments;
-
   const [assignments, setAssignments] = useState([]);
   const [tasks, setTasks] = useState([]);
   const [exams, setExams] = useState([]);
@@ -122,14 +117,22 @@ const CalendarPage = ({ navigation }) => {
 
   //TODO: Work on making the calendar go back to its current week after changing the navigation
 
+  const [currentTerm, setCurrentTerm] = useState(null);
+
   useEffect(() => {
     loadLocalData(currentWeek);
-  }, [assignments, exams, tasks]);
+    // console.log("Also, Here", currentTerm);
+  }, [assignments, exams, tasks, currentTerm]);
 
   useEffect(() => {
     loadData({ setData: setAssignments, type: "assignments" });
     loadData({ setData: setExams, type: "exams" });
     loadData({ setData: setTasks, type: "tasks" });
+    // console.log("Here", currentTerm);
+  }, [currentTerm]);
+
+  useEffect(() => {
+    getUserDetail({ setValue: setCurrentTerm, type: "currentTerm" });
   }, []);
 
   return (

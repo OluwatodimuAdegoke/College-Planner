@@ -22,6 +22,8 @@ const HomePage = ({ navigation }) => {
   const [showModalType, setShowModalType] = useState("");
   const [currentItem, setCurrentItem] = useState(null);
 
+  // const [currentTerm, setCurrentTerm] = useState(null);
+
   useEffect(() => {
     getUserDetail({ setValue: setUserName, type: "username" });
     getUserDetail({ setValue: setProfilePicture, type: "profile_picture" });
@@ -31,6 +33,10 @@ const HomePage = ({ navigation }) => {
     queryTask({ setData: setCourses, type: "courses" });
     queryTask({ setData: setStudySessions, type: "studySessions" });
   }, []);
+  // console.log(currentTerm);
+  // useEffect(() => {
+  //   getUserDetail({ setValue: setCurrentTerm, type: "currentTerm" });
+  // }, []);
 
   if (courses.length > 0) {
     schedule = (

@@ -19,8 +19,6 @@ const Schedules = ({ navigation }) => {
 
   const [courses, setCourses] = useState([]);
   const [term, setTerm] = useState("");
-  // const [assignments, setAssignments] = useState([]);
-  // const [exams, setExams] = useState([]);
 
   const [activeModalE, setActiveModalE] = useState(false);
   const [activeModalA, setActiveModalA] = useState(false);
@@ -29,11 +27,6 @@ const Schedules = ({ navigation }) => {
     if (type === "courses") {
       deleteData({ id: id, type: "courses" });
     }
-    // } else if (type === "assignments") {
-    //   // deleteFromCourse({ id: id, type: "assignments", courseId: courseId });
-    // } else if (type === "exams") {
-    //   // deleteFromCourse({ id: id, type: "exams", courseId: courseId });
-    // }
   };
 
   const editComponent = ({ type, item, course }) => {
@@ -42,13 +35,6 @@ const Schedules = ({ navigation }) => {
     if (type === "courses") {
       setActiveModal(true);
     }
-    // } else if (type === "assignments") {
-    //   setCurrentCourse(course);
-    //   setActiveModalA(true);
-    // } else if (type === "exams") {
-    //   setCurrentCourse(course);
-    //   setActiveModalE(true);
-    // }
   };
 
   const addComponent = ({ course, type }) => {
@@ -57,13 +43,6 @@ const Schedules = ({ navigation }) => {
     if (type === "courses") {
       setActiveModal(true);
     }
-    // } else if (type === "assignments") {
-    //   setCurrentCourse(course);
-    //   setActiveModalE(true);
-    // } else if (type === "exams") {
-    //   setCurrentCourse(course);
-    //   setActiveModalA(true);
-    // }
   };
 
   const completeAssignment = ({ item, courseId }) => {

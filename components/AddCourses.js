@@ -52,6 +52,7 @@ const AddCourses = ({ setActiveModal, type, item }) => {
       startTime: startTime,
       endTime: endTime,
       days: daysChosen,
+      date: new Date(),
     };
 
     setActiveModal(false);

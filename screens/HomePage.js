@@ -22,7 +22,7 @@ const HomePage = ({ navigation }) => {
   const [showModalType, setShowModalType] = useState("");
   const [currentItem, setCurrentItem] = useState(null);
 
-  // const [currentTerm, setCurrentTerm] = useState(null);
+  const [currentTerm, setCurrentTerm] = useState(null);
 
   useEffect(() => {
     getUserDetail({ setValue: setUserName, type: "username" });
@@ -32,11 +32,12 @@ const HomePage = ({ navigation }) => {
     queryTask({ setData: setAssignments, type: "assignments" });
     queryTask({ setData: setCourses, type: "courses" });
     queryTask({ setData: setStudySessions, type: "studySessions" });
-  }, []);
+  }, [currentTerm]);
+
   // console.log(currentTerm);
-  // useEffect(() => {
-  //   getUserDetail({ setValue: setCurrentTerm, type: "currentTerm" });
-  // }, []);
+  useEffect(() => {
+    getUserDetail({ setValue: setCurrentTerm, type: "currentTerm" });
+  }, []);
 
   if (courses.length > 0) {
     schedule = (
@@ -271,7 +272,10 @@ const HomePage = ({ navigation }) => {
       )}
       <View className="justify-between pt-2 flex-row items-center">
         <View>
-          <Text className="text-black font-normal text-l">Good Morning</Text>
+          <Text className="text-black font-normal text-l">
+            {" "}
+            {currentTerm} ,Good Morning
+          </Text>
           <Text className="text-black font-bold text-xl">
             Hello, {userName}
           </Text>

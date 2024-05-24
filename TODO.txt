@@ -7,9 +7,6 @@ Add function to delete exmas and assignemnts related to a course
 
 Work on the completed menu button
 
-Work on query data for the selected term only
-Look for solution to data not deleteing completely
-
 
 
 
@@ -33,21 +30,4 @@ if (isLoading) {
   return <Text>Loading...</Text>;
 }
 
-// Rest of the component
 
-Check this to see if it works with deleting
-const [isDeleting, setIsDeleting] = useState(false);
-
-const deleteData = async () => {
-  setIsDeleting(true);
-  // Perform the delete operation
-  setIsDeleting(false);
-};
-
-useEffect(() => {
-  if (!isDeleting) {
-    loadData({ setData: setAssignments, type: "assignments" });
-    loadData({ setData: setExams, type: "exams" });
-    loadData({ setData: setTasks, type: "tasks" });
-  }
-}, [isDeleting]);

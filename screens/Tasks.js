@@ -13,7 +13,7 @@ import Icon from "react-native-vector-icons/MaterialIcons";
 import { addData, deleteData, loadData, updateData } from "../firebaseConfig";
 import AddTask from "../components/AddTask";
 import { Button, Menu } from "react-native-paper";
-import ShowTask from "../components/ShowTask";
+import ShowDetails from "../components/ShowDetails";
 
 const Tasks = ({ navigation }) => {
   const [active, setActive] = useState("Ongoing");
@@ -90,7 +90,7 @@ const Tasks = ({ navigation }) => {
         />
       )}
       {showModal && (
-        <ShowTask
+        <ShowDetails
           editComponent={editComponent}
           setShowModal={setShowModal}
           type={"tasks"}

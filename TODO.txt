@@ -5,6 +5,7 @@ Future: Delete all courses related to a specific term
 
 Add function to delete exmas and assignemnts related to a course
 
-and then work on the other pop up modal for exam and assignemnts
+Work on the pop up modal for exams and connect it to calendar and homepage
 
 Work on the completed menu button
+

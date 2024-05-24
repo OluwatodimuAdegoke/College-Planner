@@ -1,9 +1,9 @@
 import { View, Text, TouchableOpacity, Image } from "react-native";
 import React, { useEffect, useState } from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { FlatList, ScrollView } from "react-native-gesture-handler";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { getUserDetail, queryTask } from "../firebaseConfig";
+import ShowDetails from "../components/ShowDetails";
 
 const HomePage = ({ navigation }) => {
   const [userName, setUserName] = useState("");
@@ -18,6 +18,10 @@ const HomePage = ({ navigation }) => {
   const [courses, setCourses] = useState([]);
   const [study_sessions, setStudySessions] = useState([]);
 
+  const [showModal, setShowModal] = useState(false);
+  const [showModalType, setShowModalType] = useState("");
+  const [currentItem, setCurrentItem] = useState(null);
+
   useEffect(() => {
     getUserDetail({ setValue: setUserName, type: "username" });
     getUserDetail({ setValue: setProfilePicture, type: "profile_picture" });
@@ -28,7 +32,7 @@ const HomePage = ({ navigation }) => {
     queryTask({ setData: setStudySessions, type: "studySessions" });
   }, []);
 
-  if (courses !== null) {
+  if (courses.length > 0) {
     schedule = (
       <ScrollView
         horizontal
@@ -87,6 +91,11 @@ const HomePage = ({ navigation }) => {
             <TouchableOpacity
               key={item.id}
               className="flex-row p-2 rounded-md bg-gray-400 justify-between"
+              onPress={() => {
+                setCurrentItem(item);
+                setShowModalType("tasks");
+                setShowModal(true);
+              }}
             >
               <View className="flex-row items-center">
                 <Icon name="add-task" size={20} />
@@ -112,7 +121,7 @@ const HomePage = ({ navigation }) => {
     tasks = <Text>No Upcoming Tasks...</Text>;
   }
 
-  if (assignments !== null) {
+  if (assignments.length > 0) {
     ass = (
       <ScrollView
         showsVerticalScrollIndicator={false}
@@ -123,6 +132,11 @@ const HomePage = ({ navigation }) => {
             <TouchableOpacity
               className=" p-2 rounded-md bg-gray-400"
               key={item.id}
+              onPress={() => {
+                setCurrentItem(item);
+                setShowModalType("assignments");
+                setShowModal(true);
+              }}
             >
               <View className="flex-row items-center justify-between">
                 <View>
@@ -147,7 +161,7 @@ const HomePage = ({ navigation }) => {
     ass = <Text>No Upcoming Assignments...</Text>;
   }
 
-  if (exams !== null) {
+  if (exams.length > 0) {
     exam = (
       <ScrollView
         showsVerticalScrollIndicator={false}
@@ -158,6 +172,11 @@ const HomePage = ({ navigation }) => {
             <TouchableOpacity
               className=" p-2 rounded-md bg-gray-400"
               key={item.id}
+              onPress={() => {
+                setCurrentItem(item);
+                setShowModalType("exams");
+                setShowModal(true);
+              }}
             >
               <View className="justify-between">
                 <View>
@@ -201,7 +220,7 @@ const HomePage = ({ navigation }) => {
     exam = <Text>No Upcoming Assignments...</Text>;
   }
 
-  if (study_sessions !== null) {
+  if (study_sessions.length > 0) {
     study = (
       <ScrollView
         showsHorizontalScrollIndicator={false}
@@ -215,6 +234,7 @@ const HomePage = ({ navigation }) => {
             <TouchableOpacity
               key={item.id}
               className="flex p-2 rounded-md bg-gray-400"
+              onPress={() => navigation.navigate("StudyPage", { item: item })}
             >
               <Text className="font-bold text-lg text-center">
                 {item.name.toUpperCase()}
@@ -223,12 +243,6 @@ const HomePage = ({ navigation }) => {
                 <Text className="font-semibold text-base">Time: </Text>
                 <Text className="text-base">{item.duration} minutes</Text>
               </View>
-              {/* <View className="flex-row items-start">
-                <Text className="font-semibold text-base">Notes: </Text>
-                <Text className="text-base w-36" numberOfLines={3}>
-                  {item.notes}
-                </Text>
-              </View> */}
             </TouchableOpacity>
           );
         })}
@@ -241,6 +255,14 @@ const HomePage = ({ navigation }) => {
   return (
     <View className="flex-1 justify-between p-2">
       {/* Header */}
+      {showModal && (
+        <ShowDetails
+          editComponent={null}
+          setShowModal={setShowModal}
+          type={showModalType}
+          item={currentItem}
+        />
+      )}
       <View className="justify-between pt-2 flex-row items-center">
         <View>
           <Text className="text-black font-normal text-l">Good Morning</Text>

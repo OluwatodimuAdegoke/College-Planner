@@ -9,9 +9,14 @@ import {
 import React, { useEffect, useState } from "react";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
-import { addData, loadData, updateData } from "../firebaseConfig";
+import {
+  addData,
+  loadData,
+  setUserDetail,
+  updateData,
+} from "../firebaseConfig";
 
-const AddTerm = ({ setActiveModal, type, item }) => {
+const AddTerm = ({ setActiveModal, type, item, editCurrentTerm }) => {
   const [name, setName] = useState("");
 
   const checkField = () => {
@@ -26,6 +31,12 @@ const AddTerm = ({ setActiveModal, type, item }) => {
     setActiveModal(false);
     if (type === "Edit") {
       updateData({ id: item.id, type: "terms", value: task });
+      if (editCurrentTerm) {
+        console.log(task.name);
+        setUserDetail({
+          value: { currentTerm: task.name },
+        });
+      }
     } else {
       addData({ value: task, type: "terms" });
     }
@@ -33,7 +44,7 @@ const AddTerm = ({ setActiveModal, type, item }) => {
 
   useEffect(() => {
     if (item) {
-      setTaskName(item.name);
+      setName(item.name);
     }
   }, [item]);
 

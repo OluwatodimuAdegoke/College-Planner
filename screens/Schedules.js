@@ -78,8 +78,6 @@ const Schedules = ({ navigation }) => {
   useEffect(() => {
     getUserDetail({ type: "currentTerm", setValue: setTerm });
     loadData({ setData: setCourses, type: "courses" });
-    // loadData({ setData: setAssignments, type: "assignments" });
-    // loadData({ setData: setExams, type: "exams" });
   }, []);
 
   return (

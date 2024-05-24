@@ -11,7 +11,7 @@ import Icon from "react-native-vector-icons/MaterialIcons";
 import AddAssignments from "./AddAssignments";
 import AddExams from "./AddExams";
 import { Button, Menu } from "react-native-paper";
-import ShowTask from "../components/ShowTask";
+import ShowDetails from "./ShowDetails";
 const Display = ({ route, navigation }) => {
   const { data } = route.params;
 
@@ -27,6 +27,7 @@ const Display = ({ route, navigation }) => {
   const [visible, setVisible] = useState(false);
 
   const [showModal, setShowModal] = useState(false);
+  const [showModalType, setShowModalType] = useState("");
 
   const addComponent = ({ course, type }) => {
     setCurrentItem(null);
@@ -78,6 +79,7 @@ const Display = ({ route, navigation }) => {
               key={item.id}
               onPress={() => {
                 setCurrentItem(item);
+                setShowModalType("assignments");
                 setShowModal(true);
               }}
             >
@@ -130,6 +132,11 @@ const Display = ({ route, navigation }) => {
             <TouchableOpacity
               className=" p-2 rounded-md bg-gray-400"
               key={item.id}
+              onPress={() => {
+                setCurrentItem(item);
+                setShowModalType("exams");
+                setShowModal(true);
+              }}
             >
               <View className="justify-between">
                 <View>
@@ -222,11 +229,12 @@ const Display = ({ route, navigation }) => {
           course={data}
         />
       )}
+
       {showModal && (
-        <ShowTask
+        <ShowDetails
           editComponent={editComponent}
           setShowModal={setShowModal}
-          type={"assignments"}
+          type={showModalType}
           item={currentItem}
         />
       )}

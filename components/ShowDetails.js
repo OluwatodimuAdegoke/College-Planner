@@ -8,11 +8,10 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import RNDateTimePicker from "@react-native-community/datetimepicker";
 import { addData, loadData, updateData, deleteData } from "../firebaseConfig";
-import AddTask from "../components/AddTask";
+import AddTask from "./AddTask";
 
-const ShowTask = ({ setShowModal, type, item, editComponent }) => {
+const ShowDetails = ({ setShowModal, type, item, editComponent }) => {
   const [activeModal, setActiveModal] = useState(false);
 
   const completeTask = (item) => {
@@ -28,10 +27,6 @@ const ShowTask = ({ setShowModal, type, item, editComponent }) => {
     deleteData({ id: id, type: type });
     setShowModal(false);
   };
-  //   const editComponent = (item) => {
-  //     // setShowModal(false);
-  //     setActiveModal(true);
-  //   };
 
   useEffect(() => {});
 
@@ -75,38 +70,54 @@ const ShowTask = ({ setShowModal, type, item, editComponent }) => {
               <Text>{item.completed ? "Completed" : "Not Completed"}</Text>
             </View>
           )}
+          {type === "exams" && (
+            <View>
+              <Text>Name: {item.name}</Text>
+              <Text>Course: {item.course}</Text>
+              <Text>Location: {item.location}</Text>
+              <Text>Exam Date: {item.date.toDate().toDateString()}</Text>
+              <Text>Start Time: {item.startTime.toDate().toTimeString()}</Text>
+              <Text>End Time: {item.endTime.toDate().toTimeString()}</Text>
+            </View>
+          )}
 
           <View className="flex-row justify-between space-x-4">
-            {item.completed === true ? (
-              <Icon
-                name="check-box"
-                size={20}
-                onPress={() => completeTask(item)}
-              />
-            ) : (
-              <Icon
-                name="check-box-outline-blank"
-                size={20}
-                onPress={() => completeTask(item)}
-              />
+            {type != "exams" &&
+              (item.completed === true ? (
+                <Icon
+                  name="check-box"
+                  size={20}
+                  onPress={() => completeTask(item)}
+                />
+              ) : (
+                <Icon
+                  name="check-box-outline-blank"
+                  size={20}
+                  onPress={() => completeTask(item)}
+                />
+              ))}
+
+            {editComponent !== null && (
+              <View className="flex-row space-x-8">
+                <Icon
+                  name="edit-note"
+                  size={25}
+                  onPress={() => {
+                    if (type == "tasks") {
+                      editComponent(item);
+                    } else {
+                      editComponent({ type: type, item: item });
+                    }
+                    setShowModal(false);
+                  }}
+                />
+                <Icon
+                  name="delete"
+                  size={25}
+                  onPress={() => deleteComponent(item.id)}
+                />
+              </View>
             )}
-            <Icon
-              name="edit-note"
-              size={25}
-              onPress={() => {
-                if (type == "tasks") {
-                  editComponent(item);
-                } else {
-                  editComponent({ type: type, item: item });
-                }
-                setShowModal(false);
-              }}
-            />
-            <Icon
-              name="delete"
-              size={25}
-              onPress={() => deleteComponent(item.id)}
-            />
           </View>
         </View>
       </View>
@@ -114,4 +125,4 @@ const ShowTask = ({ setShowModal, type, item, editComponent }) => {
   );
 };
 
-export default ShowTask;
+export default ShowDetails;

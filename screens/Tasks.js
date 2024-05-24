@@ -6,6 +6,7 @@ import {
   FlatList,
   TextInput,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -57,7 +58,6 @@ const Tasks = ({ navigation }) => {
 
   const deleteComponent = (id) => {
     deleteData({ id: id, type: "tasks" });
-    // loadData({ setData: setTasks, type: "tasks" });
   };
   const editComponent = (item) => {
     setModalType("Edit");
@@ -71,8 +71,15 @@ const Tasks = ({ navigation }) => {
     setActiveModal(true);
   };
 
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
-    loadData({ setData: setTasks, type: "tasks" });
+    const fetchData = async () => {
+      setIsLoading(true);
+      await loadData({ setData: setTasks, type: "tasks" });
+      setIsLoading(false);
+    };
+    fetchData();
   }, []);
 
   useEffect(() => {
@@ -125,59 +132,75 @@ const Tasks = ({ navigation }) => {
         </TouchableOpacity>
       </View>
 
-      <View className="flex-1 mt-2">
-        <FlatList
-          data={ongoing}
-          keyExtractor={(item, index) => index.toString()}
-          showsVerticalScrollIndicator={false}
-          renderItem={({ item }) => (
-            <View className="rounded-lg mb-2 p-2 bg-gray-300 ">
-              {/* TouchableOpacity Here */}
-              <TouchableOpacity
-                onPress={() => {
-                  setCurrentItem(item);
-                  setShowModal(true);
-                }}
-              >
-                <View className=" flex-1">
-                  <View className="flex-row">
-                    <Text className="text-center font-bold text-sm flex-auto">
-                      {item.name}
-                    </Text>
-
-                    {item.completed === true ? (
-                      <Icon
-                        name="check-box"
-                        size={20}
-                        onPress={() => completeTask(item)}
-                      />
-                    ) : (
-                      <Icon
-                        name="check-box-outline-blank"
-                        size={20}
-                        onPress={() => completeTask(item)}
-                      />
-                    )}
-                  </View>
-
-                  <View className="self-start">
-                    <Text className="font-semibold">
-                      Description:{" "}
-                      <Text className="font-normal">{item.description}</Text>
-                    </Text>
-                    <Text className="font-semibold">
-                      Due Date:{" "}
-                      <Text className="font-normal">
-                        {item.date.toDate().toDateString()}
-                      </Text>
-                    </Text>
-                  </View>
-                </View>
-              </TouchableOpacity>
-            </View>
-          )}
+      {isLoading && (
+        <ActivityIndicator
+          size="large"
+          className="justify-center items-center flex-1"
         />
-      </View>
+      )}
+      {!isLoading && (
+        <View className="flex-1 mt-2">
+          <FlatList
+            data={ongoing}
+            keyExtractor={(item, index) => index.toString()}
+            showsVerticalScrollIndicator={false}
+            renderItem={({ item }) => (
+              <View className="rounded-lg mb-2 p-2 bg-gray-300 ">
+                {/* TouchableOpacity Here */}
+                <TouchableOpacity
+                  onPress={() => {
+                    setCurrentItem(item);
+                    setShowModal(true);
+                  }}
+                >
+                  <View className=" flex-1">
+                    <View className="flex-row">
+                      <Text className="text-center font-bold text-sm flex-auto">
+                        {item.name}
+                      </Text>
+
+                      {item.completed === true ? (
+                        <Icon
+                          name="check-box"
+                          size={20}
+                          onPress={() => completeTask(item)}
+                        />
+                      ) : (
+                        <Icon
+                          name="check-box-outline-blank"
+                          size={20}
+                          onPress={() => completeTask(item)}
+                        />
+                      )}
+                    </View>
+
+                    <View className="self-start">
+                      <Text className="font-semibold">
+                        Description:{" "}
+                        <Text className="font-normal">{item.description}</Text>
+                      </Text>
+                      <Text className="font-semibold">
+                        Due Date:{" "}
+                        <Text className="font-normal">
+                          {item.date.toDate().toDateString()}
+                        </Text>
+                      </Text>
+                    </View>
+                    <View className="self-end">
+                      <Icon
+                        name="delete"
+                        size={25}
+                        onPress={() => deleteComponent(item.id)}
+                      />
+                    </View>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            )}
+          />
+        </View>
+      )}
+
       {active === "Ongoing" && (
         <TouchableOpacity
           className="justify-center items-center"

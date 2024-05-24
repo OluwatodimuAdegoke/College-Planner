@@ -1,9 +1,16 @@
-import { View, Text, TouchableOpacity, Image } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  ActivityIndicator,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import { FlatList, ScrollView } from "react-native-gesture-handler";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { getUserDetail, queryTask } from "../firebaseConfig";
 import ShowDetails from "../components/ShowDetails";
+// import { ActivityIndicator } from "react-native-paper";
 
 const HomePage = ({ navigation }) => {
   const [userName, setUserName] = useState("");
@@ -24,20 +31,39 @@ const HomePage = ({ navigation }) => {
 
   const [currentTerm, setCurrentTerm] = useState(null);
 
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
-    getUserDetail({ setValue: setUserName, type: "username" });
-    getUserDetail({ setValue: setProfilePicture, type: "profile_picture" });
-    queryTask({ setData: setTaskToday, type: "tasks" });
-    queryTask({ setData: setExams, type: "exams" });
-    queryTask({ setData: setAssignments, type: "assignments" });
-    queryTask({ setData: setCourses, type: "courses" });
-    queryTask({ setData: setStudySessions, type: "studySessions" });
+    const fetchData = async () => {
+      setIsLoading(true);
+      await getUserDetail({ setValue: setUserName, type: "username" });
+      await getUserDetail({
+        setValue: setProfilePicture,
+        type: "profile_picture",
+      });
+      await queryTask({ setData: setTaskToday, type: "tasks" });
+      await queryTask({ setData: setExams, type: "exams" });
+      await queryTask({ setData: setAssignments, type: "assignments" });
+      await queryTask({ setData: setCourses, type: "courses" });
+      await queryTask({ setData: setStudySessions, type: "studySessions" });
+      setIsLoading(false);
+    };
+    fetchData();
   }, [currentTerm]);
 
   // console.log(currentTerm);
   useEffect(() => {
     getUserDetail({ setValue: setCurrentTerm, type: "currentTerm" });
   }, []);
+
+  if (isLoading) {
+    return (
+      <ActivityIndicator
+        size="large"
+        className="justify-center items-center flex-1"
+      />
+    );
+  }
 
   if (courses.length > 0) {
     schedule = (

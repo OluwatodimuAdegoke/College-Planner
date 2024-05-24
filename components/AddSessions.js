@@ -25,6 +25,7 @@ const AddSessions = ({ setActiveModal, type, item }) => {
     const task = {
       duration: durationInt,
       name: name,
+      date: new Date(),
     };
 
     setActiveModal(false);

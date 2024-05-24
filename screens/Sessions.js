@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, ActivityIndicator } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -27,9 +27,15 @@ const Sessions = ({ navigation }) => {
     setCurrentItem(null);
     setActiveModal(true);
   };
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    loadData({ setData: setSessions, type: "studySessions" });
+    const fetchData = async () => {
+      setIsLoading(true);
+      await loadData({ setData: setSessions, type: "studySessions" });
+      setIsLoading(false);
+    };
+    fetchData();
   }, []);
 
   return (
@@ -51,53 +57,62 @@ const Sessions = ({ navigation }) => {
           Study Sessions
         </Text>
       </View>
-      <ScrollView className="flex-1" contentContainerStyle={{ gap: 10 }}>
-        {sessions.map((session, index) => {
-          return (
-            <TouchableOpacity
-              key={index}
-              className="bg-gray-300 rounded-lg p-2 h-28 justify-between"
-            >
-              <View className="flex-row items-center justify-between">
-                <Text className="font-bold text-3xl ">
-                  {/* {session.course.toUpperCase()} */}
-                </Text>
-                <TouchableOpacity className="h-10 w-10 bg-gray-500 items-center justify-center rounded-full">
-                  <Text>Start</Text>
-                </TouchableOpacity>
-              </View>
+      {isLoading && (
+        <ActivityIndicator
+          size="large"
+          className="justify-center items-center flex-1"
+        />
+      )}
+      {!isLoading && (
+        <ScrollView className="flex-1" contentContainerStyle={{ gap: 10 }}>
+          {sessions.map((session, index) => {
+            return (
+              <TouchableOpacity
+                key={index}
+                className="bg-gray-300 rounded-lg p-2 h-28 justify-between"
+              >
+                <View className="flex-row items-center justify-between">
+                  <Text className="font-bold text-3xl ">
+                    {/* {session.course.toUpperCase()} */}
+                  </Text>
+                  <TouchableOpacity className="h-10 w-10 bg-gray-500 items-center justify-center rounded-full">
+                    <Text>Start</Text>
+                  </TouchableOpacity>
+                </View>
 
-              <View>
-                <Text className="font-semibold text-2xl">
-                  Name:{" "}
-                  <Text className="font-normal text-xl">{session.name}</Text>
-                </Text>
-                <View className="flex-row justify-between">
-                  <View className="flex-row space-x-4 items-center">
-                    <Icon size={25} name="timer" />
-                    <Text className="font-semibold text-xl">
-                      {session.duration}{" "}
-                      <Text className="font-normal">minutes</Text>
-                    </Text>
-                  </View>
-                  <View className="flex-row items-center space-x-4">
-                    <Icon
-                      name="edit-note"
-                      size={25}
-                      onPress={() => editComponent(session)}
-                    />
-                    <Icon
-                      name="delete"
-                      size={25}
-                      onPress={() => deleteComponent(session.id)}
-                    />
+                <View>
+                  <Text className="font-semibold text-2xl">
+                    Name:{" "}
+                    <Text className="font-normal text-xl">{session.name}</Text>
+                  </Text>
+                  <View className="flex-row justify-between">
+                    <View className="flex-row space-x-4 items-center">
+                      <Icon size={25} name="timer" />
+                      <Text className="font-semibold text-xl">
+                        {session.duration}{" "}
+                        <Text className="font-normal">minutes</Text>
+                      </Text>
+                    </View>
+                    <View className="flex-row items-center space-x-4">
+                      <Icon
+                        name="edit-note"
+                        size={25}
+                        onPress={() => editComponent(session)}
+                      />
+                      <Icon
+                        name="delete"
+                        size={25}
+                        onPress={() => deleteComponent(session.id)}
+                      />
+                    </View>
                   </View>
                 </View>
-              </View>
-            </TouchableOpacity>
-          );
-        })}
-      </ScrollView>
+              </TouchableOpacity>
+            );
+          })}
+        </ScrollView>
+      )}
+
       <TouchableOpacity
         className="justify-center items-center"
         onPress={() => addComponent()}

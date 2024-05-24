@@ -1,4 +1,11 @@
-import { View, Text, Button, Dimensions, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  Button,
+  Dimensions,
+  StyleSheet,
+  ActivityIndicator,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
@@ -124,11 +131,16 @@ const CalendarPage = ({ navigation }) => {
     // console.log("Also, Here", currentTerm);
   }, [assignments, exams, tasks, currentTerm]);
 
+  const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
-    loadData({ setData: setAssignments, type: "assignments" });
-    loadData({ setData: setExams, type: "exams" });
-    loadData({ setData: setTasks, type: "tasks" });
-    // console.log("Here", currentTerm);
+    const fetchData = async () => {
+      setIsLoading(true);
+      await loadData({ setData: setAssignments, type: "assignments" });
+      await loadData({ setData: setExams, type: "exams" });
+      await loadData({ setData: setTasks, type: "tasks" });
+      setIsLoading(false);
+    };
+    fetchData();
   }, [currentTerm]);
 
   useEffect(() => {
@@ -185,83 +197,91 @@ const CalendarPage = ({ navigation }) => {
             const temp = getNextWeek(currentWeek);
             setCurrentWeek(temp);
             loadLocalData(temp);
-            // setEvents(loadLocalData(temp));
           }}
         >
           <Icon name="chevron-right" size={30} />
         </TouchableOpacity>
       </View>
 
-      <View className="flex-1 rounded-lg">
-        <View className="flex-1 p-2">
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={{ gap: 5 }}
-          >
-            {currentWeek.map((e, i) => {
-              const a = events[e.toDateString()];
-              return (
-                <View key={i} className="flex-row flex-1">
-                  <View className="pr-2">
-                    {a && (
-                      <Text className="text-xl font-bold">
-                        {format(new Date(a[0].date), "dd")}
-                      </Text>
-                    )}
-                  </View>
-                  <View className="flex-1">
-                    {a &&
-                      a.map((item, i) => {
-                        return (
-                          <View
-                            className="rounded-lg mb-2 p-2 bg-gray-300 h-18"
-                            key={i}
-                          >
-                            <TouchableOpacity className=" ">
-                              <View className="flex-row">
-                                <Text className="text-center font-bold text-sm flex-auto">
-                                  {item.name}
-                                </Text>
-                                {item.completed && (
-                                  <Icon
-                                    name="check-circle"
-                                    size={15}
-                                    color={"green"}
-                                  />
-                                )}
-                              </View>
+      {isLoading && (
+        <ActivityIndicator
+          size="large"
+          className="justify-center items-center flex-1"
+        />
+      )}
 
-                              <View className="self-start">
-                                <Text className="font-semibold">
-                                  Description:{" "}
-                                  <Text className="font-normal">
-                                    {item.description}
+      {!isLoading && (
+        <View className="flex-1 rounded-lg">
+          <View className="flex-1 p-2">
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={{ gap: 5 }}
+            >
+              {currentWeek.map((e, i) => {
+                const a = events[e.toDateString()];
+                return (
+                  <View key={i} className="flex-row flex-1">
+                    <View className="pr-2">
+                      {a && (
+                        <Text className="text-xl font-bold">
+                          {format(new Date(a[0].date), "dd")}
+                        </Text>
+                      )}
+                    </View>
+                    <View className="flex-1">
+                      {a &&
+                        a.map((item, i) => {
+                          return (
+                            <View
+                              className="rounded-lg mb-2 p-2 bg-gray-300 h-18"
+                              key={i}
+                            >
+                              <TouchableOpacity className=" ">
+                                <View className="flex-row">
+                                  <Text className="text-center font-bold text-sm flex-auto">
+                                    {item.name}
                                   </Text>
-                                </Text>
-                                <Text className="font-semibold">
-                                  Due Date:{" "}
-                                  <Text className="font-normal">
-                                    {new Date(item.date).toDateString()}
+                                  {item.completed && (
+                                    <Icon
+                                      name="check-circle"
+                                      size={15}
+                                      color={"green"}
+                                    />
+                                  )}
+                                </View>
+
+                                <View className="self-start">
+                                  <Text className="font-semibold">
+                                    Description:{" "}
+                                    <Text className="font-normal">
+                                      {item.description}
+                                    </Text>
                                   </Text>
-                                </Text>
-                                <Text className="font-semibold">
-                                  Type:{" "}
-                                  <Text className="font-normal">
-                                    {item.type}
+                                  <Text className="font-semibold">
+                                    Due Date:{" "}
+                                    <Text className="font-normal">
+                                      {new Date(item.date).toDateString()}
+                                    </Text>
                                   </Text>
-                                </Text>
-                              </View>
-                            </TouchableOpacity>
-                          </View>
-                        );
-                      })}
+                                  <Text className="font-semibold">
+                                    Type:{" "}
+                                    <Text className="font-normal">
+                                      {item.type}
+                                    </Text>
+                                  </Text>
+                                </View>
+                              </TouchableOpacity>
+                            </View>
+                          );
+                        })}
+                    </View>
                   </View>
-                </View>
-              );
-            })}
-          </ScrollView>
+                );
+              })}
+            </ScrollView>
+          </View>
         </View>
-      </View>
+      )}
     </SafeAreaView>
   );
 };

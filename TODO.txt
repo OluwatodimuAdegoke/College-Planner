@@ -1,33 +1,6 @@
 
-Continue using the terms collection to keep track of the terms in a person's profile
 
 Future: Delete all courses related to a specific term
-
-Add function to delete exmas and assignemnts related to a course
+Future: Delete all exams and assignemnts related to a course
 
 Work on the completed menu button
-
-
-
-
-Add this for loading data
-
-const [isLoading, setIsLoading] = useState(true);
-
-useEffect(() => {
-  const fetchData = async () => {
-    setIsLoading(true);
-    await loadData({ setData: setAssignments, type: "assignments" });
-    await loadData({ setData: setExams, type: "exams" });
-    await loadData({ setData: setTasks, type: "tasks" });
-    setIsLoading(false);
-  };
-
-  fetchData();
-}, [currentTerm]);
-
-if (isLoading) {
-  return <Text>Loading...</Text>;
-}
-
-

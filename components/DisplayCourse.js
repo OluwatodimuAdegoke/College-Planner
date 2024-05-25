@@ -8,10 +8,11 @@ import {
   updateData,
 } from "../firebaseConfig";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import AddAssignments from "./AddAssignments";
-import AddExams from "./AddExams";
+import AddAssignments from "../modals/AddAssignments";
+import AddExams from "../modals/AddExams";
 import { Button, Menu } from "react-native-paper";
-import ShowDetails from "./ShowDetails";
+import ShowDetails from "../modals/ShowDetails";
+import ItemComponent from "./ItemComponent";
 const Display = ({ route, navigation }) => {
   const { data } = route.params;
 
@@ -49,159 +50,6 @@ const Display = ({ route, navigation }) => {
     }
   };
 
-  const completeTask = ({ item }) => {
-    updateData({
-      value: { completed: !item.completed },
-      id: item.id,
-      type: "assignments",
-    });
-  };
-
-  const deleteComponent = ({ id, type }) => {
-    console.log(id, type);
-    if (type === "assignments") {
-      deleteData({ id: id, type: type });
-    } else if (type === "exams") {
-      deleteData({ id: id, type: type });
-    }
-  };
-
-  if (assignments !== null) {
-    ass = (
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ gap: 10 }}
-      >
-        {assignments.map((item) => {
-          return (
-            <TouchableOpacity
-              className=" p-2 rounded-md bg-gray-400"
-              key={item.id}
-              onPress={() => {
-                setCurrentItem(item);
-                setShowModalType("assignments");
-                setShowModal(true);
-              }}
-            >
-              <View className="flex-row items-center justify-between">
-                <View>
-                  <Text className="font-bold text-base">
-                    {item.name} : {item.course}
-                  </Text>
-                  <Text className="text-base w-11/12" numberOfLines={1}>
-                    {item.description}
-                  </Text>
-                </View>
-                <View className="">
-                  <Text>Due Date: </Text>
-                  <Text>{item.date.toDate().toDateString()}</Text>
-                </View>
-              </View>
-              <View className="flex-row justify-end space-x-4">
-                {item.completed === true ? (
-                  <Icon
-                    name="check-box"
-                    size={20}
-                    onPress={() => completeTask({ item: item })}
-                  />
-                ) : (
-                  <Icon
-                    name="check-box-outline-blank"
-                    size={20}
-                    onPress={() => completeTask({ item: item })}
-                  />
-                )}
-              </View>
-            </TouchableOpacity>
-          );
-        })}
-      </ScrollView>
-    );
-  } else {
-    ass = <Text>No Upcoming Assignments...</Text>;
-  }
-
-  if (exams !== null) {
-    exam = (
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ gap: 10 }}
-      >
-        {exams.map((item) => {
-          return (
-            <TouchableOpacity
-              className=" p-2 rounded-md bg-gray-400"
-              key={item.id}
-              onPress={() => {
-                setCurrentItem(item);
-                setShowModalType("exams");
-                setShowModal(true);
-              }}
-            >
-              <View className="justify-between">
-                <View>
-                  <Text className="font-semibold text-base">
-                    {item.course.toUpperCase()} : {item.name}
-                  </Text>
-                  <Text
-                    className="text-bold font-semibold w-11/12"
-                    numberOfLines={1}
-                  >
-                    Location:{" "}
-                    <Text className="font-normal">{item.location}</Text>
-                  </Text>
-                  <Text
-                    className="text-bold font-semibold w-11/12"
-                    numberOfLines={1}
-                  >
-                    Date:{" "}
-                    <Text className="font-normal">
-                      {item.date.toDate().toDateString()}
-                    </Text>
-                  </Text>
-                  <Text
-                    className="text-bold font-semibold w-11/12"
-                    numberOfLines={1}
-                  >
-                    Time:{" "}
-                    <Text className="font-normal">
-                      {item.startTime.toDate().toTimeString()} -{" "}
-                      {item.endTime.toDate().toTimeString()}
-                    </Text>
-                  </Text>
-                </View>
-              </View>
-              <View className="flex-row justify-end space-x-4">
-                <Icon
-                  name="delete"
-                  size={18}
-                  onPress={() =>
-                    deleteComponent({
-                      id: item.id,
-                      type: "exams",
-                    })
-                  }
-                />
-                <Icon
-                  name="edit"
-                  size={18}
-                  onPress={() =>
-                    editComponent({
-                      type: "exams",
-                      item: item,
-                    })
-                  }
-                />
-              </View>
-            </TouchableOpacity>
-          );
-        })}
-      </ScrollView>
-    );
-  } else {
-    exam = <Text>No Upcoming Assignments...</Text>;
-  }
-
   useEffect(() => {
     loadForCourse({
       setData: setAssignments,
@@ -238,52 +86,65 @@ const Display = ({ route, navigation }) => {
           item={currentItem}
         />
       )}
-      <View className="flex-row justify-between">
-        <Text
-          className="font-bold text-lg text-center flex-auto"
-          numberOfLines={1}
-        >
-          {data.code}
-          <Text className="font-normal">: {data.name}</Text>
-        </Text>
+      {/* <Icon name="chevron-left" size={30} onPress={() => navigation.goBack()} /> */}
+      <View className="p-2 rounded-md bg-gray-400  justify-between items-start flex-row">
+        <ItemComponent item={data} type="courses" edit={true} />
         <Menu
           visible={visible}
           onDismiss={() => setVisible(false)}
           anchor={
-            <Icon onPress={() => setVisible(true)} name="more-vert" size={30} />
+            <Icon onPress={() => setVisible(true)} name="more-vert" size={25} />
           }
           anchorPosition="bottom"
         >
-          <Menu.Item onPress={() => {}} title="Completed" />
+          <Menu.Item
+            onPress={() => {
+              navigation.navigate("CompletedAssignments");
+              setVisible(false);
+            }}
+            title="Completed Assignments"
+          />
         </Menu>
-      </View>
-      <View className="p-2 rounded-md bg-gray-400  justify-around items-start">
-        <Text className="font-bold text-base text-center">
-          Location:
-          <Text className="font-normal">: {data.location}</Text>
-        </Text>
-        <Text className="font-bold text-base text-center">
-          Start Time:
-          <Text className="font-normal">
-            : {data.startTime.toDate().toTimeString()}
-          </Text>
-        </Text>
-        <Text className="font-bold text-base text-center">
-          End Time:
-          <Text className="font-normal">
-            : {data.endTime.toDate().toTimeString()}
-          </Text>
-        </Text>
       </View>
 
       <View>
-        <Text className="font-bold text-xl mb-2">Assignments</Text>
-        {ass}
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ gap: 10 }}
+        >
+          {assignments.map((item) => {
+            return (
+              <TouchableOpacity
+                className=" p-2 rounded-md bg-gray-400"
+                key={item.id}
+                onPress={() => {
+                  setCurrentItem(item);
+                  setShowModalType("assignments");
+                  setShowModal(true);
+                }}
+              >
+                <ItemComponent item={item} type={"assignments"} edit={true} />
+              </TouchableOpacity>
+            );
+          })}
+          {exams.map((item) => {
+            return (
+              <TouchableOpacity
+                className=" p-2 rounded-md bg-gray-400"
+                key={item.id}
+                onPress={() => {
+                  setCurrentItem(item);
+                  setShowModalType("exams");
+                  setShowModal(true);
+                }}
+              >
+                <ItemComponent item={item} type="exams" edit={true} />
+              </TouchableOpacity>
+            );
+          })}
+        </ScrollView>
       </View>
-      <View>
-        <Text className="font-bold text-xl mb-2">Exams</Text>
-        {exam}
-      </View>
+
       <View className="absolute bottom-24 right-5 flex-row items-center space-x-2">
         <Text>Add Exams</Text>
         <TouchableOpacity

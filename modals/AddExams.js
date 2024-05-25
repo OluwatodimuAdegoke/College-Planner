@@ -27,7 +27,7 @@ const AddExams = ({ setActiveModal, type, item, course }) => {
   const [endTime, setEndTime] = useState(new Date());
 
   const checkField = () => {
-    if (name === "" || location === "") {
+    if (location === "") {
       Alert.alert("Empty Fields", "Please fill all the fields");
       return;
     }

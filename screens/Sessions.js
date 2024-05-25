@@ -5,7 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { ScrollView } from "react-native-gesture-handler";
 import { deleteData, loadData } from "../firebaseConfig";
-import AddSessions from "../components/AddSessions";
+import AddSessions from "../modals/AddSessions";
 import COLORS from "../components/COLORS";
 
 const Sessions = ({ navigation }) => {

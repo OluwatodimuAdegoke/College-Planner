@@ -10,7 +10,7 @@ import {
   deleteData,
 } from "../firebaseConfig";
 import React, { useEffect, useState } from "react";
-import AddTerm from "../components/AddTerm";
+import AddTerm from "../modals/AddTerm";
 import { FlatList } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import COLORS from "../components/COLORS";

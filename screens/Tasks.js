@@ -12,15 +12,14 @@ import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { addData, deleteData, loadData, updateData } from "../firebaseConfig";
-import AddTask from "../components/AddTask";
+import AddTask from "../modals/AddTask";
 import { Button, Menu } from "react-native-paper";
-import ShowDetails from "../components/ShowDetails";
+import ShowDetails from "../modals/ShowDetails";
 import COLORS from "../components/COLORS";
+import ItemComponent from "../components/ItemComponent";
 
 const Tasks = ({ navigation }) => {
   const [active, setActive] = useState("Ongoing");
-  const [ongoing, setOngoing] = useState([]);
-  // const [completed, setCompleted] = useState([]);
 
   const [activeModal, setActiveModal] = useState(false);
   const [modalType, setModalType] = useState("Add");
@@ -32,21 +31,6 @@ const Tasks = ({ navigation }) => {
   const [tasks, setTasks] = useState([]);
 
   const [visible, setVisible] = useState(false);
-
-  const separateData = () => {
-    let a = [];
-    let b = [];
-
-    tasks.map((e, i) => {
-      if (e.completed) {
-        a.push(e);
-      } else {
-        b.push(e);
-      }
-    });
-    setOngoing(b);
-    // setCompleted(a);
-  };
 
   const completeTask = (item) => {
     updateData({
@@ -77,15 +61,11 @@ const Tasks = ({ navigation }) => {
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
-      await loadData({ setData: setTasks, type: "tasks" });
+      await loadData({ setData: setTasks, type: "tasks", completed: false });
       setIsLoading(false);
     };
     fetchData();
   }, []);
-
-  useEffect(() => {
-    separateData();
-  }, [tasks]);
 
   return (
     <SafeAreaView className={` ${COLORS.mainColor} flex-1 p-2`}>
@@ -111,26 +91,26 @@ const Tasks = ({ navigation }) => {
           size={30}
           onPress={() => navigation.goBack()}
         />
-        <Text className="text-3xl font-bold justify-center text-center pr-7">
-          Tasks
+        <Text className="text-3xl font-bold justify-center text-center ">
+          Tasks - To Do
         </Text>
 
         <Menu
           visible={visible}
           onDismiss={() => setVisible(false)}
           anchor={
-            <Icon onPress={() => setVisible(true)} name="more-vert" size={30} />
+            <Icon onPress={() => setVisible(true)} name="more-vert" size={25} />
           }
           anchorPosition="bottom"
         >
-          <Menu.Item onPress={() => {}} title="Completed" />
+          <Menu.Item
+            onPress={() => {
+              navigation.navigate("CompletedTasks");
+              setVisible(false);
+            }}
+            title="Completed"
+          />
         </Menu>
-      </View>
-
-      <View className="flex-row justify-evenly items-center  rounded-lg">
-        <TouchableOpacity className="bg-gray-200 border border-gray-100 py-2 px-10 rounded-xl">
-          <Text className="font-semibold text-base">Ongoing</Text>
-        </TouchableOpacity>
       </View>
 
       {isLoading && (
@@ -142,11 +122,11 @@ const Tasks = ({ navigation }) => {
       {!isLoading && (
         <View className="flex-1 mt-2">
           <FlatList
-            data={ongoing}
+            data={tasks}
             keyExtractor={(item, index) => index.toString()}
             showsVerticalScrollIndicator={false}
             renderItem={({ item }) => (
-              <View className="rounded-lg mb-2 p-2 bg-gray-300 ">
+              <View className="rounded-lg mb-2 p-2 bg-gray-400 ">
                 {/* TouchableOpacity Here */}
                 <TouchableOpacity
                   onPress={() => {
@@ -154,47 +134,7 @@ const Tasks = ({ navigation }) => {
                     setShowModal(true);
                   }}
                 >
-                  <View className=" flex-1">
-                    <View className="flex-row">
-                      <Text className="text-center font-bold text-sm flex-auto">
-                        {item.name}
-                      </Text>
-
-                      {item.completed === true ? (
-                        <Icon
-                          name="check-box"
-                          size={20}
-                          onPress={() => completeTask(item)}
-                        />
-                      ) : (
-                        <Icon
-                          name="check-box-outline-blank"
-                          size={20}
-                          onPress={() => completeTask(item)}
-                        />
-                      )}
-                    </View>
-
-                    <View className="self-start">
-                      <Text className="font-semibold">
-                        Description:{" "}
-                        <Text className="font-normal">{item.description}</Text>
-                      </Text>
-                      <Text className="font-semibold">
-                        Due Date:{" "}
-                        <Text className="font-normal">
-                          {item.date.toDate().toDateString()}
-                        </Text>
-                      </Text>
-                    </View>
-                    <View className="self-end">
-                      <Icon
-                        name="delete"
-                        size={25}
-                        onPress={() => deleteComponent(item.id)}
-                      />
-                    </View>
-                  </View>
+                  <ItemComponent item={item} type="tasks" edit={true} />
                 </TouchableOpacity>
               </View>
             )}

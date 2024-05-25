@@ -72,7 +72,6 @@ const ShowDetails = ({ setShowModal, type, item, editComponent }) => {
           )}
           {type === "exams" && (
             <View>
-              <Text>Name: {item.name}</Text>
               <Text>Course: {item.course}</Text>
               <Text>Location: {item.location}</Text>
               <Text>Exam Date: {item.date.toDate().toDateString()}</Text>

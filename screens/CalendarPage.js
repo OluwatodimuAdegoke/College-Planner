@@ -20,6 +20,7 @@ import {
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { getUserDetail, loadData } from "../firebaseConfig";
 import COLORS from "../components/COLORS";
+import ItemComponent from "../components/ItemComponent";
 
 const CalendarPage = ({ navigation }) => {
   const [assignments, setAssignments] = useState([]);
@@ -66,16 +67,16 @@ const CalendarPage = ({ navigation }) => {
 
     for (let i = 0; i < other.length; i++) {
       let eventDetails = {
-        date: other[i].date.toDate().toDateString(),
+        date: other[i].date,
         name: other[i].name,
         description: other[i].description,
         completed: other[i].completed,
-        type: "task",
+        type: "tasks",
       };
-      if (!items[eventDetails.date]) {
-        items[eventDetails.date] = [];
+      if (!items[eventDetails.date.toDate().toDateString()]) {
+        items[eventDetails.date.toDate().toDateString()] = [];
       }
-      items[eventDetails.date].push(eventDetails);
+      items[eventDetails.date.toDate().toDateString()].push(eventDetails);
     }
 
     //Assignments
@@ -85,17 +86,17 @@ const CalendarPage = ({ navigation }) => {
 
     for (let i = 0; i < other1.length; i++) {
       let eventDetails = {
-        date: other1[i].date.toDate().toDateString(),
+        date: other1[i].date,
         name: other1[i].name,
         description: other1[i].description,
         completed: other1[i].completed,
         course: other1[i].course,
-        type: "assignment",
+        type: "assignments",
       };
-      if (!items[eventDetails.date]) {
-        items[eventDetails.date] = [];
+      if (!items[eventDetails.date.toDate().toDateString()]) {
+        items[eventDetails.date.toDate().toDateString()] = [];
       }
-      items[eventDetails.date].push(eventDetails);
+      items[eventDetails.date.toDate().toDateString()].push(eventDetails);
     }
 
     //Exams
@@ -105,18 +106,18 @@ const CalendarPage = ({ navigation }) => {
 
     for (let i = 0; i < other2.length; i++) {
       let eventDetails = {
-        date: other2[i].date.toDate().toDateString(),
+        date: other2[i].date,
         name: other2[i].name,
         location: other2[i].location,
-        startTime: other2[i].startTime.toDate(),
-        endTime: other2[i].endTime.toDate(),
+        startTime: other2[i].startTime,
+        endTime: other2[i].endTime,
         course: other2[i].course,
-        type: "exam",
+        type: "exams",
       };
-      if (!items[eventDetails.date]) {
-        items[eventDetails.date] = [];
+      if (!items[eventDetails.date.toDate().toDateString()]) {
+        items[eventDetails.date.toDate().toDateString()] = [];
       }
-      items[eventDetails.date].push(eventDetails);
+      items[eventDetails.date.toDate().toDateString()].push(eventDetails);
     }
 
     setEvents(items);
@@ -136,9 +137,13 @@ const CalendarPage = ({ navigation }) => {
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
-      await loadData({ setData: setAssignments, type: "assignments" });
-      await loadData({ setData: setExams, type: "exams" });
-      await loadData({ setData: setTasks, type: "tasks" });
+      await loadData({
+        setData: setAssignments,
+        type: "assignments",
+        completed: false,
+      });
+      await loadData({ setData: setExams, type: "exams", completed: false });
+      await loadData({ setData: setTasks, type: "tasks", completed: false });
       setIsLoading(false);
     };
     fetchData();
@@ -225,7 +230,7 @@ const CalendarPage = ({ navigation }) => {
                     <View className="pr-2">
                       {a && (
                         <Text className="text-xl font-bold">
-                          {format(new Date(a[0].date), "dd")}
+                          {format(new Date(a[0].date.toDate()), "dd")}
                         </Text>
                       )}
                     </View>
@@ -234,43 +239,15 @@ const CalendarPage = ({ navigation }) => {
                         a.map((item, i) => {
                           return (
                             <View
-                              className="rounded-lg mb-2 p-2 bg-gray-300 h-18"
+                              className="rounded-lg mb-2 p-2 bg-gray-400 h-18"
                               key={i}
                             >
-                              <TouchableOpacity className=" ">
-                                <View className="flex-row">
-                                  <Text className="text-center font-bold text-sm flex-auto">
-                                    {item.name}
-                                  </Text>
-                                  {item.completed && (
-                                    <Icon
-                                      name="check-circle"
-                                      size={15}
-                                      color={"green"}
-                                    />
-                                  )}
-                                </View>
-
-                                <View className="self-start">
-                                  <Text className="font-semibold">
-                                    Description:{" "}
-                                    <Text className="font-normal">
-                                      {item.description}
-                                    </Text>
-                                  </Text>
-                                  <Text className="font-semibold">
-                                    Due Date:{" "}
-                                    <Text className="font-normal">
-                                      {new Date(item.date).toDateString()}
-                                    </Text>
-                                  </Text>
-                                  <Text className="font-semibold">
-                                    Type:{" "}
-                                    <Text className="font-normal">
-                                      {item.type}
-                                    </Text>
-                                  </Text>
-                                </View>
+                              <TouchableOpacity className="">
+                                <ItemComponent
+                                  item={item}
+                                  type={item.type}
+                                  edit={true}
+                                />
                               </TouchableOpacity>
                             </View>
                           );

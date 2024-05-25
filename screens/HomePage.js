@@ -9,18 +9,18 @@ import React, { useEffect, useState } from "react";
 import { FlatList, ScrollView } from "react-native-gesture-handler";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { getUserDetail, queryTask, updateData } from "../firebaseConfig";
-import ShowDetails from "../components/ShowDetails";
+import ShowDetails from "../modals/ShowDetails";
 // import { ActivityIndicator } from "react-native-paper";
 import Swiper from "react-native-swiper";
 import COLORS from "../components/COLORS";
 import { differenceInDays } from "date-fns";
-import { da } from "date-fns/locale";
+
+import ItemComponent from "../components/ItemComponent";
+
 const HomePage = ({ navigation }) => {
   const [userName, setUserName] = useState("");
 
   const [profilePicture, setProfilePicture] = useState("");
-
-  const [activeUpcoming, setActiveUpcoming] = useState("assignments");
 
   const [taskToday, setTaskToday] = useState([]);
   const [assignments, setAssignments] = useState([]);
@@ -81,27 +81,7 @@ const HomePage = ({ navigation }) => {
                 }
                 className={`${COLORS.secondaryColor} p-2 rounded-md justify-around items-start`}
               >
-                <View className="flex-row space-x-2">
-                  <View className="rounded-lg w-20 h-20 bg-red-400"></View>
-                  <View className="justify-center">
-                    <Text className="font-bold text-lg" numberOfLines={1}>
-                      {item.code}
-                      <Text className="font-normal">: {item.name}</Text>
-                    </Text>
-                    <Text className="font-normal">{item.location}</Text>
-                    <Text className="font-normal">
-                      {item.startTime.toDate().toLocaleTimeString([], {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}{" "}
-                      -{" "}
-                      {item.endTime.toDate().toLocaleTimeString([], {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
-                    </Text>
-                  </View>
-                </View>
+                <ItemComponent item={item} type="courses" edit={false} />
               </TouchableOpacity>
             );
           })}
@@ -111,14 +91,7 @@ const HomePage = ({ navigation }) => {
   } else {
     schedule = <Text>No Upcoming Schedule...</Text>;
   }
-  const completeTask = (item) => {
-    updateData({
-      id: item.id,
-      type: "tasks",
-      value: { completed: !item.completed },
-    });
-    setShowModal(false);
-  };
+
   //  This function is running *inline
   const showDate = (date) => {
     const diffDays = differenceInDays(
@@ -151,38 +124,14 @@ const HomePage = ({ navigation }) => {
           return (
             <TouchableOpacity
               key={item.id}
-              className={`${COLORS.secondaryColor} p-2 rounded-md justify-between flex-row`}
+              className={`${COLORS.secondaryColor} p-2 rounded-md`}
               onPress={() => {
                 setCurrentItem(item);
                 setShowModalType("tasks");
                 setShowModal(true);
               }}
             >
-              <View className="flex-row items-center">
-                {item.completed === true ? (
-                  <Icon
-                    name="check-box"
-                    size={20}
-                    onPress={() => completeTask(item)}
-                  />
-                ) : (
-                  <Icon
-                    name="check-box-outline-blank"
-                    size={20}
-                    onPress={() => completeTask(item)}
-                  />
-                )}
-
-                <View className="pl-2">
-                  <Text className="font-semibold">
-                    {item.name.slice(0, 30)}
-                  </Text>
-                  <Text>{item.description.slice(0, 40)}</Text>
-                </View>
-              </View>
-              <View className=" ">
-                <Text className="font-semibold">{showDate(item.date)}</Text>
-              </View>
+              <ItemComponent item={item} type="tasks" edit={false} />
             </TouchableOpacity>
           );
         })}
@@ -209,23 +158,7 @@ const HomePage = ({ navigation }) => {
                 setShowModal(true);
               }}
             >
-              <View className="flex-row items-center justify-between">
-                <View className="flex-row items-center space-x-2">
-                  <View className="rounded-md h-8 w-8  bg-gray-300 items-center justify-center">
-                    <Icon name="event" size={25} />
-                  </View>
-
-                  <View>
-                    <Text className="font-bold text-base">
-                      Assignment - {item.course}
-                    </Text>
-                    <Text className="text-base w-11/12" numberOfLines={1}>
-                      {item.name} - {item.description}
-                    </Text>
-                  </View>
-                </View>
-                <Text className="font-semibold">{showDate(item.date)}</Text>
-              </View>
+              <ItemComponent item={item} type="assignments" edit={false} />
             </TouchableOpacity>
           );
         })}
@@ -240,40 +173,7 @@ const HomePage = ({ navigation }) => {
                 setShowModal(true);
               }}
             >
-              <View className="flex-row items-center  space-x-2">
-                <View className="rounded-md h-8 w-8  bg-gray-300 items-center justify-center">
-                  <Icon name="event" size={25} />
-                </View>
-                <View>
-                  <Text className="font-semibold text-base">
-                    Exam - {item.course}
-                  </Text>
-                  <Text
-                    className="text-bold font-semibold w-11/12"
-                    numberOfLines={1}
-                  >
-                    Location:{" "}
-                    <Text className="font-normal">{item.location}</Text>
-                  </Text>
-                  <Text className="text-bold  " numberOfLines={1}>
-                    {item.date.toDate().toLocaleDateString([], {
-                      weekday: "long",
-                      month: "long",
-                      day: "numeric",
-                    })}
-                    {", "}
-                    {item.startTime.toDate().toLocaleTimeString([], {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}{" "}
-                    -{" "}
-                    {item.endTime.toDate().toLocaleTimeString([], {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
-                  </Text>
-                </View>
-              </View>
+              <ItemComponent item={item} type="exams" edit={false} />
             </TouchableOpacity>
           );
         })}
@@ -299,18 +199,7 @@ const HomePage = ({ navigation }) => {
               className={`${COLORS.secondaryColor} p-2 rounded-md  items-center justify-center`}
               onPress={() => navigation.navigate("StudyPage", { item: item })}
             >
-              <View className="flex-row items-center justify-center space-x-2 ">
-                <View className="rounded-md h-8 w-8  bg-gray-300 items-center justify-center">
-                  <Icon name="book" size={25} />
-                </View>
-                <View>
-                  <Text className="font-bold text-base">
-                    {item.name.toUpperCase()}
-                  </Text>
-
-                  <Text className="">{item.duration} minutes</Text>
-                </View>
-              </View>
+              <ItemComponent item={item} type="studySessions" edit={false} />
             </TouchableOpacity>
           );
         })}
@@ -375,7 +264,7 @@ const HomePage = ({ navigation }) => {
           {tasks}
         </View>
 
-        <View className=" rounded-md max-h-40">
+        <View className=" rounded-md max-h-48">
           <Text className="font-bold text-xl mb-2">Upcoming</Text>
           {assExam}
         </View>

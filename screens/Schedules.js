@@ -4,8 +4,9 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { ScrollView } from "react-native-gesture-handler";
 import { deleteData, getUserDetail, loadData } from "../firebaseConfig";
-import AddCourses from "../components/AddCourses";
+import AddCourses from "../modals/AddCourses";
 import COLORS from "../components/COLORS";
+import ItemComponent from "../components/ItemComponent";
 
 const Schedules = ({ navigation }) => {
   const [activeModal, setActiveModal] = useState(false);
@@ -87,67 +88,24 @@ const Schedules = ({ navigation }) => {
                   onPress={() =>
                     navigation.navigate("DisplayCourse", { data: course })
                   }
-                  className="bg-gray-300 rounded-lg p-2  justify-between"
+                  className="bg-gray-400 rounded-lg p-2  justify-between"
                 >
-                  <View>
-                    <View className="flex-row justify-between">
-                      <Text className="font-semibold text-2xl">
-                        {course.code}: {course.name}
-                      </Text>
-                      <Text className="font-semibold text-base">
-                        Section:{" "}
-                        <Text className="font-normal text-base">
-                          {course.section}
-                        </Text>
-                      </Text>
-                    </View>
-                    <Text className="font-semibold text-xl">
-                      Location:{" "}
-                      <Text className="font-normal text-lg">
-                        {course.location}
-                      </Text>
-                    </Text>
-                    <Text className="font-semibold text-xl">
-                      StartTime:{" "}
-                      <Text className="font-normal text-lg">
-                        {course.startTime.toDate().toLocaleTimeString()}
-                      </Text>
-                    </Text>
-                    <Text className="font-semibold text-xl">
-                      EndTime:{" "}
-                      <Text className="font-normal text-lg">
-                        {course.endTime.toDate().toLocaleTimeString()}
-                      </Text>
-                    </Text>
-
-                    <View className="flex-row justify-between">
-                      <View className="flex-row items-center">
-                        <Text className="font-semibold text-xl">Days: </Text>
-                        <View className="flex-row space-x-2">
-                          {course.days.map((e, i) => (
-                            <Text className="text-lg" key={i}>
-                              {e}
-                            </Text>
-                          ))}
-                        </View>
-                      </View>
-                      <View className="flex-row items-center">
-                        <Icon
-                          name="edit-note"
-                          size={25}
-                          onPress={() =>
-                            editComponent({ type: "courses", item: course })
-                          }
-                        />
-                        <Icon
-                          name="delete"
-                          size={25}
-                          onPress={() =>
-                            deleteComponent({ id: course.id, type: "courses" })
-                          }
-                        />
-                      </View>
-                    </View>
+                  <ItemComponent item={course} type="courses" edit={true} />
+                  <View className="flex-row items-center justify-end">
+                    <Icon
+                      name="edit-note"
+                      size={25}
+                      onPress={() =>
+                        editComponent({ type: "courses", item: course })
+                      }
+                    />
+                    <Icon
+                      name="delete"
+                      size={25}
+                      onPress={() =>
+                        deleteComponent({ id: course.id, type: "courses" })
+                      }
+                    />
                   </View>
                 </TouchableOpacity>
               </View>

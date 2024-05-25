@@ -8,6 +8,7 @@ import {
   getUserDetail,
   setUserDetail,
   deleteData,
+  deleteTerm,
 } from "../firebaseConfig";
 import React, { useEffect, useState } from "react";
 import AddTerm from "../modals/AddTerm";
@@ -49,7 +50,8 @@ const Settings = ({ navigation }) => {
     if (item.name === currentTerm) {
       Alert.alert("Current Term", "You cannot delete the current term");
     } else {
-      deleteData({ id: id, type: "terms" });
+      deleteTerm({ id: item.id });
+      // deleteData({ id: id, type: "terms" });
     }
   };
 

@@ -3,7 +3,12 @@ import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { ScrollView } from "react-native-gesture-handler";
-import { deleteData, getUserDetail, loadData } from "../firebaseConfig";
+import {
+  deleteCourse,
+  deleteData,
+  getUserDetail,
+  loadData,
+} from "../firebaseConfig";
 import AddCourses from "../modals/AddCourses";
 import COLORS from "../components/COLORS";
 import ItemComponent from "../components/ItemComponent";
@@ -17,9 +22,10 @@ const Schedules = ({ navigation }) => {
   const [term, setTerm] = useState("");
 
   const deleteComponent = ({ id, type }) => {
-    if (type === "courses") {
-      deleteData({ id: id, type: "courses" });
-    }
+    deleteCourse({ id: id });
+    // if (type === "courses") {
+    //   deleteData({ id: id, type: "courses" });
+    // }
   };
 
   const editComponent = ({ type, item }) => {

@@ -1,7 +1,7 @@
 
-Future: Delete all data related to a person
-Future: Delete all courses related to a specific term
-Future: Delete all exams and assignemnts related to a course
+Future: Delete all data related to a person => Done
+Future: Delete all courses related to a specific term => Done
+Future: Delete all exams and assignemnts related to a course => Done
 
 
 Work on the completed menu button : Show completed assignemnts

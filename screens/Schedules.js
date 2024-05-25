@@ -49,7 +49,7 @@ const Schedules = ({ navigation }) => {
     const fetchData = async () => {
       setIsLoading(true);
       getUserDetail({ type: "currentTerm", setValue: setTerm });
-      loadData({ setData: setCourses, type: "courses" });
+      loadData({ setData: setCourses, type: "courses", completed: false });
       setIsLoading(false);
     };
     fetchData();

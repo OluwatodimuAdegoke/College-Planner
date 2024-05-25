@@ -55,8 +55,14 @@ const Display = ({ route, navigation }) => {
       setData: setAssignments,
       type: "assignments",
       courseId: data.id,
+      completed: false,
     });
-    loadForCourse({ setData: setExams, type: "exams", courseId: data.id });
+    loadForCourse({
+      setData: setExams,
+      type: "exams",
+      courseId: data.id,
+      completed: false,
+    });
   }, []);
 
   return (
@@ -99,10 +105,10 @@ const Display = ({ route, navigation }) => {
         >
           <Menu.Item
             onPress={() => {
-              navigation.navigate("CompletedAssignments");
+              navigation.navigate("CompletedCourseDetails", { data: data });
               setVisible(false);
             }}
-            title="Completed Assignments"
+            title="Completed Work"
           />
         </Menu>
       </View>

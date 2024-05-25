@@ -17,8 +17,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import COLORS from "../components/COLORS";
 
 const Settings = ({ navigation }) => {
-  //TODO: Add a feature to change the current term and also create new ones for the schedule and courses
-
   const [activeModal, setActiveModal] = useState(false);
   const [modalType, setModalType] = useState("Add");
 
@@ -27,6 +25,7 @@ const Settings = ({ navigation }) => {
   const [terms, setTerms] = useState([]);
   const [currentTerm, setCurrentTerm] = useState(null);
   const [editCurrentTerm, setEditCurrentTerm] = useState(false);
+
   // Used for the edit term name method
   const [currentItem, setCurrentItem] = useState(null);
 
@@ -51,12 +50,10 @@ const Settings = ({ navigation }) => {
       Alert.alert("Current Term", "You cannot delete the current term");
     } else {
       deleteTerm({ id: item.id });
-      // deleteData({ id: id, type: "terms" });
     }
   };
 
   const changeTerm = (value) => {
-    // setValue(value.name);
     setUserDetail({
       value: { currentTerm: value.name, currentTermId: value.id },
     });
@@ -65,8 +62,7 @@ const Settings = ({ navigation }) => {
 
   useEffect(() => {
     getUserDetail({ setValue: setCurrentTerm, type: "currentTerm" });
-    // setValue(currentTerm);
-    loadData({ setData: setTerms, type: "terms" });
+    loadData({ setData: setTerms, type: "terms", completed: false });
   }, []);
 
   return (

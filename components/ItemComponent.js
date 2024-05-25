@@ -91,7 +91,7 @@ const ItemComponent = ({ item, type, edit }) => {
       <View className="flex-row items-center space-x-2 justify-between">
         <View className="flex-row items-center space-x-2">
           <View className="rounded-md h-8 w-8  bg-gray-300 items-center justify-center">
-            <Icon name="event" size={25} />
+            <Icon name="library-books" size={25} />
           </View>
           <View>
             <Text className="font-semibold text-base">

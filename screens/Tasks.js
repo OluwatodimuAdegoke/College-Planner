@@ -32,18 +32,6 @@ const Tasks = ({ navigation }) => {
 
   const [visible, setVisible] = useState(false);
 
-  const completeTask = (item) => {
-    updateData({
-      id: item.id,
-      type: "tasks",
-      value: { completed: !item.completed },
-    });
-    // console.log(item);
-  };
-
-  const deleteComponent = (id) => {
-    deleteData({ id: id, type: "tasks" });
-  };
   const editComponent = (item) => {
     setModalType("Edit");
     setCurrentItem(item);

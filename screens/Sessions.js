@@ -33,7 +33,11 @@ const Sessions = ({ navigation }) => {
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
-      await loadData({ setData: setSessions, type: "studySessions" });
+      await loadData({
+        setData: setSessions,
+        type: "studySessions",
+        completed: false,
+      });
       setIsLoading(false);
     };
     fetchData();

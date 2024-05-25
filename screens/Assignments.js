@@ -23,8 +23,8 @@ const Assignments = ({ navigation }) => {
   };
 
   useEffect(() => {
-    loadData({ setData: setAssignment, type: "assignments" });
-    loadData({ setData: setExam, type: "exams" });
+    loadData({ setData: setAssignment, type: "assignments", completed: false });
+    loadData({ setData: setExam, type: "exams", completed: false });
   }, []);
 
   return (

@@ -18,7 +18,7 @@ import { PaperProvider } from "react-native-paper";
 import StudyPage from "./components/StudyPage";
 import Accounts from "./screens/Accounts";
 import CompletedTasks from "./screens/CompletedTasks";
-import CompletedAssignments from "./screens/CompletedAssignments";
+import CompletedCourseDetails from "./screens/CompletedCourseDetails";
 const Stack = createStackNavigator();
 export default function App() {
   return (
@@ -41,8 +41,8 @@ export default function App() {
           <Stack.Screen name="Accounts" component={Accounts} />
           <Stack.Screen name="CompletedTasks" component={CompletedTasks} />
           <Stack.Screen
-            name="CompletedAssignments"
-            component={CompletedAssignments}
+            name="CompletedCourseDetails"
+            component={CompletedCourseDetails}
           />
         </Stack.Navigator>
       </NavigationContainer>

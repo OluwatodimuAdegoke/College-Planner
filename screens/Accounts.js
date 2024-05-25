@@ -7,9 +7,10 @@ import {
   deleteUserF,
   getUserDetail,
   setUserDetail,
+  deleteUserAndData,
 } from "../firebaseConfig";
 
-const Accounts = () => {
+const Accounts = ({ navigation }) => {
   return (
     <SafeAreaView className="flex-1 justify-center items-center space-y-6">
       <TouchableOpacity
@@ -41,7 +42,7 @@ const Accounts = () => {
         <Icon name="key" size={25} />
       </TouchableOpacity>
       <TouchableOpacity
-        // onPress={() => deleteUserF({ navigator: navigation })}
+        onPress={() => deleteUserAndData({ navigator: navigation })}
         className={` flex-row items-center justify-between`}
       >
         <Text className="text-lg font-semibold">Delete Account</Text>

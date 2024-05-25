@@ -40,11 +40,10 @@ const CompletedTasks = ({ navigation }) => {
           size={30}
           onPress={() => navigation.goBack()}
         />
-        <Text className="text-3xl font-bold justify-center text-center flex-auto">
-          Tasks - Completed
-        </Text>
       </View>
-
+      <View className="p-2 rounded-md bg-gray-400  ">
+        <Text className="text-center font-bold text-2xl">Completed Tasks</Text>
+      </View>
       {isLoading && (
         <ActivityIndicator
           size="large"

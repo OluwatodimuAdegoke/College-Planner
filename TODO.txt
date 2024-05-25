@@ -2,12 +2,17 @@
 Future: Delete all data related to a person => Done
 Future: Delete all courses related to a specific term => Done
 Future: Delete all exams and assignemnts related to a course => Done
+Work on the completed menu button : Show completed assignemnts => Done
 
-
-Work on the completed menu button : Show completed assignemnts
-Work on the account page, changing password, username, adding profile picker
+Work on the account page, changing password, username => Done
+Work on adding profile picture
 Work on the image for the other courses
 Work on addding the edit, delete and complete for the calendar page
 
 Work on the design of the display modals
 Work on the login, register password text input
+
+
+Work on reauthenticating a user
+Work on the Alert menu
+Work on the Study Session Page and Functionality

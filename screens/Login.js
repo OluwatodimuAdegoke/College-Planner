@@ -2,7 +2,7 @@ import { View, Text, TouchableOpacity, Alert, Modal } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import React, { useState } from "react";
 import { TextInput } from "react-native-gesture-handler";
-import { loginUser, changePassword } from "../firebaseConfig";
+import { loginUser, changePassword, forgotPassword } from "../firebaseConfig";
 import COLORS from "../components/COLORS";
 
 const Login = ({ navigation }) => {
@@ -42,7 +42,7 @@ const Login = ({ navigation }) => {
             </View>
             <TouchableOpacity
               onPress={async () => {
-                await changePassword({ navigator: navigation, email: fEmail });
+                await forgotPassword({ navigator: navigation, email: fEmail });
                 setModalVisible(!modalVisible);
               }}
               className="bg-gray-400 rounded-lg h-11 w-32 justify-center self-center mt-2"

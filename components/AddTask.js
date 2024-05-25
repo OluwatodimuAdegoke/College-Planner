@@ -73,7 +73,7 @@ const AddTask = ({ setActiveModal, type, item }) => {
             <View className="h-10">
               <TextInput
                 className="bg-gray-100 flex-1 rounded-lg px-2 pr-2"
-                maxLength={30}
+                maxLength={300}
                 placeholder="Task Description"
                 value={taskDescription}
                 onChangeText={(value) => setTaskDescription(value)}

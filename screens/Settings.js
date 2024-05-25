@@ -11,8 +11,9 @@ import {
 } from "../firebaseConfig";
 import React, { useEffect, useState } from "react";
 import AddTerm from "../components/AddTerm";
-import { Picker } from "@react-native-picker/picker";
 import { FlatList } from "react-native-gesture-handler";
+import { SafeAreaView } from "react-native-safe-area-context";
+import COLORS from "../components/COLORS";
 
 const Settings = ({ navigation }) => {
   //TODO: Add a feature to change the current term and also create new ones for the schedule and courses
@@ -67,7 +68,7 @@ const Settings = ({ navigation }) => {
   }, []);
 
   return (
-    <View className="flex-1">
+    <SafeAreaView className={` ${COLORS.mainColor} flex-1 p-2 space-y-4`}>
       {activeModal && (
         <AddTerm
           type={modalType}
@@ -83,7 +84,7 @@ const Settings = ({ navigation }) => {
         onRequestClose={() => setModalVisible(false)}
       >
         <View className="flex-1 justify-center items-center">
-          <View className="bg-gray-300 rounded-md p-2 mb-3 w-1/2 space-y-2">
+          <View className="bg-gray-700 rounded-2xl p-2 mb-3 w-1/2 space-y-2">
             <TouchableOpacity
               onPress={() => setModalVisible(false)}
               className="bg-gray-400 w-8 h-8 rounded-xl items-center justify-center"
@@ -128,25 +129,31 @@ const Settings = ({ navigation }) => {
           </View>
         </View>
       </Modal>
-      <View className="flex-row space-x-3">
-        <TouchableOpacity onPress={() => logOutUser({ navigator: navigation })}>
-          <Icon name="logout" size={25} />
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => deleteUserF({ navigator: navigation })}
-        >
-          <Icon name="delete" size={25} />
-        </TouchableOpacity>
-      </View>
-      <View>
-        <TouchableOpacity
-          className="bg-gray-400 items-center py-4  w-20 rounded-lg"
-          onPress={() => setModalVisible(true)}
-        >
-          <Text>{currentTerm ? currentTerm : "Select a term"}</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+
+      <TouchableOpacity
+        onPress={() => navigation.navigate("Accounts")}
+        className={` flex-row items-center justify-between`}
+      >
+        <Text className="text-lg font-semibold">Accounts</Text>
+        <Icon name={"chevron-right"} size={20} />
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => setModalVisible(true)}
+        className={` flex-row items-center justify-between`}
+      >
+        <Text className="text-lg font-semibold">
+          {currentTerm ? currentTerm : "Select a term"}
+        </Text>
+        <Icon name={"chevron-right"} size={20} />
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        className="bg-gray-400 items-center  rounded-lg h-10 justify-center"
+        onPress={() => logOutUser({ navigator: navigation })}
+      >
+        <Text className="font-semibold text-xl">Log out</Text>
+      </TouchableOpacity>
+    </SafeAreaView>
   );
 };
 

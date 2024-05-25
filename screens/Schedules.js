@@ -5,6 +5,7 @@ import Icon from "react-native-vector-icons/MaterialIcons";
 import { ScrollView } from "react-native-gesture-handler";
 import { deleteData, getUserDetail, loadData } from "../firebaseConfig";
 import AddCourses from "../components/AddCourses";
+import COLORS from "../components/COLORS";
 
 const Schedules = ({ navigation }) => {
   const [activeModal, setActiveModal] = useState(false);
@@ -48,7 +49,7 @@ const Schedules = ({ navigation }) => {
   }, []);
 
   return (
-    <SafeAreaView className="flex-1 p-2">
+    <SafeAreaView className={` ${COLORS.mainColor} flex-1 p-2`}>
       {activeModal && (
         <AddCourses
           setActiveModal={setActiveModal}

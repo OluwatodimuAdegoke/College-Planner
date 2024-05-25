@@ -9,13 +9,14 @@ import HomePage from "./HomePage";
 import CalendarPage from "./CalendarPage";
 import Settings from "./Settings";
 import Categories from "./Categories";
+import COLORS from "../components/COLORS";
 
 const Tab = createBottomTabNavigator();
 const Home = ({ navigation }) => {
   const user = auth.currentUser;
   if (user) {
     return (
-      <SafeAreaView className="flex-1 p-2">
+      <SafeAreaView className={`flex-1 p-2 ${COLORS.mainColor}`}>
         <Tab.Navigator
           initialRouteName="HomePage"
           screenOptions={{
@@ -26,9 +27,9 @@ const Home = ({ navigation }) => {
               // backgroundColor: "#9ca3af",
               // borderColor: "black",
               // marginHorizontal: 4,
-              backgroundColor: "#f3f4f6",
+              backgroundColor: COLORS.hexColorMain,
               elevation: 0,
-              borderColor: "#f3f4f6",
+              borderColor: COLORS.hexColorMain,
             },
           }}
         >

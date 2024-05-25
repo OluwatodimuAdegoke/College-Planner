@@ -1,17 +1,16 @@
-import { View, Text, TouchableOpacity } from 'react-native'
-import React, { useEffect } from 'react'
-import { autoLogin } from '../firebaseConfig'
+import { View, Text, TouchableOpacity } from "react-native";
+import React, { useEffect } from "react";
+import { autoLogin } from "../firebaseConfig";
+import COLORS from "../components/COLORS";
 
-const Welcome = ({navigation}) => {
+const Welcome = ({ navigation }) => {
+  useEffect(() => autoLogin({ navigator: navigation }));
 
-  useEffect(() => 
-    autoLogin({navigator: navigation}))
-  
   return (
-    <View className="flex-1 justify-center bg-white p-5">
+    <SafeAreaView className={` ${COLORS.mainColor} flex-1 p-5 justify-center`}>
       <Text className="font-bold text-2xl text-center">Welcome</Text>
-    </View>
-  )
-}
+    </SafeAreaView>
+  );
+};
 
-export default Welcome
+export default Welcome;

@@ -19,7 +19,6 @@ import {
 const AddExams = ({ setActiveModal, type, item, course }) => {
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState(new Date());
-  const [name, setName] = useState("");
   const [location, setLocation] = useState("");
 
   const [openStart, setOpenStart] = useState(false);
@@ -33,7 +32,6 @@ const AddExams = ({ setActiveModal, type, item, course }) => {
       return;
     }
     const task = {
-      name: name,
       location: location,
       date: date,
       course: course.code,
@@ -43,22 +41,14 @@ const AddExams = ({ setActiveModal, type, item, course }) => {
     };
     setActiveModal(false);
     if (type === "Edit") {
-      // updateToCourse({
-      //   value: task,
-      //   id: item.id,
-      //   type: "exams",
-      //   courseId: course.id,
-      // });
       updateData({ id: item.id, value: task, type: "exams" });
     } else {
       addData({ value: task, type: "exams" });
-      // addToCourse({ value: task, type: "exams", courseId: course.id });
     }
   };
 
   useEffect(() => {
     if (item) {
-      setName(item.name);
       setLocation(item.location);
       setDate(item.date.toDate());
       setStartTime(item.startTime.toDate());
@@ -86,16 +76,6 @@ const AddExams = ({ setActiveModal, type, item, course }) => {
               <TextInput
                 className="bg-gray-100 flex-1 rounded-lg px-2 pr-2"
                 maxLength={30}
-                placeholder="Exam Type"
-                value={name}
-                onChangeText={(value) => setName(value)}
-              />
-            </View>
-
-            <View className="h-10">
-              <TextInput
-                className="bg-gray-100 flex-1 rounded-lg px-2 pr-2"
-                maxLength={30}
                 placeholder="Location"
                 value={location}
                 onChangeText={(value) => setLocation(value)}
@@ -106,7 +86,6 @@ const AddExams = ({ setActiveModal, type, item, course }) => {
               <TouchableOpacity
                 onPress={() => {
                   setOpen(true);
-                  // console.log(open);
                 }}
                 className="bg-gray-200 w-20 rounded-md h-8 justify-center"
               >
@@ -176,7 +155,6 @@ const AddExams = ({ setActiveModal, type, item, course }) => {
                 mode="date"
                 minimumDate={new Date()}
                 onChange={(e, selectedDate) => {
-                  s;
                   if (e.type === "dismissed") {
                     setOpen(false);
                   } else if (e.type === "set") {

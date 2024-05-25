@@ -6,6 +6,7 @@ import Icon from "react-native-vector-icons/MaterialIcons";
 import { ScrollView } from "react-native-gesture-handler";
 import { deleteData, loadData } from "../firebaseConfig";
 import AddSessions from "../components/AddSessions";
+import COLORS from "../components/COLORS";
 
 const Sessions = ({ navigation }) => {
   const [sessions, setSessions] = useState([]);
@@ -39,7 +40,7 @@ const Sessions = ({ navigation }) => {
   }, []);
 
   return (
-    <SafeAreaView className="flex-1 p-2">
+    <SafeAreaView className={` ${COLORS.mainColor} flex-1 p-2`}>
       {activeModal && (
         <AddSessions
           type={modalType}

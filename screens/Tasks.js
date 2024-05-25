@@ -15,6 +15,7 @@ import { addData, deleteData, loadData, updateData } from "../firebaseConfig";
 import AddTask from "../components/AddTask";
 import { Button, Menu } from "react-native-paper";
 import ShowDetails from "../components/ShowDetails";
+import COLORS from "../components/COLORS";
 
 const Tasks = ({ navigation }) => {
   const [active, setActive] = useState("Ongoing");
@@ -87,7 +88,7 @@ const Tasks = ({ navigation }) => {
   }, [tasks]);
 
   return (
-    <SafeAreaView className="flex-1 p-2">
+    <SafeAreaView className={` ${COLORS.mainColor} flex-1 p-2`}>
       {/* {modal} */}
       {activeModal && (
         <AddTask

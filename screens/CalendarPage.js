@@ -19,6 +19,7 @@ import {
 } from "date-fns";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { getUserDetail, loadData } from "../firebaseConfig";
+import COLORS from "../components/COLORS";
 
 const CalendarPage = ({ navigation }) => {
   const [assignments, setAssignments] = useState([]);
@@ -148,7 +149,7 @@ const CalendarPage = ({ navigation }) => {
   }, []);
 
   return (
-    <SafeAreaView className="flex-1 p-2">
+    <SafeAreaView className={` ${COLORS.mainColor} flex-1 p-2`}>
       <View className="flex-row items-start justify-center mb-2">
         <Text className="text-4xl font-bold ">Calendar, </Text>
         <Text className="text-base font-bold">

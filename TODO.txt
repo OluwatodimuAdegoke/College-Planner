@@ -1,6 +1,13 @@
 
-
+Future: Delete all data related to a person
 Future: Delete all courses related to a specific term
 Future: Delete all exams and assignemnts related to a course
 
-Work on the completed menu button
+
+Work on the completed menu button : Show completed tasks, assignemnts
+Work on the account page, changing password, username, adding profile picker
+Work on the image for the other courses
+Work on addding the edit, delete and complete for the calendar page
+
+Work on the design of the display modals
+Work on the login, register password text input

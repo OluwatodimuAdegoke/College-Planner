@@ -16,6 +16,7 @@ import {
 import DisplayCourse from "./components/DisplayCourse";
 import { PaperProvider } from "react-native-paper";
 import StudyPage from "./components/StudyPage";
+import Accounts from "./screens/Accounts";
 const Stack = createStackNavigator();
 export default function App() {
   return (
@@ -35,6 +36,7 @@ export default function App() {
           <Stack.Screen name="Sessions" component={Sessions} />
           <Stack.Screen name="DisplayCourse" component={DisplayCourse} />
           <Stack.Screen name="StudyPage" component={StudyPage} />
+          <Stack.Screen name="Accounts" component={Accounts} />
         </Stack.Navigator>
       </NavigationContainer>
     </PaperProvider>

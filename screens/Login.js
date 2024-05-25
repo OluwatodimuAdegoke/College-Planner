@@ -3,6 +3,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import React, { useState } from "react";
 import { TextInput } from "react-native-gesture-handler";
 import { loginUser, changePassword } from "../firebaseConfig";
+import COLORS from "../components/COLORS";
 
 const Login = ({ navigation }) => {
   const [email, setEmail] = useState();
@@ -12,7 +13,7 @@ const Login = ({ navigation }) => {
   const [fEmail, setFEmail] = useState();
 
   return (
-    <SafeAreaView className="flex-1 justify-center bg-white p-5">
+    <SafeAreaView className={` ${COLORS.mainColor} flex-1 p-5 justify-center`}>
       <Modal
         visible={modalVisible}
         animationType="fade"

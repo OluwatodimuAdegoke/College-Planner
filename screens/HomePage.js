@@ -8,10 +8,13 @@ import {
 import React, { useEffect, useState } from "react";
 import { FlatList, ScrollView } from "react-native-gesture-handler";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import { getUserDetail, queryTask } from "../firebaseConfig";
+import { getUserDetail, queryTask, updateData } from "../firebaseConfig";
 import ShowDetails from "../components/ShowDetails";
 // import { ActivityIndicator } from "react-native-paper";
-
+import Swiper from "react-native-swiper";
+import COLORS from "../components/COLORS";
+import { differenceInDays } from "date-fns";
+import { da } from "date-fns/locale";
 const HomePage = ({ navigation }) => {
   const [userName, setUserName] = useState("");
 
@@ -67,51 +70,76 @@ const HomePage = ({ navigation }) => {
 
   if (courses.length > 0) {
     schedule = (
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{
-          gap: 10,
-        }}
-      >
-        {courses.map((item) => {
-          return (
-            <TouchableOpacity
-              key={item.id}
-              onPress={() =>
-                navigation.navigate("DisplayCourse", { data: item })
-              }
-              className="p-2 rounded-md bg-gray-400  justify-around items-start"
-            >
-              <Text className="font-bold text-lg text-center" numberOfLines={1}>
-                {item.code}
-                <Text className="font-normal">: {item.name}</Text>
-              </Text>
-
-              <Text className="font-bold text-base text-center">
-                Location:
-                <Text className="font-normal">: {item.location}</Text>
-              </Text>
-              <Text className="font-bold text-base text-center">
-                Start Time:
-                <Text className="font-normal">
-                  : {item.startTime.toDate().toTimeString()}
-                </Text>
-              </Text>
-              <Text className="font-bold text-base text-center">
-                End Time:
-                <Text className="font-normal">
-                  : {item.endTime.toDate().toTimeString()}
-                </Text>
-              </Text>
-            </TouchableOpacity>
-          );
-        })}
-      </ScrollView>
+      <View className="h-24">
+        <Swiper showsPagination={false}>
+          {courses.map((item) => {
+            return (
+              <TouchableOpacity
+                key={item.id}
+                onPress={() =>
+                  navigation.navigate("DisplayCourse", { data: item })
+                }
+                className={`${COLORS.secondaryColor} p-2 rounded-md justify-around items-start`}
+              >
+                <View className="flex-row space-x-2">
+                  <View className="rounded-lg w-20 h-20 bg-red-400"></View>
+                  <View className="justify-center">
+                    <Text className="font-bold text-lg" numberOfLines={1}>
+                      {item.code}
+                      <Text className="font-normal">: {item.name}</Text>
+                    </Text>
+                    <Text className="font-normal">{item.location}</Text>
+                    <Text className="font-normal">
+                      {item.startTime.toDate().toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}{" "}
+                      -{" "}
+                      {item.endTime.toDate().toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </Text>
+                  </View>
+                </View>
+              </TouchableOpacity>
+            );
+          })}
+        </Swiper>
+      </View>
     );
   } else {
     schedule = <Text>No Upcoming Schedule...</Text>;
   }
+  const completeTask = (item) => {
+    updateData({
+      id: item.id,
+      type: "tasks",
+      value: { completed: !item.completed },
+    });
+    setShowModal(false);
+  };
+  //  This function is running *inline
+  const showDate = (date) => {
+    const diffDays = differenceInDays(
+      date.toDate(),
+      new Date(
+        Date.UTC(
+          new Date().getFullYear(),
+          new Date().getMonth(),
+          new Date().getDate(),
+          12
+        )
+      )
+    );
+    if (diffDays === 0) {
+      return "Today";
+    } else if (diffDays === 1) {
+      return "Tomorrow";
+    } else {
+      return diffDays + " days";
+    }
+  };
 
   if (taskToday.length > 0) {
     tasks = (
@@ -123,7 +151,7 @@ const HomePage = ({ navigation }) => {
           return (
             <TouchableOpacity
               key={item.id}
-              className="flex-row p-2 rounded-md bg-gray-400 justify-between"
+              className={`${COLORS.secondaryColor} p-2 rounded-md justify-between flex-row`}
               onPress={() => {
                 setCurrentItem(item);
                 setShowModalType("tasks");
@@ -131,19 +159,29 @@ const HomePage = ({ navigation }) => {
               }}
             >
               <View className="flex-row items-center">
-                <Icon name="add-task" size={20} />
+                {item.completed === true ? (
+                  <Icon
+                    name="check-box"
+                    size={20}
+                    onPress={() => completeTask(item)}
+                  />
+                ) : (
+                  <Icon
+                    name="check-box-outline-blank"
+                    size={20}
+                    onPress={() => completeTask(item)}
+                  />
+                )}
+
                 <View className="pl-2">
                   <Text className="font-semibold">
-                    {item.name.slice(0, 30)}...
+                    {item.name.slice(0, 30)}
                   </Text>
-                  <Text>{item.description.slice(0, 30)}...</Text>
+                  <Text>{item.description.slice(0, 40)}</Text>
                 </View>
               </View>
-              <View className="pl-2 ">
-                <Text className="font-semibold">
-                  Date: {item.date.toDate().toDateString()}
-                </Text>
-                <Text>Due Today</Text>
+              <View className=" ">
+                <Text className="font-semibold">{showDate(item.date)}</Text>
               </View>
             </TouchableOpacity>
           );
@@ -154,8 +192,8 @@ const HomePage = ({ navigation }) => {
     tasks = <Text>No Upcoming Tasks...</Text>;
   }
 
-  if (assignments.length > 0) {
-    ass = (
+  if (assignments.length > 0 || exams.length > 0) {
+    assExam = (
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ gap: 10 }}
@@ -163,7 +201,7 @@ const HomePage = ({ navigation }) => {
         {assignments.map((item) => {
           return (
             <TouchableOpacity
-              className=" p-2 rounded-md bg-gray-400"
+              className={`${COLORS.secondaryColor} p-2 rounded-md`}
               key={item.id}
               onPress={() => {
                 setCurrentItem(item);
@@ -172,38 +210,29 @@ const HomePage = ({ navigation }) => {
               }}
             >
               <View className="flex-row items-center justify-between">
-                <View>
-                  <Text className="font-bold text-base">
-                    {item.name} : {item.course}
-                  </Text>
-                  <Text className="text-base w-11/12" numberOfLines={1}>
-                    {item.description}
-                  </Text>
+                <View className="flex-row items-center space-x-2">
+                  <View className="rounded-md h-8 w-8  bg-gray-300 items-center justify-center">
+                    <Icon name="event" size={25} />
+                  </View>
+
+                  <View>
+                    <Text className="font-bold text-base">
+                      Assignment - {item.course}
+                    </Text>
+                    <Text className="text-base w-11/12" numberOfLines={1}>
+                      {item.name} - {item.description}
+                    </Text>
+                  </View>
                 </View>
-                <View className="">
-                  <Text>Due Date: </Text>
-                  <Text>{item.date.toDate().toDateString()}</Text>
-                </View>
+                <Text className="font-semibold">{showDate(item.date)}</Text>
               </View>
             </TouchableOpacity>
           );
         })}
-      </ScrollView>
-    );
-  } else {
-    ass = <Text>No Upcoming Assignments...</Text>;
-  }
-
-  if (exams.length > 0) {
-    exam = (
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ gap: 10 }}
-      >
         {exams.map((item) => {
           return (
             <TouchableOpacity
-              className=" p-2 rounded-md bg-gray-400"
+              className={`${COLORS.secondaryColor} p-2 rounded-md`}
               key={item.id}
               onPress={() => {
                 setCurrentItem(item);
@@ -211,10 +240,13 @@ const HomePage = ({ navigation }) => {
                 setShowModal(true);
               }}
             >
-              <View className="justify-between">
+              <View className="flex-row items-center  space-x-2">
+                <View className="rounded-md h-8 w-8  bg-gray-300 items-center justify-center">
+                  <Icon name="event" size={25} />
+                </View>
                 <View>
                   <Text className="font-semibold text-base">
-                    {item.course.toUpperCase()} : {item.name}
+                    Exam - {item.course}
                   </Text>
                   <Text
                     className="text-bold font-semibold w-11/12"
@@ -223,24 +255,22 @@ const HomePage = ({ navigation }) => {
                     Location:{" "}
                     <Text className="font-normal">{item.location}</Text>
                   </Text>
-                  <Text
-                    className="text-bold font-semibold w-11/12"
-                    numberOfLines={1}
-                  >
-                    Date:{" "}
-                    <Text className="font-normal">
-                      {item.date.toDate().toDateString()}
-                    </Text>
-                  </Text>
-                  <Text
-                    className="text-bold font-semibold w-11/12"
-                    numberOfLines={1}
-                  >
-                    Time:{" "}
-                    <Text className="font-normal">
-                      {item.startTime.toDate().toTimeString()} -{" "}
-                      {item.endTime.toDate().toTimeString()}
-                    </Text>
+                  <Text className="text-bold  " numberOfLines={1}>
+                    {item.date.toDate().toLocaleDateString([], {
+                      weekday: "long",
+                      month: "long",
+                      day: "numeric",
+                    })}
+                    {", "}
+                    {item.startTime.toDate().toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}{" "}
+                    -{" "}
+                    {item.endTime.toDate().toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
                   </Text>
                 </View>
               </View>
@@ -250,7 +280,7 @@ const HomePage = ({ navigation }) => {
       </ScrollView>
     );
   } else {
-    exam = <Text>No Upcoming Assignments...</Text>;
+    assExam = <Text>No Upcoming Assignments/Exams...</Text>;
   }
 
   if (study_sessions.length > 0) {
@@ -266,15 +296,20 @@ const HomePage = ({ navigation }) => {
           return (
             <TouchableOpacity
               key={item.id}
-              className="flex p-2 rounded-md bg-gray-400"
+              className={`${COLORS.secondaryColor} p-2 rounded-md  items-center justify-center`}
               onPress={() => navigation.navigate("StudyPage", { item: item })}
             >
-              <Text className="font-bold text-lg text-center">
-                {item.name.toUpperCase()}
-              </Text>
-              <View className="flex-row items-center">
-                <Text className="font-semibold text-base">Time: </Text>
-                <Text className="text-base">{item.duration} minutes</Text>
+              <View className="flex-row items-center justify-center space-x-2 ">
+                <View className="rounded-md h-8 w-8  bg-gray-300 items-center justify-center">
+                  <Icon name="book" size={25} />
+                </View>
+                <View>
+                  <Text className="font-bold text-base">
+                    {item.name.toUpperCase()}
+                  </Text>
+
+                  <Text className="">{item.duration} minutes</Text>
+                </View>
               </View>
             </TouchableOpacity>
           );
@@ -286,7 +321,7 @@ const HomePage = ({ navigation }) => {
   }
 
   return (
-    <View className="flex-1 justify-between p-2">
+    <View className={`flex-1 justify-between  ${COLORS.mainColor}`}>
       {/* Header */}
       {showModal && (
         <ShowDetails
@@ -316,49 +351,44 @@ const HomePage = ({ navigation }) => {
       </View>
 
       {/* Body */}
-      <View className="flex-1 justify-between rounded-lg">
+      <View className="flex-1 rounded-lg space-y-4 ">
         {/* TODO: Schedule Tab*/}
-        <View className=" rounded-md h-36">
-          <Text className="font-bold text-xl mb-2">Today's Schedule</Text>
+        <View className=" rounded-md">
+          <View className="flex-row justify-between">
+            <Text className="font-bold text-xl mb-2">Today's Schedule</Text>
+            <TouchableOpacity onPress={() => navigation.navigate("Schedules")}>
+              <Text className="text-blue-500">See all schedules </Text>
+            </TouchableOpacity>
+          </View>
           {schedule}
         </View>
 
         {/* TODO: My Tasks*/}
         <View className=" rounded-md max-h-48">
-          <Text className="font-bold text-xl mb-2">To do Today</Text>
-          {/* <View> */}
-          {tasks}
-          {/* </View> */}
-        </View>
-
-        {/* TODO: Upcoming Assignments/ Exams*/}
-        <View className=" rounded-md max-h-48">
-          <Text className="font-bold text-xl mb-2">Upcoming</Text>
-          <View className="flex-row justify-evenly mb-2">
-            <TouchableOpacity
-              className={`${
-                activeUpcoming == "assignments" ? "bg-gray-400" : "bg-gray-200"
-              } p-1 rounded-md px-2`}
-              onPress={() => setActiveUpcoming("assignments")}
-            >
-              <Text className="font-semibold text-base">Assignments</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              className={`${
-                activeUpcoming == "exams" ? "bg-gray-400" : "bg-gray-200"
-              } p-1 rounded-md px-2`}
-              onPress={() => setActiveUpcoming("exams")}
-            >
-              <Text className="font-semibold text-base">Exams</Text>
+          <View className="flex-row justify-between">
+            <Text className="font-bold text-xl mb-2">To Do</Text>
+            <TouchableOpacity onPress={() => navigation.navigate("Tasks")}>
+              <Text className="text-blue-500">See all tasks </Text>
             </TouchableOpacity>
           </View>
-          {activeUpcoming == "assignments" && ass}
-          {activeUpcoming == "exams" && exam}
+
+          {tasks}
+        </View>
+
+        <View className=" rounded-md max-h-40">
+          <Text className="font-bold text-xl mb-2">Upcoming</Text>
+          {assExam}
         </View>
 
         {/* TODO: Study Sessions*/}
-        <View className=" rounded-md h-32 mb-2">
-          <Text className="font-bold text-xl mb-2">Study Sessions</Text>
+        <View className=" rounded-md  mb-2 ">
+          <View className="flex-row justify-between">
+            <Text className="font-bold text-xl mb-2">Study Sessions</Text>
+            <TouchableOpacity onPress={() => navigation.navigate("Sessions")}>
+              <Text className="text-blue-500">See all sessions </Text>
+            </TouchableOpacity>
+          </View>
+
           {study}
         </View>
       </View>

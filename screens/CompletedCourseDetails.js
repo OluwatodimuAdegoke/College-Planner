@@ -1,20 +1,11 @@
 import { View, Text, ScrollView, TouchableOpacity } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import {
-  deleteData,
-  loadData,
-  loadForCourse,
-  updateData,
-} from "../firebaseConfig";
+import { loadForCourse } from "../firebaseConfig";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import AddAssignments from "../modals/AddAssignments";
-import AddExams from "../modals/AddExams";
-import { Button, Menu } from "react-native-paper";
 
-import ShowDetails from "../modals/ShowDetails";
-import ItemComponent from "../components/ItemComponent";
-import { tr } from "date-fns/locale";
+import { ItemComponent } from "../components";
+
 const CompletedCourseDetails = ({ route, navigation }) => {
   const { data } = route.params;
   const [assignments, setAssignments] = useState([]);

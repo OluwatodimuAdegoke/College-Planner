@@ -3,7 +3,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import React, { useState } from "react";
 import { TextInput } from "react-native-gesture-handler";
 import { registerUser } from "../firebaseConfig";
-import COLORS from "../components/COLORS";
+import { COLORS } from "../components";
 
 const Register = ({ navigation }) => {
   const [email, setEmail] = useState();

@@ -7,15 +7,12 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { FlatList, ScrollView } from "react-native-gesture-handler";
-import Icon from "react-native-vector-icons/MaterialIcons";
 import { getUserDetail, queryTask, updateData } from "../firebaseConfig";
-import ShowDetails from "../modals/ShowDetails";
-// import { ActivityIndicator } from "react-native-paper";
 import Swiper from "react-native-swiper";
-import COLORS from "../components/COLORS";
 import { differenceInDays } from "date-fns";
-
-import ItemComponent from "../components/ItemComponent";
+import { ShowDetails } from "../modals";
+import { COLORS, ItemComponent } from "../components";
+import { ProfilePic } from "../assets";
 
 const HomePage = ({ navigation }) => {
   const [userName, setUserName] = useState("");
@@ -232,10 +229,14 @@ const HomePage = ({ navigation }) => {
         </View>
 
         <View className="h-10 w-10">
-          <Image
-            className="flex-1 justify-center self-center w-10 object-fill rounded-full border-"
-            source={profilePicture}
-          />
+          {profilePicture === "null" ? (
+            <ProfilePic />
+          ) : (
+            <Image
+              className="flex-1 justify-center self-center w-10 object-fill rounded-md"
+              source={{ uri: profilePicture }}
+            />
+          )}
         </View>
       </View>
 

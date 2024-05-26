@@ -1,18 +1,24 @@
-import { View, Text, TouchableOpacity, Modal } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Modal,
+  ActivityIndicator,
+} from "react-native";
 import React, { useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import {
-  logOutUser,
-  deleteUserF,
   getUserDetail,
   setUserDetail,
   deleteUserAndData,
   changePassword,
   changeEmail,
   sendVerification,
+  uploadImage,
 } from "../firebaseConfig";
 import { TextInput } from "react-native";
+import * as ImagePicker from "expo-image-picker";
 
 const Accounts = ({ navigation }) => {
   const [userName, setUserName] = React.useState("");
@@ -22,6 +28,28 @@ const Accounts = ({ navigation }) => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [showModal, setShowModal] = React.useState(false);
   const [type, setType] = React.useState("");
+
+  const [profilePicture, setProfilePicture] = React.useState("");
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 4],
+      quality: 0.5,
+    });
+
+    if (!result.canceled) {
+      setProfilePicture(result.assets[0].uri);
+      // setIsLoading(true);
+      await uploadImage({
+        uri: result.assets[0].uri,
+        name: "profile_picture",
+        setIsLoading: setIsLoading,
+      });
+      // setIsLoading(false);
+    }
+  };
 
   const submitButton = () => {
     if (type === "username") {
@@ -39,15 +67,28 @@ const Accounts = ({ navigation }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      setIsLoading(true);
+      // setIsLoading(true);
       await getUserDetail({ setValue: setUserName, type: "username" });
       await getUserDetail({ setValue: setEmail, type: "email" });
-      setIsLoading(false);
+      // setIsLoading(false);
     };
     fetchData();
   }, []);
   return (
     <SafeAreaView className="flex-1 ">
+      <Modal
+        visible={isLoading}
+        animationType="fade"
+        transparent={true}
+        className="justify-center items-center flex-1"
+      >
+        <View className="flex-1 justify-center items-center">
+          <View className="bg-gray-200 w-5/6 h-1/6 rounded-xl p-2 space-y-2 items-center justify-center">
+            <Text>Uploading...</Text>
+            <ActivityIndicator size="large" color="white" />
+          </View>
+        </View>
+      </Modal>
       <Modal
         visible={showModal}
         animationType="fade"
@@ -111,10 +152,7 @@ const Accounts = ({ navigation }) => {
           <Icon name="dns" size={25} />
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => {
-            setType("profile_picture");
-            setShowModal(true);
-          }}
+          onPress={pickImage}
           className={` flex-row items-center justify-between`}
         >
           <Text className="text-lg font-semibold">Change ProfilePicture</Text>

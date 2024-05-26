@@ -2,8 +2,8 @@ import { View, Text, TouchableOpacity, Alert, Modal } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import React, { useState } from "react";
 import { TextInput } from "react-native-gesture-handler";
-import { loginUser, changePassword, forgotPassword } from "../firebaseConfig";
-import COLORS from "../components/COLORS";
+import { loginUser, forgotPassword } from "../firebaseConfig";
+import { COLORS } from "../components";
 
 const Login = ({ navigation }) => {
   const [email, setEmail] = useState();

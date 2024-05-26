@@ -1,4 +1,4 @@
-import { View, Text } from "react-native";
+import { View, Text, Image } from "react-native";
 import React from "react";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import {
@@ -49,7 +49,14 @@ const ItemComponent = ({ item, type, edit }) => {
     return (
       <View>
         <View className="flex-row space-x-2 ">
-          <View className="rounded-lg w-20 h-20 bg-red-400"></View>
+          <View className="rounded-lg w-20 h-20 bg-gray-100">
+            <Image
+              className="flex-1 justify-center self-center w-full object-fill rounded-md"
+              source={{
+                uri: "https://firebasestorage.googleapis.com/v0/b/taskmanager-401320.appspot.com/o/Media%2Fcourses%2Fbook.png?alt=media&token=6dd1bf38-de37-45f5-8046-88ce1c324dfc",
+              }}
+            />
+          </View>
           <View className="justify-center">
             <View className="flex-row justify-between ">
               <Text className="font-bold text-lg" numberOfLines={1}>

@@ -9,9 +9,8 @@ import {
   getUserDetail,
   loadData,
 } from "../firebaseConfig";
-import AddCourses from "../modals/AddCourses";
-import COLORS from "../components/COLORS";
-import ItemComponent from "../components/ItemComponent";
+import { AddCourses } from "../modals";
+import { COLORS, ItemComponent } from "../components";
 
 const Schedules = ({ navigation }) => {
   const [activeModal, setActiveModal] = useState(false);

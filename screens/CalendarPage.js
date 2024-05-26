@@ -1,11 +1,4 @@
-import {
-  View,
-  Text,
-  Button,
-  Dimensions,
-  StyleSheet,
-  ActivityIndicator,
-} from "react-native";
+import { View, Text, ActivityIndicator } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
@@ -19,8 +12,7 @@ import {
 } from "date-fns";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { getUserDetail, loadData } from "../firebaseConfig";
-import COLORS from "../components/COLORS";
-import ItemComponent from "../components/ItemComponent";
+import { ItemComponent, COLORS } from "../components";
 
 const CalendarPage = ({ navigation }) => {
   const [assignments, setAssignments] = useState([]);

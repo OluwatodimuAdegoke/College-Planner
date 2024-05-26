@@ -1,8 +1,8 @@
-import { View, Text, Button, Dimensions, StyleSheet } from "react-native";
-import React, { act, useEffect, useState } from "react";
+import { View, Text } from "react-native";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
+import { FlatList } from "react-native-gesture-handler";
 
 import { deleteData, loadData, updateData } from "../firebaseConfig";
 

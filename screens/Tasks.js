@@ -11,12 +11,10 @@ import {
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import { addData, deleteData, loadData, updateData } from "../firebaseConfig";
-import AddTask from "../modals/AddTask";
-import { Button, Menu } from "react-native-paper";
-import ShowDetails from "../modals/ShowDetails";
-import COLORS from "../components/COLORS";
-import ItemComponent from "../components/ItemComponent";
+import { loadData } from "../firebaseConfig";
+import { AddTask, ShowDetails } from "../modals";
+import { Menu } from "react-native-paper";
+import { COLORS, ItemComponent } from "../components";
 
 const Tasks = ({ navigation }) => {
   const [active, setActive] = useState("Ongoing");

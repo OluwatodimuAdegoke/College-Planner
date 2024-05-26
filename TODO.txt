@@ -5,8 +5,8 @@ Future: Delete all exams and assignemnts related to a course => Done
 Work on the completed menu button : Show completed assignemnts => Done
 
 Work on the account page, changing password, username => Done
-Work on adding profile picture
-Work on the image for the other courses
+Work on adding profile picture => Done
+Work on the image for the other courses => Started => Get the url from storage at login and register and store them in a user's profile as a list
 Work on addding the edit, delete and complete for the calendar page
 
 Work on the design of the display modals

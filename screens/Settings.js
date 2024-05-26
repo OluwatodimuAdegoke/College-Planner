@@ -2,19 +2,16 @@ import { View, TouchableOpacity, Text, Modal, Alert } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import {
   logOutUser,
-  deleteUserF,
-  auth,
   loadData,
   getUserDetail,
   setUserDetail,
-  deleteData,
   deleteTerm,
 } from "../firebaseConfig";
 import React, { useEffect, useState } from "react";
-import AddTerm from "../modals/AddTerm";
+import { AddTerm } from "../modals";
 import { FlatList } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
-import COLORS from "../components/COLORS";
+import { COLORS } from "../components";
 
 const Settings = ({ navigation }) => {
   const [activeModal, setActiveModal] = useState(false);

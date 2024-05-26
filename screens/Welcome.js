@@ -1,7 +1,7 @@
 import { View, Text, SafeAreaView } from "react-native";
 import React, { useEffect } from "react";
 import { autoLogin } from "../firebaseConfig";
-import COLORS from "../components/COLORS";
+import { COLORS } from "../components";
 
 const Welcome = ({ navigation }) => {
   useEffect(() => autoLogin({ navigator: navigation }));

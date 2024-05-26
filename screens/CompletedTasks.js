@@ -1,22 +1,9 @@
-import {
-  View,
-  Text,
-  Modal,
-  TouchableOpacity,
-  FlatList,
-  TextInput,
-  Alert,
-  ActivityIndicator,
-} from "react-native";
+import { View, Text, FlatList, ActivityIndicator } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import { addData, deleteData, loadData, updateData } from "../firebaseConfig";
-import AddTask from "../modals/AddTask";
-import { Button, Menu } from "react-native-paper";
-import ShowDetails from "../modals/ShowDetails";
-import COLORS from "../components/COLORS";
-import ItemComponent from "../components/ItemComponent";
+import { loadData } from "../firebaseConfig";
+import { ItemComponent, COLORS } from "../components";
 
 const CompletedTasks = ({ navigation }) => {
   const [tasks, setTasks] = useState([]);

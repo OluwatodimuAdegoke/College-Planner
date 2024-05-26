@@ -9,7 +9,7 @@ import HomePage from "./HomePage";
 import CalendarPage from "./CalendarPage";
 import Settings from "./Settings";
 import Categories from "./Categories";
-import COLORS from "../components/COLORS";
+import { COLORS } from "../components";
 
 const Tab = createBottomTabNavigator();
 const Home = ({ navigation }) => {

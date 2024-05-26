@@ -4,41 +4,24 @@ import {
   Modal,
   TouchableOpacity,
   FlatList,
-  TextInput,
-  Alert,
   ActivityIndicator,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { loadData } from "../firebaseConfig";
-import { AddTask, ShowDetails } from "../modals";
+import { AddTask } from "../modals";
 import { Menu } from "react-native-paper";
 import { COLORS, ItemComponent } from "../components";
 
 const Tasks = ({ navigation }) => {
-  const [active, setActive] = useState("Ongoing");
-
   const [activeModal, setActiveModal] = useState(false);
-  const [modalType, setModalType] = useState("Add");
-  // Using this
-  const [currentItem, setCurrentItem] = useState(null);
-
-  const [showModal, setShowModal] = useState(false);
 
   const [tasks, setTasks] = useState([]);
 
   const [visible, setVisible] = useState(false);
 
-  const editComponent = (item) => {
-    setModalType("Edit");
-    setCurrentItem(item);
-    setActiveModal(true);
-  };
-
   const addComponent = () => {
-    setModalType("Add");
-    setCurrentItem(null);
     setActiveModal(true);
   };
 
@@ -56,21 +39,8 @@ const Tasks = ({ navigation }) => {
   return (
     <SafeAreaView className={` ${COLORS.mainColor} flex-1 p-2`}>
       {/* {modal} */}
-      {activeModal && (
-        <AddTask
-          setActiveModal={setActiveModal}
-          type={modalType}
-          item={currentItem}
-        />
-      )}
-      {showModal && (
-        <ShowDetails
-          editComponent={editComponent}
-          setShowModal={setShowModal}
-          type={"tasks"}
-          item={currentItem}
-        />
-      )}
+      {activeModal && <AddTask setActiveModal={setActiveModal} />}
+
       <View className="flex-row mb-2 items-center justify-between">
         <Icon
           name="chevron-left"
@@ -113,29 +83,19 @@ const Tasks = ({ navigation }) => {
             showsVerticalScrollIndicator={false}
             renderItem={({ item }) => (
               <View className="rounded-lg mb-2 p-2 bg-gray-400 ">
-                {/* TouchableOpacity Here */}
-                <TouchableOpacity
-                  onPress={() => {
-                    setCurrentItem(item);
-                    setShowModal(true);
-                  }}
-                >
-                  <ItemComponent item={item} type="tasks" edit={true} />
-                </TouchableOpacity>
+                <ItemComponent item={item} type="tasks" edit={true} />
               </View>
             )}
           />
         </View>
       )}
 
-      {active === "Ongoing" && (
-        <TouchableOpacity
-          className="justify-center items-center"
-          onPress={() => addComponent()}
-        >
-          <Icon name="add-box" size={50} style={{ color: "#6b7280" }} />
-        </TouchableOpacity>
-      )}
+      <TouchableOpacity
+        className="justify-center items-center"
+        onPress={() => addComponent()}
+      >
+        <Icon name="add-box" size={50} style={{ color: "#6b7280" }} />
+      </TouchableOpacity>
     </SafeAreaView>
   );
 };

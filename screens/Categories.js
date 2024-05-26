@@ -1,12 +1,9 @@
-import { View, Text, Dimensions } from "react-native";
+import { View, Text } from "react-native";
 import React from "react";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { COLORS } from "../components";
 const Categories = ({ navigation }) => {
-  const width = Dimensions.get("screen").width / 2 - 25;
-  const width2 = Dimensions.get("screen").width / 1.5 - 25;
-
   return (
     <View className={`${COLORS.mainColor} flex-1 space-y-4`}>
       <Text className="text-2xl font-bold mb-5 text-center">

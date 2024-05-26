@@ -16,7 +16,7 @@ import {
   updateToCourse,
 } from "../firebaseConfig";
 
-const AddAssignments = ({ setActiveModal, type, item, course }) => {
+const AddAssignments = ({ setActiveModal, course }) => {
   const [open, setOpen] = useState(false);
   const [dueDate, setDueDate] = useState(new Date());
   const [name, setName] = useState("");
@@ -37,21 +37,9 @@ const AddAssignments = ({ setActiveModal, type, item, course }) => {
     };
 
     setActiveModal(false);
-    if (type === "Edit") {
-      updateData({ id: item.id, value: task, type: "assignments" });
-    } else {
-      addData({ value: task, type: "assignments" });
-      // addToCourse({ value: task, type: "assignments", courseId: course.id });
-    }
-  };
 
-  useEffect(() => {
-    if (item) {
-      setName(item.name);
-      setDescription(item.description);
-      setDueDate(item.date.toDate());
-    }
-  }, [item]);
+    addData({ value: task, type: "assignments" });
+  };
 
   return (
     <Modal

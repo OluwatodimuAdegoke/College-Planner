@@ -40,32 +40,16 @@ const CompletedCourseDetails = ({ route, navigation }) => {
         >
           {assignments.map((item) => {
             return (
-              <TouchableOpacity
-                className=" p-2 rounded-md bg-gray-400"
-                key={item.id}
-                onPress={() => {
-                  setCurrentItem(item);
-                  setShowModalType("assignments");
-                  setShowModal(true);
-                }}
-              >
+              <View className=" p-2 rounded-md bg-gray-400" key={item.id}>
                 <ItemComponent item={item} type={"assignments"} edit={true} />
-              </TouchableOpacity>
+              </View>
             );
           })}
           {exams.map((item) => {
             return (
-              <TouchableOpacity
-                className=" p-2 rounded-md bg-gray-400"
-                key={item.id}
-                onPress={() => {
-                  setCurrentItem(item);
-                  setShowModalType("exams");
-                  setShowModal(true);
-                }}
-              >
+              <View className=" p-2 rounded-md bg-gray-400" key={item.id}>
                 <ItemComponent item={item} type="exams" edit={true} />
-              </TouchableOpacity>
+              </View>
             );
           })}
         </ScrollView>

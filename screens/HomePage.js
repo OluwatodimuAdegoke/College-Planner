@@ -7,10 +7,9 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { FlatList, ScrollView } from "react-native-gesture-handler";
-import { getUserDetail, queryTask, updateData } from "../firebaseConfig";
+import { getUserDetail, queryTask } from "../firebaseConfig";
 import Swiper from "react-native-swiper";
 import { differenceInDays } from "date-fns";
-import { ShowDetails } from "../modals";
 import { COLORS, ItemComponent } from "../components";
 import { ProfilePic } from "../assets";
 
@@ -24,10 +23,6 @@ const HomePage = ({ navigation }) => {
   const [exams, setExams] = useState([]);
   const [courses, setCourses] = useState([]);
   const [study_sessions, setStudySessions] = useState([]);
-
-  const [showModal, setShowModal] = useState(false);
-  const [showModalType, setShowModalType] = useState("");
-  const [currentItem, setCurrentItem] = useState(null);
 
   const [currentTerm, setCurrentTerm] = useState(null);
 
@@ -89,28 +84,6 @@ const HomePage = ({ navigation }) => {
     schedule = <Text>No Upcoming Schedule...</Text>;
   }
 
-  //  This function is running *inline
-  const showDate = (date) => {
-    const diffDays = differenceInDays(
-      date.toDate(),
-      new Date(
-        Date.UTC(
-          new Date().getFullYear(),
-          new Date().getMonth(),
-          new Date().getDate(),
-          12
-        )
-      )
-    );
-    if (diffDays === 0) {
-      return "Today";
-    } else if (diffDays === 1) {
-      return "Tomorrow";
-    } else {
-      return diffDays + " days";
-    }
-  };
-
   if (taskToday.length > 0) {
     tasks = (
       <ScrollView
@@ -119,17 +92,12 @@ const HomePage = ({ navigation }) => {
       >
         {taskToday.map((item) => {
           return (
-            <TouchableOpacity
+            <View
               key={item.id}
               className={`${COLORS.secondaryColor} p-2 rounded-md`}
-              onPress={() => {
-                setCurrentItem(item);
-                setShowModalType("tasks");
-                setShowModal(true);
-              }}
             >
               <ItemComponent item={item} type="tasks" edit={false} />
-            </TouchableOpacity>
+            </View>
           );
         })}
       </ScrollView>
@@ -146,32 +114,22 @@ const HomePage = ({ navigation }) => {
       >
         {assignments.map((item) => {
           return (
-            <TouchableOpacity
+            <View
               className={`${COLORS.secondaryColor} p-2 rounded-md`}
               key={item.id}
-              onPress={() => {
-                setCurrentItem(item);
-                setShowModalType("assignments");
-                setShowModal(true);
-              }}
             >
               <ItemComponent item={item} type="assignments" edit={false} />
-            </TouchableOpacity>
+            </View>
           );
         })}
         {exams.map((item) => {
           return (
-            <TouchableOpacity
+            <View
               className={`${COLORS.secondaryColor} p-2 rounded-md`}
               key={item.id}
-              onPress={() => {
-                setCurrentItem(item);
-                setShowModalType("exams");
-                setShowModal(true);
-              }}
             >
               <ItemComponent item={item} type="exams" edit={false} />
-            </TouchableOpacity>
+            </View>
           );
         })}
       </ScrollView>
@@ -208,15 +166,6 @@ const HomePage = ({ navigation }) => {
 
   return (
     <View className={`flex-1 justify-between  ${COLORS.mainColor}`}>
-      {/* Header */}
-      {showModal && (
-        <ShowDetails
-          editComponent={null}
-          setShowModal={setShowModal}
-          type={showModalType}
-          item={currentItem}
-        />
-      )}
       <View className="justify-between pt-2 flex-row items-center">
         <View>
           <Text className="text-black font-normal text-l">

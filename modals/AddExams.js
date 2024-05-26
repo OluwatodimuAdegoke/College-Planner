@@ -9,14 +9,9 @@ import {
 import React, { useEffect, useState } from "react";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
-import {
-  addData,
-  addToCourse,
-  updateData,
-  updateToCourse,
-} from "../firebaseConfig";
+import { addData } from "../firebaseConfig";
 
-const AddExams = ({ setActiveModal, type, item, course }) => {
+const AddExams = ({ setActiveModal, course }) => {
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState(new Date());
   const [location, setLocation] = useState("");
@@ -40,21 +35,9 @@ const AddExams = ({ setActiveModal, type, item, course }) => {
       endTime: endTime,
     };
     setActiveModal(false);
-    if (type === "Edit") {
-      updateData({ id: item.id, value: task, type: "exams" });
-    } else {
-      addData({ value: task, type: "exams" });
-    }
-  };
 
-  useEffect(() => {
-    if (item) {
-      setLocation(item.location);
-      setDate(item.date.toDate());
-      setStartTime(item.startTime.toDate());
-      setEndTime(item.endTime.toDate());
-    }
-  }, [item]);
+    addData({ value: task, type: "exams" });
+  };
 
   return (
     <Modal

@@ -19,6 +19,11 @@ import StudyPage from "./components/StudyPage";
 import Accounts from "./screens/Accounts";
 import CompletedTasks from "./screens/CompletedTasks";
 import CompletedCourseDetails from "./screens/CompletedCourseDetails";
+import {
+  AssignmentComponent,
+  ExamComponent,
+  TaskComponent,
+} from "./components";
 const Stack = createStackNavigator();
 export default function App() {
   return (
@@ -40,9 +45,15 @@ export default function App() {
           <Stack.Screen name="StudyPage" component={StudyPage} />
           <Stack.Screen name="Accounts" component={Accounts} />
           <Stack.Screen name="CompletedTasks" component={CompletedTasks} />
+          <Stack.Screen name="TaskComponent" component={TaskComponent} />
           <Stack.Screen
             name="CompletedCourseDetails"
             component={CompletedCourseDetails}
+          />
+          <Stack.Screen name="ExamComponent" component={ExamComponent} />
+          <Stack.Screen
+            name="AssignmentComponent"
+            component={AssignmentComponent}
           />
         </Stack.Navigator>
       </NavigationContainer>

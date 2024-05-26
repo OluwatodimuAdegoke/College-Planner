@@ -10,9 +10,8 @@ import React, { useEffect, useState } from "react";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { Picker } from "@react-native-picker/picker";
 import { addData, loadData, updateData } from "../firebaseConfig";
-import { update } from "firebase/database";
 
-const AddSessions = ({ setActiveModal, type, item }) => {
+const AddSessions = ({ setActiveModal }) => {
   const [duration, setDuration] = useState(0);
   const [name, setName] = useState("");
 
@@ -29,19 +28,9 @@ const AddSessions = ({ setActiveModal, type, item }) => {
     };
 
     setActiveModal(false);
-    if (type === "Edit") {
-      updateData({ id: item.id, value: task, type: "studySessions" });
-    } else {
-      addData({ value: task, type: "studySessions" });
-    }
-  };
 
-  useEffect(() => {
-    if (item) {
-      setName(item.name);
-      setDuration(item.duration);
-    }
-  }, [item]);
+    addData({ value: task, type: "studySessions" });
+  };
 
   return (
     <Modal

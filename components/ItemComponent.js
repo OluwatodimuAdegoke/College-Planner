@@ -1,5 +1,5 @@
 import { View, Text, Image } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import {
   deleteData,
@@ -9,8 +9,12 @@ import {
   updateData,
 } from "../firebaseConfig";
 import { differenceInDays } from "date-fns";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { AddTask, ShowDetails } from "../modals";
+import { useNavigation } from "@react-navigation/native";
 
 const ItemComponent = ({ item, type, edit }) => {
+  const navigation = useNavigation();
   const completeTask = ({ item, type }) => {
     updateData({
       id: item.id,
@@ -45,6 +49,19 @@ const ItemComponent = ({ item, type, edit }) => {
       return diffDays + " days";
     }
   };
+
+  const [activeModal, setActiveModal] = useState(false);
+  const [activeModalType, setActiveModalType] = useState("tasks");
+  const [modalType, setModalType] = useState("Add");
+  const [showModal, setShowModal] = useState(false);
+  const [currentItem, setCurrentItem] = useState(null);
+
+  const editComponent = (item) => {
+    setModalType("Edit");
+    setCurrentItem(item);
+    setActiveModal(true);
+  };
+
   if (type === "courses") {
     return (
       <View>
@@ -95,7 +112,12 @@ const ItemComponent = ({ item, type, edit }) => {
     );
   } else if (type === "exams") {
     return (
-      <View className="flex-row items-center space-x-2 justify-between">
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate("ExamComponent", { data: item });
+        }}
+        className="flex-row items-center space-x-2 justify-between"
+      >
         <View className="flex-row items-center space-x-2">
           <View className="rounded-md h-8 w-8  bg-gray-300 items-center justify-center">
             <Icon name="library-books" size={25} />
@@ -137,11 +159,15 @@ const ItemComponent = ({ item, type, edit }) => {
             </View>
           )}
         </View>
-      </View>
+      </TouchableOpacity>
     );
   } else if (type === "tasks") {
     return (
-      <View>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate("TaskComponent", { data: item });
+        }}
+      >
         <View className={`rounded-md justify-between flex-row`}>
           <View className="flex-row items-center">
             <View className="rounded-md h-8 w-8  bg-gray-300 items-center justify-center">
@@ -156,7 +182,7 @@ const ItemComponent = ({ item, type, edit }) => {
           </View>
           <View className=" ">
             <Text className="font-semibold">{showDate(item.date)}</Text>
-            <View className="flex-row items-center self-end">
+            <View className="flex-row items-center self-end space-x-2">
               {item.completed === true ? (
                 <Icon
                   name="check-box"
@@ -184,11 +210,16 @@ const ItemComponent = ({ item, type, edit }) => {
             </View>
           </View>
         </View>
-      </View>
+      </TouchableOpacity>
     );
   } else if (type === "assignments") {
     return (
-      <View className="flex-row items-center justify-between">
+      <TouchableOpacity
+        className="flex-row items-center justify-between"
+        onPress={() => {
+          navigation.navigate("AssignmentComponent", { data: item });
+        }}
+      >
         <View className="flex-row items-center space-x-2">
           <View className="rounded-md h-8 w-8  bg-gray-300 items-center justify-center">
             <Icon name="event" size={25} />
@@ -236,7 +267,7 @@ const ItemComponent = ({ item, type, edit }) => {
             )}
           </View>
         </View>
-      </View>
+      </TouchableOpacity>
     );
   } else if (type === "studySessions") {
     return (

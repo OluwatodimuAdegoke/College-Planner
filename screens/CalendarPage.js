@@ -64,6 +64,7 @@ const CalendarPage = ({ navigation }) => {
         description: other[i].description,
         completed: other[i].completed,
         type: "tasks",
+        id: other[i].id,
       };
       if (!items[eventDetails.date.toDate().toDateString()]) {
         items[eventDetails.date.toDate().toDateString()] = [];
@@ -84,6 +85,7 @@ const CalendarPage = ({ navigation }) => {
         completed: other1[i].completed,
         course: other1[i].course,
         type: "assignments",
+        id: other1[i].id,
       };
       if (!items[eventDetails.date.toDate().toDateString()]) {
         items[eventDetails.date.toDate().toDateString()] = [];
@@ -105,6 +107,7 @@ const CalendarPage = ({ navigation }) => {
         endTime: other2[i].endTime,
         course: other2[i].course,
         type: "exams",
+        id: other2[i].id,
       };
       if (!items[eventDetails.date.toDate().toDateString()]) {
         items[eventDetails.date.toDate().toDateString()] = [];
@@ -234,13 +237,13 @@ const CalendarPage = ({ navigation }) => {
                               className="rounded-lg mb-2 p-2 bg-gray-400 h-18"
                               key={i}
                             >
-                              <TouchableOpacity className="">
+                              <View className="">
                                 <ItemComponent
                                   item={item}
                                   type={item.type}
                                   edit={true}
                                 />
-                              </TouchableOpacity>
+                              </View>
                             </View>
                           );
                         })}

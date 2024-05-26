@@ -29,9 +29,6 @@ const Display = ({ route, navigation }) => {
 
   const [course, setCourse] = useState(data);
 
-  const [modalType, setModalType] = useState("Add");
-  const [currentItem, setCurrentItem] = useState(null);
-
   const [activeModal, setActiveModal] = useState(false);
   const [activeModalType, setActiveModalType] = useState("");
 
@@ -40,22 +37,10 @@ const Display = ({ route, navigation }) => {
 
   const [visible, setVisible] = useState(false);
 
-  const [showModal, setShowModal] = useState(false);
-  const [showModalType, setShowModalType] = useState("");
-
   const [images, setImages] = useState([]);
   const [imageModal, setImageModal] = useState(false);
 
   const addComponent = ({ type }) => {
-    setCurrentItem(null);
-    setModalType("Add");
-    setActiveModalType(type);
-    setActiveModal(true);
-  };
-
-  const editComponent = ({ type, item }) => {
-    setModalType("Edit");
-    setCurrentItem(item);
     setActiveModalType(type);
     setActiveModal(true);
   };
@@ -87,30 +72,12 @@ const Display = ({ route, navigation }) => {
   return (
     <SafeAreaView className="p-4 flex-1 space-y-2">
       {activeModal && activeModalType === "assignments" && (
-        <AddAssignments
-          setActiveModal={setActiveModal}
-          type={modalType}
-          item={currentItem}
-          course={course}
-        />
+        <AddAssignments setActiveModal={setActiveModal} course={course} />
       )}
       {activeModal && activeModalType === "exams" && (
-        <AddExams
-          setActiveModal={setActiveModal}
-          type={modalType}
-          item={currentItem}
-          course={course}
-        />
+        <AddExams setActiveModal={setActiveModal} course={course} />
       )}
 
-      {showModal && (
-        <ShowDetails
-          editComponent={editComponent}
-          setShowModal={setShowModal}
-          type={showModalType}
-          item={currentItem}
-        />
-      )}
       <Modal
         visible={imageModal}
         animationType="fade"
@@ -183,32 +150,16 @@ const Display = ({ route, navigation }) => {
         >
           {assignments.map((item) => {
             return (
-              <TouchableOpacity
-                className=" p-2 rounded-md bg-gray-400"
-                key={item.id}
-                onPress={() => {
-                  setCurrentItem(item);
-                  setShowModalType("assignments");
-                  setShowModal(true);
-                }}
-              >
+              <View className=" p-2 rounded-md bg-gray-400" key={item.id}>
                 <ItemComponent item={item} type={"assignments"} edit={true} />
-              </TouchableOpacity>
+              </View>
             );
           })}
           {exams.map((item) => {
             return (
-              <TouchableOpacity
-                className=" p-2 rounded-md bg-gray-400"
-                key={item.id}
-                onPress={() => {
-                  setCurrentItem(item);
-                  setShowModalType("exams");
-                  setShowModal(true);
-                }}
-              >
+              <View className=" p-2 rounded-md bg-gray-400" key={item.id}>
                 <ItemComponent item={item} type="exams" edit={true} />
-              </TouchableOpacity>
+              </View>
             );
           })}
         </ScrollView>

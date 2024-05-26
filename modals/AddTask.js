@@ -11,7 +11,7 @@ import Icon from "react-native-vector-icons/MaterialIcons";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import { addData, loadData, updateData } from "../firebaseConfig";
 
-const AddTask = ({ setActiveModal, type, item }) => {
+const AddTask = ({ setActiveModal }) => {
   const [open, setOpen] = useState(false);
   const [dueDate, setDueDate] = useState(new Date());
   const [taskName, setTaskName] = useState("");
@@ -29,20 +29,9 @@ const AddTask = ({ setActiveModal, type, item }) => {
       completed: false,
     };
     setActiveModal(false);
-    if (type === "Edit") {
-      updateData({ id: item.id, type: "tasks", value: task });
-    } else {
-      addData({ value: task, type: "tasks" });
-    }
-  };
 
-  useEffect(() => {
-    if (item) {
-      setTaskName(item.name);
-      setTaskDescription(item.description);
-      setDueDate(item.date.toDate());
-    }
-  }, [item]);
+    addData({ value: task, type: "tasks" });
+  };
 
   return (
     <Modal

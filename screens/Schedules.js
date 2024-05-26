@@ -22,9 +22,6 @@ const Schedules = ({ navigation }) => {
 
   const deleteComponent = ({ id, type }) => {
     deleteCourse({ id: id });
-    // if (type === "courses") {
-    //   deleteData({ id: id, type: "courses" });
-    // }
   };
 
   const editComponent = ({ type, item }) => {
@@ -38,7 +35,6 @@ const Schedules = ({ navigation }) => {
   const addComponent = () => {
     setCurrentItem(null);
     setModalType("Add");
-
     setActiveModal(true);
   };
 

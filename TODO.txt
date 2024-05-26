@@ -6,7 +6,9 @@ Work on the completed menu button : Show completed assignemnts => Done
 
 Work on the account page, changing password, username => Done
 Work on adding profile picture => Done
-Work on the image for the other courses => Started => Get the url from storage at login and register and store them in a user's profile as a list
+Work on the image for the other courses => Done
+Get the url from storage at login and register and store them in a 
+user's profile as a list => Done
 Work on addding the edit, delete and complete for the calendar page
 
 Work on the design of the display modals
@@ -16,3 +18,4 @@ Work on the login, register password text input
 Work on reauthenticating a user
 Work on the Alert menu
 Work on the Study Session Page and Functionality
+Add the Image Modal to the Add Course page

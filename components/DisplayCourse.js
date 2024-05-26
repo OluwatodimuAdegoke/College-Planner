@@ -1,26 +1,39 @@
-import { View, Text, ScrollView, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  Modal,
+  FlatList,
+  Image,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   deleteData,
+  getCourseImages,
+  getUserDetail,
+  loadCourse,
   loadData,
   loadForCourse,
+  loadImages,
   updateData,
 } from "../firebaseConfig";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import AddAssignments from "../modals/AddAssignments";
-import AddExams from "../modals/AddExams";
-import { Button, Menu } from "react-native-paper";
-import ShowDetails from "../modals/ShowDetails";
+import { AddAssignments, AddExams, ShowDetails } from "../modals";
+import { Menu } from "react-native-paper";
 import ItemComponent from "./ItemComponent";
+
 const Display = ({ route, navigation }) => {
   const { data } = route.params;
+
+  const [course, setCourse] = useState(data);
 
   const [modalType, setModalType] = useState("Add");
   const [currentItem, setCurrentItem] = useState(null);
 
-  const [activeModalE, setActiveModalE] = useState(false);
-  const [activeModalA, setActiveModalA] = useState(false);
+  const [activeModal, setActiveModal] = useState(false);
+  const [activeModalType, setActiveModalType] = useState("");
 
   const [assignments, setAssignments] = useState([]);
   const [exams, setExams] = useState([]);
@@ -30,57 +43,63 @@ const Display = ({ route, navigation }) => {
   const [showModal, setShowModal] = useState(false);
   const [showModalType, setShowModalType] = useState("");
 
-  const addComponent = ({ course, type }) => {
+  const [images, setImages] = useState([]);
+  const [imageModal, setImageModal] = useState(false);
+
+  const addComponent = ({ type }) => {
     setCurrentItem(null);
     setModalType("Add");
-    if (type === "assignments") {
-      setActiveModalE(true);
-    } else if (type === "exams") {
-      setActiveModalA(true);
-    }
+    setActiveModalType(type);
+    setActiveModal(true);
   };
 
   const editComponent = ({ type, item }) => {
     setModalType("Edit");
     setCurrentItem(item);
-    if (type === "assignments") {
-      setActiveModalA(true);
-    } else if (type === "exams") {
-      setActiveModalE(true);
-    }
+    setActiveModalType(type);
+    setActiveModal(true);
+  };
+
+  const changeCourseImage = ({ url }) => {
+    updateData({ id: course.id, type: "courses", value: { image: url } });
   };
 
   useEffect(() => {
-    loadForCourse({
-      setData: setAssignments,
-      type: "assignments",
-      courseId: data.id,
-      completed: false,
-    });
-    loadForCourse({
-      setData: setExams,
-      type: "exams",
-      courseId: data.id,
-      completed: false,
-    });
+    const fetchData = async () => {
+      await loadCourse({ setData: setCourse, courseId: course.id });
+      await loadForCourse({
+        setData: setAssignments,
+        type: "assignments",
+        courseId: course.id,
+        completed: false,
+      });
+      await loadForCourse({
+        setData: setExams,
+        type: "exams",
+        courseId: course.id,
+        completed: false,
+      });
+      await getCourseImages({ setValue: setImages });
+    };
+    fetchData();
   }, []);
 
   return (
     <SafeAreaView className="p-4 flex-1 space-y-2">
-      {activeModalA && (
+      {activeModal && activeModalType === "assignments" && (
         <AddAssignments
-          setActiveModal={setActiveModalA}
+          setActiveModal={setActiveModal}
           type={modalType}
           item={currentItem}
-          course={data}
+          course={course}
         />
       )}
-      {activeModalE && (
+      {activeModal && activeModalType === "exams" && (
         <AddExams
-          setActiveModal={setActiveModalE}
+          setActiveModal={setActiveModal}
           type={modalType}
           item={currentItem}
-          course={data}
+          course={course}
         />
       )}
 
@@ -92,9 +111,46 @@ const Display = ({ route, navigation }) => {
           item={currentItem}
         />
       )}
-      {/* <Icon name="chevron-left" size={30} onPress={() => navigation.goBack()} /> */}
+      <Modal
+        visible={imageModal}
+        animationType="fade"
+        transparent={true}
+        onRequestClose={() => setImageModal(false)}
+      >
+        <View className="flex-1 justify-center items-center">
+          <View className="bg-gray-500 rounded-xl p-2 max-h-56">
+            <FlatList
+              data={images}
+              numColumns={4}
+              showsVerticalScrollIndicator={false}
+              keyExtractor={(item, index) => index}
+              contentContainerStyle={{ gap: 5, padding: 2 }}
+              columnWrapperStyle={{ gap: 5 }}
+              renderItem={({ item, index }) => {
+                return (
+                  <TouchableOpacity
+                    className="rounded-lg bg-gray-100 w-16 h-16"
+                    key={index}
+                    onPress={() => {
+                      changeCourseImage({ url: item });
+                      setImageModal(false);
+                    }}
+                  >
+                    <Image
+                      source={{ uri: item }}
+                      alt="Image"
+                      className="flex-1 justify-center self-center w-full object-fill rounded-md"
+                    />
+                  </TouchableOpacity>
+                );
+              }}
+            />
+          </View>
+        </View>
+      </Modal>
+
       <View className="p-2 rounded-md bg-gray-400  justify-between items-start flex-row">
-        <ItemComponent item={data} type="courses" edit={true} />
+        <ItemComponent item={course} type="courses" edit={true} />
         <Menu
           visible={visible}
           onDismiss={() => setVisible(false)}
@@ -105,10 +161,17 @@ const Display = ({ route, navigation }) => {
         >
           <Menu.Item
             onPress={() => {
-              navigation.navigate("CompletedCourseDetails", { data: data });
+              navigation.navigate("CompletedCourseDetails", { data: course });
               setVisible(false);
             }}
             title="Completed Work"
+          />
+          <Menu.Item
+            onPress={async () => {
+              setImageModal(true);
+              setVisible(false);
+            }}
+            title="Change Image"
           />
         </Menu>
       </View>
@@ -155,7 +218,7 @@ const Display = ({ route, navigation }) => {
         <Text>Add Exams</Text>
         <TouchableOpacity
           className=" items-center rounded-full border justify-center  w-10 h-10 "
-          onPress={() => addComponent({ data, type: "assignments" })}
+          onPress={() => addComponent({ type: "exams" })}
         >
           <Icon name="add" size={24} color="black" />
         </TouchableOpacity>
@@ -164,7 +227,7 @@ const Display = ({ route, navigation }) => {
         <Text>Add Assignments</Text>
         <TouchableOpacity
           className=" items-center rounded-full border justify-center  w-10 h-10"
-          onPress={() => addComponent({ data, type: "exams" })}
+          onPress={() => addComponent({ type: "assignments" })}
         >
           <Icon name="add" size={24} color="black" />
         </TouchableOpacity>

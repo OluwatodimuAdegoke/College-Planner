@@ -4,6 +4,7 @@ import Icon from "react-native-vector-icons/MaterialIcons";
 import {
   deleteData,
   getUserDetail,
+  loadImages,
   queryTask,
   updateData,
 } from "../firebaseConfig";
@@ -44,7 +45,6 @@ const ItemComponent = ({ item, type, edit }) => {
       return diffDays + " days";
     }
   };
-
   if (type === "courses") {
     return (
       <View>
@@ -53,7 +53,7 @@ const ItemComponent = ({ item, type, edit }) => {
             <Image
               className="flex-1 justify-center self-center w-full object-fill rounded-md"
               source={{
-                uri: "https://firebasestorage.googleapis.com/v0/b/taskmanager-401320.appspot.com/o/Media%2Fcourses%2Fbook.png?alt=media&token=6dd1bf38-de37-45f5-8046-88ce1c324dfc",
+                uri: item.image,
               }}
             />
           </View>

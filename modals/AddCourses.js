@@ -53,6 +53,7 @@ const AddCourses = ({ setActiveModal, type, item }) => {
       endTime: endTime,
       days: daysChosen,
       date: new Date(),
+      image: "",
     };
 
     setActiveModal(false);

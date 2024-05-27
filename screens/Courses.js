@@ -11,8 +11,8 @@ const Courses = ({ navigation }) => {
   const [courses, setCourses] = useState([]);
   const [term, setTerm] = useState("");
 
-  const deleteComponent = ({ id }) => {
-    deleteCourse({ id: id });
+  const deleteComponent = ({ item }) => {
+    deleteCourse({ data: item });
   };
 
   const editComponent = ({ type, item }) => {
@@ -81,7 +81,7 @@ const Courses = ({ navigation }) => {
                       name="delete"
                       size={25}
                       onPress={() =>
-                        deleteComponent({ id: course.id, type: "courses" })
+                        deleteComponent({ item: course, type: "courses" })
                       }
                     />
                   </View>

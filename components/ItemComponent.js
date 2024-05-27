@@ -23,8 +23,8 @@ const ItemComponent = ({ item, type, edit }) => {
     });
   };
 
-  const deleteComponent = ({ id, type }) => {
-    deleteData({ id: id, type: type });
+  const deleteComponent = ({ item, type }) => {
+    deleteData({ data: item, type: type });
   };
   //  This function is running *inline
   const showDate = (date) => {
@@ -154,7 +154,7 @@ const ItemComponent = ({ item, type, edit }) => {
               <Icon
                 name="delete"
                 size={25}
-                onPress={() => deleteComponent({ id: item.id, type: "exams" })}
+                onPress={() => deleteComponent({ item: item, type: "exams" })}
               />
             </View>
           )}
@@ -202,7 +202,7 @@ const ItemComponent = ({ item, type, edit }) => {
                     name="delete"
                     size={25}
                     onPress={() =>
-                      deleteComponent({ id: item.id, type: "tasks" })
+                      deleteComponent({ item: item, type: "tasks" })
                     }
                   />
                 </View>
@@ -260,7 +260,7 @@ const ItemComponent = ({ item, type, edit }) => {
                   name="delete"
                   size={25}
                   onPress={() =>
-                    deleteComponent({ id: item.id, type: "assignments" })
+                    deleteComponent({ item: item, type: "assignments" })
                   }
                 />
               </View>

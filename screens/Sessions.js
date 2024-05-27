@@ -19,8 +19,8 @@ const Sessions = ({ navigation }) => {
     setModalVisible(true);
   };
 
-  const deleteComponent = (item) => {
-    deleteData({ data: item, type: "studySessions" });
+  const deleteComponent = (id) => {
+    deleteData({ id: id, type: "studySessions" });
   };
 
   const [isLoading, setIsLoading] = useState(true);
@@ -95,7 +95,7 @@ const Sessions = ({ navigation }) => {
                       <Icon
                         name="delete"
                         size={25}
-                        onPress={() => deleteComponent(session)}
+                        onPress={() => deleteComponent(session.id)}
                       />
                     </View>
                   </View>

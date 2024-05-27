@@ -46,7 +46,7 @@ const Settings = ({ navigation }) => {
     if (item.name === currentTerm) {
       Alert.alert("Current Term", "You cannot delete the current term");
     } else {
-      deleteTerm({ data: item });
+      deleteTerm({ id: item.id });
     }
   };
 

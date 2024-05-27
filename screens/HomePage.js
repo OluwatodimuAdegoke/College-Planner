@@ -66,15 +66,12 @@ const HomePage = ({ navigation }) => {
         <Swiper showsPagination={false}>
           {courses.map((item) => {
             return (
-              <TouchableOpacity
+              <View
                 key={item.id}
-                onPress={() =>
-                  navigation.navigate("DisplayCourse", { data: item })
-                }
-                className={`${COLORS.secondaryColor} p-2 rounded-md justify-around items-start`}
+                className={`${COLORS.secondaryColor} p-2 rounded-md`}
               >
                 <ItemComponent item={item} type="courses" edit={false} />
-              </TouchableOpacity>
+              </View>
             );
           })}
         </Swiper>
@@ -196,7 +193,7 @@ const HomePage = ({ navigation }) => {
           <View className="flex-row justify-between">
             <Text className="font-bold text-xl mb-2">Today's Schedule</Text>
             <TouchableOpacity onPress={() => navigation.navigate("Courses")}>
-              <Text className="text-blue-500">See all schedules </Text>
+              <Text className="text-blue-500">See all courses </Text>
             </TouchableOpacity>
           </View>
           {schedule}

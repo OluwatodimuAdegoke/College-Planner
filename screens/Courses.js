@@ -12,7 +12,7 @@ const Courses = ({ navigation }) => {
   const [term, setTerm] = useState("");
 
   const deleteComponent = ({ item }) => {
-    deleteCourse({ data: item });
+    deleteCourse({ id: item.id });
   };
 
   const editComponent = ({ type, item }) => {
@@ -61,15 +61,18 @@ const Courses = ({ navigation }) => {
         >
           {courses.map((course, index) => {
             return (
-              <View key={index} className="space-y-1">
-                <TouchableOpacity
+              <View
+                key={index}
+                className="space-y-1 bg-gray-400 p-2 rounded-lg"
+              >
+                {/* <TouchableOpacity
                   onPress={() =>
                     navigation.navigate("DisplayCourse", { data: course })
                   }
                   className="bg-gray-400 rounded-lg p-2  justify-between"
-                >
-                  <ItemComponent item={course} type="courses" edit={true} />
-                  <View className="flex-row items-center justify-end">
+                > */}
+                <ItemComponent item={course} type="courses" edit={true} />
+                {/* <View className="flex-row items-center justify-end">
                     <Icon
                       name="edit-note"
                       size={25}
@@ -85,7 +88,7 @@ const Courses = ({ navigation }) => {
                       }
                     />
                   </View>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
               </View>
             );
           })}

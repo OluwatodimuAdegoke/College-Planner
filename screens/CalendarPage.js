@@ -13,6 +13,7 @@ import {
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { getUserDetail, loadData } from "../firebaseConfig";
 import { ItemComponent, COLORS } from "../components";
+import { SheetManager } from "react-native-actions-sheet";
 
 const CalendarPage = ({ navigation }) => {
   const [assignments, setAssignments] = useState([]);
@@ -255,6 +256,20 @@ const CalendarPage = ({ navigation }) => {
           </View>
         </View>
       )}
+      <View className="absolute bottom-5 items-center justify-center w-full">
+        <TouchableOpacity
+          className=" items-center rounded-full border justify-center w-10 h-10 "
+          onPress={() =>
+            SheetManager.show("AddEvent", {
+              payload: {
+                type: "tasks",
+              },
+            })
+          }
+        >
+          <Icon name="add" size={24} color="black" />
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 };

@@ -16,11 +16,6 @@ import StudyPage from "./components/StudyPage";
 import Accounts from "./screens/Accounts";
 import CompletedTasks from "./screens/CompletedTasks";
 import CompletedCourseDetails from "./screens/CompletedCourseDetails";
-import {
-  AssignmentComponent,
-  ExamComponent,
-  TaskComponent,
-} from "./components";
 import { SheetProvider } from "react-native-actions-sheet";
 import "./sheets.js";
 
@@ -46,15 +41,10 @@ export default function App() {
             <Stack.Screen name="StudyPage" component={StudyPage} />
             <Stack.Screen name="Accounts" component={Accounts} />
             <Stack.Screen name="CompletedTasks" component={CompletedTasks} />
-            <Stack.Screen name="TaskComponent" component={TaskComponent} />
+
             <Stack.Screen
               name="CompletedCourseDetails"
               component={CompletedCourseDetails}
-            />
-            <Stack.Screen name="ExamComponent" component={ExamComponent} />
-            <Stack.Screen
-              name="AssignmentComponent"
-              component={AssignmentComponent}
             />
           </Stack.Navigator>
         </NavigationContainer>

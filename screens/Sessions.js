@@ -85,12 +85,20 @@ const Sessions = ({ navigation }) => {
                         {session.duration}{" "}
                         <Text className="font-normal">minutes</Text>
                       </Text>
+                      <Text>{session.date.toDate().toDateString()}</Text>
                     </View>
                     <View className="flex-row items-center space-x-4">
                       <Icon
                         name="edit-note"
                         size={25}
-                        onPress={() => editComponent(session)}
+                        onPress={() =>
+                          SheetManager.show("EditEvent", {
+                            payload: {
+                              type: "studySessions",
+                              item: session,
+                            },
+                          })
+                        }
                       />
                       <Icon
                         name="delete"

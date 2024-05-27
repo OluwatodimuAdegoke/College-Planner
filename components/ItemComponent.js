@@ -13,6 +13,7 @@ import { differenceInDays } from "date-fns";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { AddTask, ShowDetails } from "../modals";
 import { useNavigation } from "@react-navigation/native";
+import { SheetManager } from "react-native-actions-sheet";
 
 const ItemComponent = ({ item, type, edit }) => {
   const navigation = useNavigation();
@@ -53,18 +54,6 @@ const ItemComponent = ({ item, type, edit }) => {
     } else {
       return diffDays + " days";
     }
-  };
-
-  const [activeModal, setActiveModal] = useState(false);
-  const [activeModalType, setActiveModalType] = useState("tasks");
-  const [modalType, setModalType] = useState("Add");
-  const [showModal, setShowModal] = useState(false);
-  const [currentItem, setCurrentItem] = useState(null);
-
-  const editComponent = (item) => {
-    setModalType("Edit");
-    setCurrentItem(item);
-    setActiveModal(true);
   };
 
   if (type === "courses") {
@@ -123,6 +112,18 @@ const ItemComponent = ({ item, type, edit }) => {
           {edit && (
             <View className="">
               <Icon
+                name="tune"
+                size={24}
+                onPress={() =>
+                  SheetManager.show("EditEvent", {
+                    payload: {
+                      type: "courses",
+                      item: item,
+                    },
+                  })
+                }
+              />
+              <Icon
                 name="delete"
                 size={25}
                 onPress={() =>
@@ -140,7 +141,12 @@ const ItemComponent = ({ item, type, edit }) => {
         <View className="flex-1">
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate("ExamComponent", { data: item });
+              SheetManager.show("EditEvent", {
+                payload: {
+                  type: "exams",
+                  item: item,
+                },
+              });
             }}
             className="flex-row items-center space-x-2  flex-auto"
           >
@@ -199,7 +205,12 @@ const ItemComponent = ({ item, type, edit }) => {
           <TouchableOpacity
             className="flex-row items-center space-x-2  flex-auto "
             onPress={() => {
-              navigation.navigate("TaskComponent", { data: item });
+              SheetManager.show("EditEvent", {
+                payload: {
+                  type: "tasks",
+                  item: item,
+                },
+              });
             }}
           >
             <View className="flex-row items-center">
@@ -235,7 +246,7 @@ const ItemComponent = ({ item, type, edit }) => {
               />
             )}
             {edit && (
-              <View className="self-end">
+              <View className="self-end flex-row">
                 <Icon
                   name="delete"
                   size={25}
@@ -256,7 +267,12 @@ const ItemComponent = ({ item, type, edit }) => {
           <TouchableOpacity
             className="flex-row items-center space-x-2  flex-auto"
             onPress={() => {
-              navigation.navigate("AssignmentComponent", { data: item });
+              SheetManager.show("EditEvent", {
+                payload: {
+                  type: "assignments",
+                  item: item,
+                },
+              });
             }}
           >
             <View className="rounded-md h-8 w-8  bg-gray-300 items-center justify-center">

@@ -11,18 +11,6 @@ const Courses = ({ navigation }) => {
   const [courses, setCourses] = useState([]);
   const [term, setTerm] = useState("");
 
-  const deleteComponent = ({ item }) => {
-    deleteCourse({ id: item.id });
-  };
-
-  const editComponent = ({ type, item }) => {
-    // setModalType("Edit");
-    // setCurrentItem(item);
-    // if (type === "courses") {
-    //   setActiveModal(true);
-    // }
-  };
-
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -65,30 +53,7 @@ const Courses = ({ navigation }) => {
                 key={index}
                 className="space-y-1 bg-gray-400 p-2 rounded-lg"
               >
-                {/* <TouchableOpacity
-                  onPress={() =>
-                    navigation.navigate("DisplayCourse", { data: course })
-                  }
-                  className="bg-gray-400 rounded-lg p-2  justify-between"
-                > */}
                 <ItemComponent item={course} type="courses" edit={true} />
-                {/* <View className="flex-row items-center justify-end">
-                    <Icon
-                      name="edit-note"
-                      size={25}
-                      onPress={() =>
-                        editComponent({ type: "courses", item: course })
-                      }
-                    />
-                    <Icon
-                      name="delete"
-                      size={25}
-                      onPress={() =>
-                        deleteComponent({ item: course, type: "courses" })
-                      }
-                    />
-                  </View>
-                </TouchableOpacity> */}
               </View>
             );
           })}

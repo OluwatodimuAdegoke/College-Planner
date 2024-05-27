@@ -13,9 +13,10 @@ Work on addding the edit, delete and complete for the calendar page => Done
 Work on adding data to the calendar page => Done
 
 Work on the design of the display add modals => Done
-Work on the edit page
+Work on the edit page => Done
 Don't forget the Image ternary condition
 Work on the login, register password text input
+Work on TouchableOpacity for the last course detail => Can't figure out
 
 
 Work on reauthenticating a user

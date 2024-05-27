@@ -13,20 +13,13 @@ import { loadData } from "../firebaseConfig";
 import { AddEvent } from "../modals";
 import { Menu } from "react-native-paper";
 import { COLORS, ItemComponent } from "../components";
+import { SheetManager } from "react-native-actions-sheet";
 
 const Tasks = ({ navigation }) => {
   const [tasks, setTasks] = useState([]);
 
   //For the menu
   const [visible, setVisible] = useState(false);
-
-  const [type, setType] = useState("");
-  const [modalVisible, setModalVisible] = useState(false);
-
-  const handleOpenModal = (type) => {
-    setType(type);
-    setModalVisible(true);
-  };
 
   const [isLoading, setIsLoading] = useState(true);
 
@@ -90,13 +83,14 @@ const Tasks = ({ navigation }) => {
         </View>
       )}
 
-      {modalVisible && (
-        <AddEvent setModalVisible={setModalVisible} type={type} />
-      )}
       <TouchableOpacity
         className="justify-center items-center"
         onPress={() => {
-          handleOpenModal("tasks");
+          SheetManager.show("AddEvent", {
+            payload: {
+              type: "tasks",
+            },
+          });
         }}
       >
         <Icon name="add-box" size={50} style={{ color: "#6b7280" }} />

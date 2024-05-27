@@ -20,9 +20,9 @@ import {
   updateData,
 } from "../firebaseConfig";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import { AddAssignments, AddEvent, AddExams, ShowDetails } from "../modals";
 import { Menu } from "react-native-paper";
 import ItemComponent from "./ItemComponent";
+import { SheetManager } from "react-native-actions-sheet";
 
 const Display = ({ route, navigation }) => {
   const { data } = route.params;
@@ -38,12 +38,13 @@ const Display = ({ route, navigation }) => {
   const [images, setImages] = useState([]);
   const [imageModal, setImageModal] = useState(false);
 
-  const [type, setType] = useState("");
-  const [modalVisible, setModalVisible] = useState(false);
-
   const handleOpenModal = (type) => {
-    setType(type);
-    setModalVisible(true);
+    SheetManager.show("AddEvent", {
+      payload: {
+        type: type,
+        course: course,
+      },
+    });
   };
 
   const changeCourseImage = ({ url }) => {
@@ -158,14 +159,6 @@ const Display = ({ route, navigation }) => {
           })}
         </ScrollView>
       </View>
-
-      {modalVisible && (
-        <AddEvent
-          setModalVisible={setModalVisible}
-          type={type}
-          course={course}
-        />
-      )}
 
       <View className="absolute bottom-24 right-5 flex-row items-center space-x-2">
         <Text>Add Exams</Text>

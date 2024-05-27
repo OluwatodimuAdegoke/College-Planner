@@ -6,6 +6,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import { deleteData, loadData } from "../firebaseConfig";
 import { COLORS } from "../components";
 import { AddEvent } from "../modals";
+import { SheetManager } from "react-native-actions-sheet";
 
 const Sessions = ({ navigation }) => {
   const [sessions, setSessions] = useState([]);
@@ -110,7 +111,11 @@ const Sessions = ({ navigation }) => {
       <TouchableOpacity
         className="justify-center items-center"
         onPress={() => {
-          handleOpenModal("studySessions");
+          SheetManager.show("AddEvent", {
+            payload: {
+              type: "studySessions",
+            },
+          });
         }}
       >
         <Icon name="add-box" size={50} style={{ color: "#6b7280" }} />

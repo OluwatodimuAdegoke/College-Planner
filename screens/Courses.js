@@ -4,20 +4,12 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { ScrollView } from "react-native-gesture-handler";
 import { deleteCourse, getUserDetail, loadData } from "../firebaseConfig";
-import { AddEvent } from "../modals";
 import { COLORS, ItemComponent } from "../components";
+import { SheetManager } from "react-native-actions-sheet";
 
 const Courses = ({ navigation }) => {
   const [courses, setCourses] = useState([]);
   const [term, setTerm] = useState("");
-
-  const [type, setType] = useState("");
-  const [modalVisible, setModalVisible] = useState(false);
-
-  const handleOpenModal = (type) => {
-    setType(type);
-    setModalVisible(true);
-  };
 
   const deleteComponent = ({ id }) => {
     deleteCourse({ id: id });
@@ -99,13 +91,16 @@ const Courses = ({ navigation }) => {
           })}
         </ScrollView>
       )}
-      {modalVisible && (
-        <AddEvent setModalVisible={setModalVisible} type={type} />
-      )}
 
       <TouchableOpacity
         className="justify-center items-center "
-        onPress={() => handleOpenModal("courses")}
+        onPress={() => {
+          SheetManager.show("AddEvent", {
+            payload: {
+              type: "courses",
+            },
+          });
+        }}
       >
         <Icon name="add-box" size={50} style={{ color: "#6b7280" }} />
       </TouchableOpacity>

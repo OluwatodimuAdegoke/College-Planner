@@ -1,19 +1,12 @@
 import { View, Text, Image } from "react-native";
 import React, { useState } from "react";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import {
-  deleteCourse,
-  deleteData,
-  getUserDetail,
-  loadImages,
-  queryTask,
-  updateData,
-} from "../firebaseConfig";
+import { deleteCourse, deleteData, updateData } from "../firebaseConfig";
 import { differenceInDays } from "date-fns";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { AddTask, ShowDetails } from "../modals";
 import { useNavigation } from "@react-navigation/native";
 import { SheetManager } from "react-native-actions-sheet";
+import { CourseDefault } from "../assets";
 
 const ItemComponent = ({ item, type, edit }) => {
   const navigation = useNavigation();
@@ -64,13 +57,17 @@ const ItemComponent = ({ item, type, edit }) => {
             onPress={() => navigation.navigate("DisplayCourse", { data: item })}
             className="flex-row items-center space-x-2  flex-auto "
           >
-            <View className="rounded-lg w-20 h-20 bg-gray-100">
-              <Image
-                className="flex-1 justify-center self-center w-full object-fill rounded-md"
-                source={{
-                  uri: item.image,
-                }}
-              />
+            <View className="rounded-lg w-20 h-20 bg-gray-200">
+              {item.image === "null" ? (
+                <CourseDefault className="h-14 w-14 self-center flex-1" />
+              ) : (
+                <Image
+                  className="flex-1 justify-center self-center w-full object-fill rounded-md"
+                  source={{
+                    uri: item.image,
+                  }}
+                />
+              )}
             </View>
 
             <View className="flex-1">

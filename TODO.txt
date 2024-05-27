@@ -14,8 +14,8 @@ Work on adding data to the calendar page => Done
 
 Work on the design of the display add modals => Done
 Work on the edit page => Done
-Don't forget the Image ternary condition
-Work on the login, register password text input
+Don't forget the Image ternary condition => Done
+Work on the login, register password text input => Done
 Work on TouchableOpacity for the last course detail => Can't figure out
 
 

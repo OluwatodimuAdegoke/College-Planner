@@ -20,7 +20,7 @@ import {
   updateData,
 } from "../firebaseConfig";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import { AddAssignments, AddExams, ShowDetails } from "../modals";
+import { AddAssignments, AddEvent, AddExams, ShowDetails } from "../modals";
 import { Menu } from "react-native-paper";
 import ItemComponent from "./ItemComponent";
 
@@ -28,21 +28,22 @@ const Display = ({ route, navigation }) => {
   const { data } = route.params;
 
   const [course, setCourse] = useState(data);
-
-  const [activeModal, setActiveModal] = useState(false);
-  const [activeModalType, setActiveModalType] = useState("");
-
   const [assignments, setAssignments] = useState([]);
   const [exams, setExams] = useState([]);
 
+  //For the menu
   const [visible, setVisible] = useState(false);
 
+  //For the image modal
   const [images, setImages] = useState([]);
   const [imageModal, setImageModal] = useState(false);
 
-  const addComponent = ({ type }) => {
-    setActiveModalType(type);
-    setActiveModal(true);
+  const [type, setType] = useState("");
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const handleOpenModal = (type) => {
+    setType(type);
+    setModalVisible(true);
   };
 
   const changeCourseImage = ({ url }) => {
@@ -71,13 +72,6 @@ const Display = ({ route, navigation }) => {
 
   return (
     <SafeAreaView className="p-4 flex-1 space-y-2">
-      {activeModal && activeModalType === "assignments" && (
-        <AddAssignments setActiveModal={setActiveModal} course={course} />
-      )}
-      {activeModal && activeModalType === "exams" && (
-        <AddExams setActiveModal={setActiveModal} course={course} />
-      )}
-
       <Modal
         visible={imageModal}
         animationType="fade"
@@ -165,11 +159,19 @@ const Display = ({ route, navigation }) => {
         </ScrollView>
       </View>
 
+      {modalVisible && (
+        <AddEvent
+          setModalVisible={setModalVisible}
+          type={type}
+          course={course}
+        />
+      )}
+
       <View className="absolute bottom-24 right-5 flex-row items-center space-x-2">
         <Text>Add Exams</Text>
         <TouchableOpacity
           className=" items-center rounded-full border justify-center  w-10 h-10 "
-          onPress={() => addComponent({ type: "exams" })}
+          onPress={() => handleOpenModal("exams")}
         >
           <Icon name="add" size={24} color="black" />
         </TouchableOpacity>
@@ -178,7 +180,7 @@ const Display = ({ route, navigation }) => {
         <Text>Add Assignments</Text>
         <TouchableOpacity
           className=" items-center rounded-full border justify-center  w-10 h-10"
-          onPress={() => addComponent({ type: "assignments" })}
+          onPress={() => handleOpenModal("assignments")}
         >
           <Icon name="add" size={24} color="black" />
         </TouchableOpacity>

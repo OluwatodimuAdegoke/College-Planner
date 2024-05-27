@@ -4,33 +4,31 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { ScrollView } from "react-native-gesture-handler";
 import { deleteCourse, getUserDetail, loadData } from "../firebaseConfig";
-import { AddCourses } from "../modals";
+import { AddEvent } from "../modals";
 import { COLORS, ItemComponent } from "../components";
 
-const Schedules = ({ navigation }) => {
-  const [activeModal, setActiveModal] = useState(false);
-  const [modalType, setModalType] = useState("Add");
-  const [currentItem, setCurrentItem] = useState(null);
-
+const Courses = ({ navigation }) => {
   const [courses, setCourses] = useState([]);
   const [term, setTerm] = useState("");
 
-  const deleteComponent = ({ id, type }) => {
+  const [type, setType] = useState("");
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const handleOpenModal = (type) => {
+    setType(type);
+    setModalVisible(true);
+  };
+
+  const deleteComponent = ({ id }) => {
     deleteCourse({ id: id });
   };
 
   const editComponent = ({ type, item }) => {
-    setModalType("Edit");
-    setCurrentItem(item);
-    if (type === "courses") {
-      setActiveModal(true);
-    }
-  };
-
-  const addComponent = () => {
-    setCurrentItem(null);
-    setModalType("Add");
-    setActiveModal(true);
+    // setModalType("Edit");
+    // setCurrentItem(item);
+    // if (type === "courses") {
+    //   setActiveModal(true);
+    // }
   };
 
   const [isLoading, setIsLoading] = useState(true);
@@ -47,14 +45,6 @@ const Schedules = ({ navigation }) => {
 
   return (
     <SafeAreaView className={` ${COLORS.mainColor} flex-1 p-2`}>
-      {activeModal && (
-        <AddCourses
-          setActiveModal={setActiveModal}
-          type={modalType}
-          item={currentItem}
-        />
-      )}
-
       <View className="flex-row mb-1 items-center">
         <Icon
           name="chevron-left"
@@ -109,10 +99,13 @@ const Schedules = ({ navigation }) => {
           })}
         </ScrollView>
       )}
+      {modalVisible && (
+        <AddEvent setModalVisible={setModalVisible} type={type} />
+      )}
 
       <TouchableOpacity
-        className="justify-center items-center"
-        onPress={() => addComponent()}
+        className="justify-center items-center "
+        onPress={() => handleOpenModal("courses")}
       >
         <Icon name="add-box" size={50} style={{ color: "#6b7280" }} />
       </TouchableOpacity>
@@ -120,4 +113,4 @@ const Schedules = ({ navigation }) => {
   );
 };
 
-export default Schedules;
+export default Courses;

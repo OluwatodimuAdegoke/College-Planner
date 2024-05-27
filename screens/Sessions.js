@@ -4,29 +4,24 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { ScrollView } from "react-native-gesture-handler";
 import { deleteData, loadData } from "../firebaseConfig";
-import { AddSessions } from "../modals";
 import { COLORS } from "../components";
+import { AddEvent } from "../modals";
 
 const Sessions = ({ navigation }) => {
   const [sessions, setSessions] = useState([]);
-  const [activeModal, setActiveModal] = useState(false);
 
-  const [modalType, setModalType] = useState("Add");
-  const [currentItem, setCurrentItem] = useState(null);
+  const [type, setType] = useState("");
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const handleOpenModal = (type) => {
+    setType(type);
+    setModalVisible(true);
+  };
 
   const deleteComponent = (id) => {
     deleteData({ id: id, type: "studySessions" });
   };
-  const editComponent = (item) => {
-    setModalType("Edit");
-    setCurrentItem(item);
-    setActiveModal(true);
-  };
-  const addComponent = () => {
-    setModalType("Add");
-    setCurrentItem(null);
-    setActiveModal(true);
-  };
+
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -44,13 +39,6 @@ const Sessions = ({ navigation }) => {
 
   return (
     <SafeAreaView className={` ${COLORS.mainColor} flex-1 p-2`}>
-      {activeModal && (
-        <AddSessions
-          type={modalType}
-          item={currentItem}
-          setActiveModal={setActiveModal}
-        />
-      )}
       <View className="flex-row mb-2 items-center">
         <Icon
           name="chevron-left"
@@ -116,10 +104,14 @@ const Sessions = ({ navigation }) => {
           })}
         </ScrollView>
       )}
-
+      {modalVisible && (
+        <AddEvent setModalVisible={setModalVisible} type={type} />
+      )}
       <TouchableOpacity
         className="justify-center items-center"
-        onPress={() => addComponent()}
+        onPress={() => {
+          handleOpenModal("studySessions");
+        }}
       >
         <Icon name="add-box" size={50} style={{ color: "#6b7280" }} />
       </TouchableOpacity>

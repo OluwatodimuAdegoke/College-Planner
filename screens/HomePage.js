@@ -195,7 +195,7 @@ const HomePage = ({ navigation }) => {
         <View className=" rounded-md">
           <View className="flex-row justify-between">
             <Text className="font-bold text-xl mb-2">Today's Schedule</Text>
-            <TouchableOpacity onPress={() => navigation.navigate("Schedules")}>
+            <TouchableOpacity onPress={() => navigation.navigate("Courses")}>
               <Text className="text-blue-500">See all schedules </Text>
             </TouchableOpacity>
           </View>

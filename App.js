@@ -8,8 +8,7 @@ import {
   Welcome,
   Register,
   Home,
-  Assignments,
-  Schedules,
+  Courses,
   Tasks,
   Sessions,
 } from "./screens";
@@ -38,7 +37,7 @@ export default function App() {
           <Stack.Screen name="Register" component={Register} />
           <Stack.Screen name="Home" component={Home} />
 
-          <Stack.Screen name="Schedules" component={Schedules} />
+          <Stack.Screen name="Courses" component={Courses} />
           <Stack.Screen name="Tasks" component={Tasks} />
           <Stack.Screen name="Sessions" component={Sessions} />
           <Stack.Screen name="DisplayCourse" component={DisplayCourse} />
@@ -60,12 +59,3 @@ export default function App() {
     </PaperProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});

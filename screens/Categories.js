@@ -11,7 +11,7 @@ const Categories = ({ navigation }) => {
       </Text>
 
       <TouchableOpacity
-        onPress={() => navigation.navigate("Schedules")}
+        onPress={() => navigation.navigate("Courses")}
         className={` flex-row items-center justify-between`}
       >
         <Text className="text-2xl font-semibold">Schedules</Text>

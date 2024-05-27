@@ -4,7 +4,7 @@ import Register from "./Register";
 import Home from "./Home";
 import Tasks from "./Tasks";
 import Sessions from "./Sessions";
-import Schedules from "./Schedules";
+import Courses from "./Courses";
 import Accounts from "./Accounts";
 import CalendarPage from "./CalendarPage";
 import Categories from "./Categories";
@@ -19,7 +19,7 @@ export {
   Home,
   Tasks,
   Sessions,
-  Schedules,
+  Courses,
   Accounts,
   CalendarPage,
   Categories,

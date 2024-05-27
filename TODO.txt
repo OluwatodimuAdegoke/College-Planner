@@ -9,9 +9,12 @@ Work on adding profile picture => Done
 Work on the image for the other courses => Done
 Get the url from storage at login and register and store them in a 
 user's profile as a list => Done
-Work on addding the edit, delete and complete for the calendar page
+Work on addding the edit, delete and complete for the calendar page => Done
+Work on adding data to the calendar page
 
-Work on the design of the display modals
+Work on the design of the display add modals
+Work on the edit page for the course page
+Don't forget the Image ternary condition
 Work on the login, register password text input
 
 

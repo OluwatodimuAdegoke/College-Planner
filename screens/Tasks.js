@@ -10,19 +10,22 @@ import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { loadData } from "../firebaseConfig";
-import { AddTask } from "../modals";
+import { AddEvent } from "../modals";
 import { Menu } from "react-native-paper";
 import { COLORS, ItemComponent } from "../components";
 
 const Tasks = ({ navigation }) => {
-  const [activeModal, setActiveModal] = useState(false);
-
   const [tasks, setTasks] = useState([]);
 
+  //For the menu
   const [visible, setVisible] = useState(false);
 
-  const addComponent = () => {
-    setActiveModal(true);
+  const [type, setType] = useState("");
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const handleOpenModal = (type) => {
+    setType(type);
+    setModalVisible(true);
   };
 
   const [isLoading, setIsLoading] = useState(true);
@@ -38,9 +41,6 @@ const Tasks = ({ navigation }) => {
 
   return (
     <SafeAreaView className={` ${COLORS.mainColor} flex-1 p-2`}>
-      {/* {modal} */}
-      {activeModal && <AddTask setActiveModal={setActiveModal} />}
-
       <View className="flex-row mb-2 items-center justify-between">
         <Icon
           name="chevron-left"
@@ -90,9 +90,14 @@ const Tasks = ({ navigation }) => {
         </View>
       )}
 
+      {modalVisible && (
+        <AddEvent setModalVisible={setModalVisible} type={type} />
+      )}
       <TouchableOpacity
         className="justify-center items-center"
-        onPress={() => addComponent()}
+        onPress={() => {
+          handleOpenModal("tasks");
+        }}
       >
         <Icon name="add-box" size={50} style={{ color: "#6b7280" }} />
       </TouchableOpacity>

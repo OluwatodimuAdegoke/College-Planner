@@ -341,14 +341,6 @@ const AddEvent = ({ payload }) => {
               maxLength={3}
               onChangeText={(value) => handleChange("duration", value)}
             />
-            <TouchableOpacity onPress={() => setShowDatePicker(true)}>
-              <TextInput
-                className={styles.textInput}
-                placeholder="Select Date"
-                value={date.toDateString()}
-                editable={false}
-              />
-            </TouchableOpacity>
           </View>
         )}
 

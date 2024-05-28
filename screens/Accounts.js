@@ -4,6 +4,7 @@ import {
   TouchableOpacity,
   Modal,
   ActivityIndicator,
+  Alert,
 } from "react-native";
 import React, { useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -56,7 +57,7 @@ const Accounts = ({ navigation }) => {
       setUserDetail({ value: data });
       setShowModal(false);
     } else if (type === "email") {
-      changeEmail({ newEmail: email });
+      changeEmail({ newEmail: email, navigator: navigation });
       setShowModal(false);
     } else if (type === "password") {
       changePassword({ newPassword: password });
@@ -68,7 +69,6 @@ const Accounts = ({ navigation }) => {
     const fetchData = async () => {
       // setIsLoading(true);
       await getUserDetail({ setValue: setUserName, type: "username" });
-      await getUserDetail({ setValue: setEmail, type: "email" });
       // setIsLoading(false);
     };
     fetchData();
@@ -185,7 +185,17 @@ const Accounts = ({ navigation }) => {
           <Icon name="send" size={25} />
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => deleteUserAndData({ navigator: navigation })}
+          onPress={() => {
+            Alert.alert("Delete Account", "Are you sure?", [
+              {
+                text: "Cancel",
+              },
+              {
+                text: "OK",
+                onPress: () => deleteUserAndData({ navigator: navigation }),
+              },
+            ]);
+          }}
           className={` flex-row items-center justify-between`}
         >
           <Text className="text-lg font-semibold">Delete Account</Text>

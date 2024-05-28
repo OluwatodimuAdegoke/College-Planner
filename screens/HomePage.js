@@ -9,10 +9,9 @@ import React, { useEffect, useState } from "react";
 import { FlatList, ScrollView } from "react-native-gesture-handler";
 import { getUserDetail, queryTask } from "../firebaseConfig";
 import Swiper from "react-native-swiper";
-import { differenceInDays } from "date-fns";
 import { COLORS, ItemComponent } from "../components";
 import { ProfilePic } from "../assets";
-
+import Icon from "react-native-vector-icons/MaterialIcons";
 const HomePage = ({ navigation }) => {
   const [userName, setUserName] = useState("");
 
@@ -151,7 +150,18 @@ const HomePage = ({ navigation }) => {
               className={`${COLORS.secondaryColor} p-2 rounded-md  items-center justify-center`}
               onPress={() => navigation.navigate("StudyPage", { item: item })}
             >
-              <ItemComponent item={item} type="studySessions" edit={false} />
+              <View className="flex-row items-center justify-center space-x-2 ">
+                <View className="rounded-md h-8 w-8  bg-gray-300 items-center justify-center">
+                  <Icon name="book" size={25} />
+                </View>
+                <View>
+                  <Text className="font-bold text-base">
+                    {item.name.toUpperCase()}
+                  </Text>
+                  <Text className="">{item.duration} minutes</Text>
+                </View>
+              </View>
+              {/* <ItemComponent item={item} type="studySessions" edit={false} /> */}
             </TouchableOpacity>
           );
         })}

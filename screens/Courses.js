@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { ScrollView } from "react-native-gesture-handler";
-import { deleteCourse, getUserDetail, loadData } from "../firebaseConfig";
+import { getUserDetail, loadData } from "../firebaseConfig";
 import { COLORS, ItemComponent } from "../components";
 import { SheetManager } from "react-native-actions-sheet";
 

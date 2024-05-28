@@ -15,7 +15,7 @@ import {
   getUserDetail,
   loadCourse,
   loadData,
-  loadForCourse,
+  loadByParent,
   loadImages,
   updateData,
 } from "../firebaseConfig";
@@ -54,16 +54,16 @@ const Display = ({ route, navigation }) => {
   useEffect(() => {
     const fetchData = async () => {
       await loadCourse({ setData: setCourse, courseId: course.id });
-      await loadForCourse({
+      await loadByParent({
         setData: setAssignments,
         type: "assignments",
-        courseId: course.id,
+        parentId: course.id,
         completed: false,
       });
-      await loadForCourse({
+      await loadByParent({
         setData: setExams,
         type: "exams",
-        courseId: course.id,
+        parentId: course.id,
         completed: false,
       });
       await getCourseImages({ setValue: setImages });

@@ -19,7 +19,7 @@ Work on the login, register password text input => Done
 Work on TouchableOpacity for the last course detail => Can't figure out
 
 
-Work on reauthenticating a user
-Work on the Alert menu
+Work on reauthenticating a user => Kinda Done
 Work on the Study Session Page and Functionality
 Add the Image Modal to the Add Course page
+Work on the Alert Menu

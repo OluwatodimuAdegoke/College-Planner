@@ -3,26 +3,12 @@ import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { ScrollView } from "react-native-gesture-handler";
-import { deleteData, loadData } from "../firebaseConfig";
-import { COLORS } from "../components";
-import { AddEvent } from "../modals";
+import { loadData } from "../firebaseConfig";
+import { COLORS, ItemComponent } from "../components";
 import { SheetManager } from "react-native-actions-sheet";
 
 const Sessions = ({ navigation }) => {
   const [sessions, setSessions] = useState([]);
-
-  const [type, setType] = useState("");
-  const [modalVisible, setModalVisible] = useState(false);
-
-  const handleOpenModal = (type) => {
-    setType(type);
-    setModalVisible(true);
-  };
-
-  const deleteComponent = (id) => {
-    deleteData({ id: id, type: "studySessions" });
-  };
-
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -60,64 +46,22 @@ const Sessions = ({ navigation }) => {
         <ScrollView className="flex-1" contentContainerStyle={{ gap: 10 }}>
           {sessions.map((session, index) => {
             return (
-              <TouchableOpacity
+              <View
+                className="space-y-1 bg-gray-400 p-2 rounded-lg"
                 key={index}
-                className="bg-gray-300 rounded-lg p-2 h-28 justify-between"
               >
-                <View className="flex-row items-center justify-between">
-                  <Text className="font-bold text-3xl ">
-                    {/* {session.course.toUpperCase()} */}
-                  </Text>
-                  <TouchableOpacity className="h-10 w-10 bg-gray-500 items-center justify-center rounded-full">
-                    <Text>Start</Text>
-                  </TouchableOpacity>
-                </View>
-
-                <View>
-                  <Text className="font-semibold text-2xl">
-                    Name:{" "}
-                    <Text className="font-normal text-xl">{session.name}</Text>
-                  </Text>
-                  <View className="flex-row justify-between">
-                    <View className="flex-row space-x-4 items-center">
-                      <Icon size={25} name="timer" />
-                      <Text className="font-semibold text-xl">
-                        {session.duration}{" "}
-                        <Text className="font-normal">minutes</Text>
-                      </Text>
-                      <Text>{session.date.toDate().toDateString()}</Text>
-                    </View>
-                    <View className="flex-row items-center space-x-4">
-                      <Icon
-                        name="edit-note"
-                        size={25}
-                        onPress={() =>
-                          SheetManager.show("EditEvent", {
-                            payload: {
-                              type: "studySessions",
-                              item: session,
-                            },
-                          })
-                        }
-                      />
-                      <Icon
-                        name="delete"
-                        size={25}
-                        onPress={() => deleteComponent(session.id)}
-                      />
-                    </View>
-                  </View>
-                </View>
-              </TouchableOpacity>
+                <ItemComponent
+                  type={"studySessions"}
+                  item={session}
+                  edit={true}
+                />
+              </View>
             );
           })}
         </ScrollView>
       )}
-      {modalVisible && (
-        <AddEvent setModalVisible={setModalVisible} type={type} />
-      )}
       <TouchableOpacity
-        className="justify-center items-center"
+        className="items-center bg-blue-500 rounded-xl flex-row pr-4 p-2 absolute bottom-5 right-4"
         onPress={() => {
           SheetManager.show("AddEvent", {
             payload: {
@@ -126,7 +70,8 @@ const Sessions = ({ navigation }) => {
           });
         }}
       >
-        <Icon name="add-box" size={50} style={{ color: "#6b7280" }} />
+        <Icon name="add" size={25} style={{ color: "white" }} />
+        <Text className="font-bold text-lg text-white">Add Session</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );

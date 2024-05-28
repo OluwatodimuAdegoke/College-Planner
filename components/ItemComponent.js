@@ -1,7 +1,7 @@
 import { View, Text, Image } from "react-native";
 import React, { useState } from "react";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import { deleteCourse, deleteData, updateData } from "../firebaseConfig";
+import { deleteParent, deleteData, updateData } from "../firebaseConfig";
 import { differenceInDays } from "date-fns";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
@@ -19,8 +19,8 @@ const ItemComponent = ({ item, type, edit }) => {
   };
 
   const deleteComponent = ({ id, type }) => {
-    if (type === "courses") {
-      deleteCourse({ id: id });
+    if (type === "courses" || type === "studySessions") {
+      deleteParent({ id: id, type: type });
     } else {
       deleteData({ id: id, type: type });
     }
@@ -322,15 +322,53 @@ const ItemComponent = ({ item, type, edit }) => {
       </View>
     );
   } else if (type === "studySessions") {
+    const hour = Math.floor(item.duration / 60);
+    const minute = item.duration % 60;
     return (
-      <View className="flex-row items-center justify-center space-x-2 ">
-        <View className="rounded-md h-8 w-8  bg-gray-300 items-center justify-center">
-          <Icon name="book" size={25} />
+      <View className="flex-row items-center justify-between">
+        <View className="flex-1">
+          <TouchableOpacity
+            onPress={() => navigation.navigate("StudyPage", { item: item })}
+          >
+            <View className="flex-row items-center space-x-2 ">
+              <View className="rounded-md h-8 w-8  bg-gray-300 items-center justify-center">
+                <Icon name="chevron-right" size={25} />
+              </View>
+              <View>
+                <Text className="font-bold text-base">
+                  {item.name.toUpperCase()}
+                </Text>
+                <Text className="">
+                  {hour > 0 ? `${hour}h` : ""} {minute}m
+                </Text>
+              </View>
+            </View>
+          </TouchableOpacity>
         </View>
         <View>
-          <Text className="font-bold text-base">{item.name.toUpperCase()}</Text>
-
-          <Text className="">{item.duration} minutes</Text>
+          {edit && (
+            <View className="self-end flex-row">
+              <Icon
+                name="tune"
+                size={24}
+                onPress={() =>
+                  SheetManager.show("EditEvent", {
+                    payload: {
+                      type: "studySessions",
+                      item: item,
+                    },
+                  })
+                }
+              />
+              <Icon
+                name="delete"
+                size={25}
+                onPress={() =>
+                  deleteComponent({ id: item.id, type: "studySessions" })
+                }
+              />
+            </View>
+          )}
         </View>
       </View>
     );

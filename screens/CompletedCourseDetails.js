@@ -1,7 +1,7 @@
 import { View, Text, ScrollView, TouchableOpacity } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { loadForCourse } from "../firebaseConfig";
+import { loadByParent } from "../firebaseConfig";
 import Icon from "react-native-vector-icons/MaterialIcons";
 
 import { ItemComponent } from "../components";
@@ -12,16 +12,16 @@ const CompletedCourseDetails = ({ route, navigation }) => {
   const [exams, setExams] = useState([]);
 
   useEffect(() => {
-    loadForCourse({
+    loadByParent({
       setData: setAssignments,
       type: "assignments",
-      courseId: data.id,
+      parentId: data.id,
       completed: true,
     });
-    loadForCourse({
+    loadByParent({
       setData: setExams,
       type: "exams",
-      courseId: data.id,
+      parentId: data.id,
       completed: true,
     });
   }, []);

@@ -175,7 +175,7 @@ const HomePage = ({ navigation }) => {
         </View>
 
         <View className="h-10 w-10">
-          {profilePicture === "null" ? (
+          {profilePicture === null ? (
             <ProfilePic />
           ) : (
             <Image

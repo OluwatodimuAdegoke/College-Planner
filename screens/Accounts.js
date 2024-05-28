@@ -40,14 +40,13 @@ const Accounts = ({ navigation }) => {
     });
 
     if (!result.canceled) {
-      setProfilePicture(result.assets[0].uri);
-      // setIsLoading(true);
+      // setProfilePicture(result.assets[0].uri);
+
       await uploadImage({
         uri: result.assets[0].uri,
         name: "profile_picture",
         setIsLoading: setIsLoading,
       });
-      // setIsLoading(false);
     }
   };
 

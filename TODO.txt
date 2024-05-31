@@ -20,6 +20,7 @@ Work on TouchableOpacity for the last course detail => Can't figure out
 
 
 Work on reauthenticating a user => Kinda Done
-Work on the Study Session Page and Functionality
+Work on the Study Session Page and Functionality => Done
+Work on making the timer universal
 Add the Image Modal to the Add Course page
 Work on the Alert Menu

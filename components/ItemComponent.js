@@ -2,7 +2,7 @@ import { View, Text, Image } from "react-native";
 import React, { useState } from "react";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { deleteParent, deleteData, updateData } from "../firebaseConfig";
-import { differenceInDays } from "date-fns";
+import { differenceInDays, formatDistanceToNow, startOfDay } from "date-fns";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import { SheetManager } from "react-native-actions-sheet";
@@ -28,15 +28,8 @@ const ItemComponent = ({ item, type, edit }) => {
   //  This function is running *inline
   const showDate = (date) => {
     const diffDays = differenceInDays(
-      date.toDate(),
-      new Date(
-        Date.UTC(
-          new Date().getFullYear(),
-          new Date().getMonth(),
-          new Date().getDate(),
-          12
-        )
-      )
+      startOfDay(date.toDate()),
+      startOfDay(new Date())
     );
     if (diffDays < 0) {
       return "Overdue";
@@ -45,7 +38,7 @@ const ItemComponent = ({ item, type, edit }) => {
     } else if (diffDays === 1) {
       return "Tomorrow";
     } else {
-      return diffDays + " days";
+      return formatDistanceToNow(startOfDay(date.toDate()));
     }
   };
 

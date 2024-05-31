@@ -1,10 +1,12 @@
-import { View, Text, Alert } from "react-native";
+import { View, Text, Alert, AppState } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { differenceInMinutes, formatDistanceToNow, set } from "date-fns";
 import { addData, deleteData, loadByParent } from "../firebaseConfig";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 const StudyPage = ({ route, navigation }) => {
   const { item } = route.params;
 
@@ -34,7 +36,6 @@ const StudyPage = ({ route, navigation }) => {
     if (data.duration > 0) {
       addData({ value: data, type: "studyHistory" });
     }
-    console.log(data);
   };
   const pause = () => {
     setIsRunning(false);
@@ -42,6 +43,7 @@ const StudyPage = ({ route, navigation }) => {
   const start = () => {
     setIsRunning(true);
   };
+
   let timer;
   useEffect(() => {
     if (isRunning) {

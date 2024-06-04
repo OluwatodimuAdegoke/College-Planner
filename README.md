@@ -12,6 +12,7 @@ College Planner is a comprehensive React Native application designed to help col
 - **Term Management**: Organize your courses and tasks by academic terms.
 - **User Authentication**: Secure login, registration, and profile management.
 - **Image Customization**: Choose custom images for your courses.
+![NewScene](https://github.com/OluwatodimuAdegoke/College-Planner/assets/22406840/9420e562-be24-4ed6-87da-9201f7e56d78)
 
 ## Installation
 

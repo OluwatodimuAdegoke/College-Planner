@@ -274,7 +274,7 @@ const ItemComponent = ({ item, type, edit }) => {
                 Assignment - {item.course}
               </Text>
               <Text className="text-base w-11/12" numberOfLines={1}>
-                {item.name} - {item.description}
+                {item.name} - {item.description.slice(0, 20)}
               </Text>
             </View>
           </TouchableOpacity>

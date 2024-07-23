@@ -3,11 +3,8 @@ import {
   View,
   Text,
   TouchableOpacity,
-  Dimensions,
   TextInput,
-  Button,
   Alert,
-  Modal,
 } from "react-native";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import { addData } from "../firebaseConfig";

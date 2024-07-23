@@ -6,7 +6,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import { FlatList, ScrollView } from "react-native-gesture-handler";
+import { ScrollView } from "react-native-gesture-handler";
 import { getUserDetail, queryTask } from "../firebaseConfig";
 import Swiper from "react-native-swiper";
 import { COLORS, ItemComponent } from "../components";

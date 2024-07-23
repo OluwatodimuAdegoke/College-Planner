@@ -8,7 +8,6 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import RNDateTimePicker from "@react-native-community/datetimepicker";
 import {
   addData,
   loadData,

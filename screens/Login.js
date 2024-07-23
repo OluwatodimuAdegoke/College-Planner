@@ -50,7 +50,7 @@ const Login = ({ navigation }) => {
               }}
               className="bg-gray-400 rounded-lg h-11 w-32 justify-center self-center mt-2"
             >
-              <Text className="self-center font-semibold text-xl">
+              <Text className="self-center font-semibold text-sm">
                 Reset Password
               </Text>
             </TouchableOpacity>

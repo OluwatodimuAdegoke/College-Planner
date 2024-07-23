@@ -5,7 +5,6 @@ import Icon from "react-native-vector-icons/MaterialIcons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { differenceInMinutes, formatDistanceToNow, set } from "date-fns";
 import { addData, deleteData, loadByParent } from "../firebaseConfig";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const StudyPage = ({ route, navigation }) => {
   const { item } = route.params;

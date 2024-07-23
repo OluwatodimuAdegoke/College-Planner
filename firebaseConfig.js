@@ -27,8 +27,6 @@ import {
   sendEmailVerification,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
-  onAuthStateChanged,
-  updateProfile,
   deleteUser,
   updateEmail,
   updatePassword,
@@ -49,8 +47,25 @@ import {
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-import { firebaseConfig } from "./env";
+// import { firebaseConfig } from "./env";
 // Initialize Firebase
+
+
+//Look for a secure way of doing this
+const apiKey = process.env.EXPO_PUBLIC_API_KEY;
+
+const firebaseConfig = {
+  apiKey: apiKey,
+  authDomain: "taskmanager-401320.firebaseapp.com",
+  projectId: "taskmanager-401320",
+  storageBucket: "taskmanager-401320.appspot.com",
+  messagingSenderId: "884630418615",
+  appId: "1:884630418615:web:5e10fb6ac8b757e1408932",
+  measurementId: "G-RZKM37E9H8",
+};
+
+
+
 const app = initializeApp(firebaseConfig);
 
 const auth = initializeAuth(app, {
@@ -263,7 +278,6 @@ const loadByParent = async ({ setData, type, parentId, completed }) => {
       } else {
         //Here
         setData([]);
-        console.log("No", type, " for today, Here");
       }
     });
     return () => unsub();
@@ -281,7 +295,6 @@ const loadData = async ({ setData, type, completed }) => {
     if (termValue.exists()) {
       const term = termValue.data()["currentTermId"];
       if (!term && type !== "terms") {
-        console.log("No term found");
         return;
       }
       const idCollection = collection(db, "users", user.uid, type);
@@ -315,7 +328,6 @@ const loadData = async ({ setData, type, completed }) => {
           setData(value);
         } else {
           setData([]);
-          console.log("No such document!");
         }
       });
 

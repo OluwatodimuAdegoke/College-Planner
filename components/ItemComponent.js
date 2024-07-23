@@ -191,9 +191,9 @@ const ItemComponent = ({ item, type, edit }) => {
   } else if (type === "tasks") {
     return (
       <View className="flex-row items-center justify-between">
-        <View className="flex-1">
+        <View className="flex-1 flex">
           <TouchableOpacity
-            className="flex-row items-center space-x-2  flex-auto "
+            className="flex-row items-center space-x-2  flex-auto flex "
             onPress={() => {
               SheetManager.show("EditEvent", {
                 payload: {
@@ -203,17 +203,17 @@ const ItemComponent = ({ item, type, edit }) => {
               });
             }}
           >
-            <View className="flex-row items-center">
+            <View className="flex-row items-center flex">
               <View className="rounded-md h-8 w-8  bg-gray-300 items-center justify-center">
                 <Icon name="splitscreen" size={25} />
               </View>
 
-              <View className="flex-row items-center">
+              <View className="flex-row items-center flex">
                 <View className="pl-2">
                   <Text className="font-semibold">
                     {item.name.slice(0, 30)}
                   </Text>
-                  <Text>{item.description.slice(0, 40)}</Text>
+                  <Text >{item.description.slice(0, 30)} {item.description.length > 30 ?  "..." : ""}</Text>
                 </View>
               </View>
             </View>

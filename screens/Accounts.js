@@ -30,8 +30,6 @@ const Accounts = ({ navigation }) => {
   const [showModal, setShowModal] = React.useState(false);
   const [type, setType] = React.useState("");
 
-  const [profilePicture, setProfilePicture] = React.useState("");
-
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -145,44 +143,49 @@ const Accounts = ({ navigation }) => {
             setType("username");
             setShowModal(true);
           }}
-          className={` flex-row items-center justify-between`}
+          className={` flex-row items-center justify-between gap-2`}
         >
-          <Text className="text-lg font-semibold">Change UserName</Text>
           <Icon name="dns" size={25} />
+          <Text className="text-lg font-semibold">Change UserName</Text>
+          
         </TouchableOpacity>
         <TouchableOpacity
           onPress={pickImage}
-          className={` flex-row items-center justify-between`}
+          className={` flex-row items-center justify-between gap-2`}
         >
+           <Icon name="person" size={25} />
           <Text className="text-lg font-semibold">Change ProfilePicture</Text>
-          <Icon name="person" size={25} />
+         
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
             setType("email");
             setShowModal(true);
           }}
-          className={` flex-row items-center justify-between`}
+          className={` flex-row items-center justify-between gap-2`}
         >
-          <Text className="text-lg font-semibold">Change Email</Text>
           <Icon name="mail" size={25} />
+          <Text className="text-lg font-semibold">Change Email</Text>
+          
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
             setType("password");
             setShowModal(true);
           }}
-          className={` flex-row items-center justify-between`}
+          className={` flex-row items-center justify-between gap-2`}
         >
-          <Text className="text-lg font-semibold">Change Password</Text>
           <Icon name="key" size={25} />
+          <Text className="text-lg font-semibold">Change Password</Text>
+          
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => sendVerification()}
-          className={` flex-row items-center justify-between`}
+          className={` flex-row items-center justify-between gap-2` }
         >
-          <Text className="text-lg font-semibold">Verify Email</Text>
           <Icon name="send" size={25} />
+          <Text className="text-lg font-semibold">Verify Email</Text>
+          
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
@@ -196,10 +199,11 @@ const Accounts = ({ navigation }) => {
               },
             ]);
           }}
-          className={` flex-row items-center justify-between`}
+          className={` flex-row items-center justify-between gap-2`}
         >
-          <Text className="text-lg font-semibold">Delete Account</Text>
           <Icon name="delete" size={25} />
+          <Text className="text-lg font-semibold">Delete Account</Text>
+          
         </TouchableOpacity>
       </View>
     </SafeAreaView>
